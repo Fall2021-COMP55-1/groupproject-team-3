@@ -11,6 +11,7 @@ public class MainApplication extends GraphicsProgram {
 	private GraphicsPane curScreen;
 	private SomePane somePane;
 	private MenuPane menu;
+	private NewGamePane newGame;
 	
 	/* Method: setupInteractions
 	 * -------------------------
@@ -102,6 +103,7 @@ public class MainApplication extends GraphicsProgram {
 		System.out.println("Let's make something awesome!");
 		somePane = new SomePane(this);
 		menu = new MenuPane(this);
+		newGame = new NewGamePane(this);
 		setupInteractions();
 		switchToMenu();
 	}
@@ -112,6 +114,10 @@ public class MainApplication extends GraphicsProgram {
 
 	public void switchToSome() {
 		switchToScreen(somePane);
+	}
+	
+	public void switchToNewGame() {
+		switchToScreen(newGame);
 	}
 
 	public static void main(String[] args) {
