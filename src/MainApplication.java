@@ -1,5 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 import acm.program.GraphicsProgram;
 
 public class MainApplication extends GraphicsProgram {
@@ -12,6 +13,8 @@ public class MainApplication extends GraphicsProgram {
 	private SomePane somePane;
 	private MenuPane menu;
 	private NewGamePane newGame;
+	private SavePane save;
+	private OptionPane options;
 	
 	/* Method: setupInteractions
 	 * -------------------------
@@ -104,6 +107,8 @@ public class MainApplication extends GraphicsProgram {
 		somePane = new SomePane(this);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
+		save = new SavePane(this);
+		options = new OptionPane(this);
 		setupInteractions();
 		switchToMenu();
 	}
@@ -119,8 +124,18 @@ public class MainApplication extends GraphicsProgram {
 	public void switchToNewGame() {
 		switchToScreen(newGame);
 	}
+	
+	public void switchToSave() {
+		switchToScreen(save);
+	}
+	
+	public void switchToOptions() {
+		switchToScreen(options);
+	}
+
 
 	public static void main(String[] args) {
 		new MainApplication().start();
 	}
+
 }
