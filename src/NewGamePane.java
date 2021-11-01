@@ -11,11 +11,14 @@ public class NewGamePane extends GraphicsPane {
 	private MainApplication program; 
 	
 	private GParagraph para;
+	private GImage player = new GImage("res/player/PCU1.png");
 	private ArrayList<GImage> spriteUp;
 	private ArrayList<GImage> spriteDown;
 	private ArrayList<GImage> spriteLeft;
 	private ArrayList<GImage> spriteRight;
 	private int x=100, y=100, dx, dy;
+	private int stepsTaken = 0;
+	private boolean sPressed = false, wPressed = false, aPressed = false, dPressed = false;
 	
 	public void move() {
 		
@@ -49,13 +52,14 @@ public class NewGamePane extends GraphicsPane {
 
 	@Override
 	public void showContents() {
-		program.add(spriteDown.get(0), x,y);
+		player.setImage(spriteDown.get(0).getImage());
+		program.add(player, x, y);
 		program.add(para);
 	}
 
 	@Override
 	public void hideContents() {
-		program.remove(spriteDown.get(0));
+		program.remove(player);
 		program.remove(para);
 	}
 
@@ -67,26 +71,67 @@ public class NewGamePane extends GraphicsPane {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			//spriteDown.get(0).move(0, 2);
-			dy=2;
+		
+		if (e.getKeyCode() == KeyEvent.VK_S) {sPressed = true;}
+		if (e.getKeyCode() == KeyEvent.VK_W) {wPressed = true;}
+		if (e.getKeyCode() == KeyEvent.VK_A) {aPressed = true;}
+		if (e.getKeyCode() == KeyEvent.VK_D) {dPressed = true;}
+		
+		if (sPressed) {
+			player.setImage(spriteDown.get(stepsTaken).getImage());
+			dy=4;
+			player.move(dx, dy);
         }
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			//spriteDown.get(0).move(0, -2);
-			dy=-2;
+		if (wPressed) {
+			player.setImage(spriteUp.get(stepsTaken).getImage());
+			dy=-4;
+			player.move(dx, dy);
         }
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			//spriteDown.get(0).move(-2, 0);
-			dx=-2;
+		if (aPressed) {
+			player.setImage(spriteLeft.get(stepsTaken).getImage());
+			dx=-4;
+			player.move(dx, dy);
         }
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			//spriteDown.get(0).move(2, 0);
-			dx=2;
+		if (dPressed) {
+			player.setImage(spriteRight.get(stepsTaken).getImage());
+			dx=4;
+			player.move(dx, dy);
         }
 		move();
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
+		/*currently only works once. Can go diagonally in one direction, then in another without letting the first key you
+		pressed go, but after trying once again, while still holding the first key, no longer detects that the first key
+		pressed is still being pressed*/
+		if (e.getKeyCode() == KeyEvent.VK_S) {sPressed = false;}
+		if (e.getKeyCode() == KeyEvent.VK_W) {wPressed = false;}
+		if (e.getKeyCode() == KeyEvent.VK_A) {aPressed = false;}
+		if (e.getKeyCode() == KeyEvent.VK_D) {dPressed = false;}
 		
+		if (sPressed)   {
+			dy = 4;
+		}
+		else if (wPressed)   {
+			dy = -4;
+		}
+		else   {
+			dy=0;
+		}
+		
+		if (aPressed)   {
+			dx = -4;
+		}
+		else if (dPressed)   {
+			dx = 4;
+		}
+		else   {
+			dx = 0;
+		}
+		
+		sPressed = false;
+		wPressed = false;
+		aPressed = false;
+		dPressed = false;
 	}
 }
