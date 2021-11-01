@@ -9,10 +9,7 @@ public class NewGamePane extends GraphicsPane {
 	private MainApplication program; 
 	
 	private GParagraph para;
-	private GImage spritesheet;
-	
-	private static final int width=32, height=32;
-	
+	private GImage spritesheet;	
 	
 	
 	public NewGamePane(MainApplication app) {

@@ -13,7 +13,7 @@ public class SavePane extends GraphicsPane {
 	public SavePane(MainApplication app) {
 		this.program = app;
 		img = new GImage("robot head.jpg", 100, 100);
-		para = new GParagraph("this is save pane where there are three saved files are", 150, 300);
+		para = new GParagraph("this is save pane where there are three saved files are ", 150, 300);
 		para.setFont("Arial-24");
 	}
 

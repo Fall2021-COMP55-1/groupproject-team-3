@@ -14,7 +14,7 @@ public class OptionPane extends GraphicsPane {
 	public OptionPane(MainApplication app) {
 		this.program = app;
 		img = new GImage("robot head.jpg", 100, 100);
-		para = new GParagraph("this is options we will have audio control", 150, 300);
+		para = new GParagraph("this is options we will have audio control ", 150, 300);
 		para.setFont("Arial-24");
 	}
 
