@@ -62,7 +62,6 @@ public class NewGamePane extends GraphicsPane {
 			spriteLeft.add(new GImage("res/player/PCL" + i + ".png"));
 			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
 		}
-		
 	}
 	
 	public NewGamePane(MainApplication app) {
