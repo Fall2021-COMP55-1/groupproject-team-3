@@ -137,5 +137,4 @@ public class MainApplication extends GraphicsProgram {
 	public static void main(String[] args) {
 		new MainApplication().start();
 	}
-
 }
