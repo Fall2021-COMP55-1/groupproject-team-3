@@ -12,18 +12,42 @@ public class NewGamePane extends GraphicsPane {
 	
 	private GParagraph para;
 	private GImage player = new GImage("res/player/PCU1.png");
-	private ArrayList<GImage> spriteUp;
-	private ArrayList<GImage> spriteDown;
-	private ArrayList<GImage> spriteLeft;
-	private ArrayList<GImage> spriteRight;
-	private int x=100, y=100, dx, dy;
-	private int stepsTaken = 0;
-	private boolean sPressed = false, wPressed = false, aPressed = false, dPressed = false;
+	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
+	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0;
+	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	
-	public void move() {
+	
+	//Shortcut to check on whether WASD / arrow keys are being pressed
+	private boolean keyUp(KeyEvent e)   {
+		if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP)   {return true;}
+		else {return false;}	
+	}
+	
+	private boolean keyDown(KeyEvent e)   {
+		if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN)   {return true;}
+		else {return false;}	
+	}
+	
+	private boolean keyLeft(KeyEvent e)   {
+		if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT)   {return true;}
+		else {return false;}
+	}
+	
+	private boolean keyRight(KeyEvent e)   {
+		if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT)   {return true;}
+		else {return false;}
+	}
+	
+	//shortcut for movement. Works with "up", "down", "left," and "right" as inputs for dir
+	private void move(String dir)   {
 		
-		x+=dx;
-		y+=dy;
+		if (stepsTaken == 1)   {stepsTaken = 0;}
+		else {stepsTaken = 1;}
+		if (dir == "up")   {player.setImage(spriteUp.get(stepsTaken).getImage());}
+		if (dir == "down")   {player.setImage(spriteDown.get(stepsTaken).getImage());}
+		if (dir == "left")   {player.setImage(spriteLeft.get(stepsTaken).getImage());}
+		if (dir == "right")   {player.setImage(spriteRight.get(stepsTaken).getImage());}
+		player.move(dx, dy);
 	}
 	
 	public void addImages() {
@@ -31,19 +55,17 @@ public class NewGamePane extends GraphicsPane {
 		spriteDown = new ArrayList<GImage>(2);
 		spriteLeft = new ArrayList<GImage>(2);
 		spriteRight = new ArrayList<GImage>(2);
-		spriteUp.add(new GImage("res/player/PCU1.png"));
-		spriteUp.add(new GImage("res/player/PCU2.png"));
-		spriteDown.add(new GImage("res/player/PCD1.png"));
-		spriteDown.add(new GImage("res/player/PCD2.png"));
-		spriteLeft.add(new GImage("res/player/PCL1.png"));
-		spriteLeft.add(new GImage("res/player/PCL2.png"));
-		spriteRight.add(new GImage("res/player/PCR1.png"));
-		spriteRight.add(new GImage("res/player/PCR2.png"));
+		
+		for (int i = 1; i <= 2; ++i)   {
+			spriteUp.add(new GImage("res/player/PCU" + i + ".png"));
+			spriteDown.add(new GImage("res/player/PCD" + i + ".png"));
+			spriteLeft.add(new GImage("res/player/PCL" + i + ".png"));
+			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
+		}
 		
 	}
 	
 	public NewGamePane(MainApplication app) {
-		
 		this.program = app;
 		addImages();
 		para = new GParagraph("The new game pane", 150, 300);
@@ -69,69 +91,52 @@ public class NewGamePane extends GraphicsPane {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 	}
 	
+	//moves the sprite of the character via WASD and Arrow keys, and changes direction sprite faces
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		if (e.getKeyCode() == KeyEvent.VK_S) {sPressed = true;}
-		if (e.getKeyCode() == KeyEvent.VK_W) {wPressed = true;}
-		if (e.getKeyCode() == KeyEvent.VK_A) {aPressed = true;}
-		if (e.getKeyCode() == KeyEvent.VK_D) {dPressed = true;}
+		if (keyUp(e)) {upPressed = true;}
+		if (keyDown(e)) {downPressed = true;}
+		if (keyLeft(e)) {leftPressed = true;}
+		if (keyRight(e)) {rightPressed = true;}
 		
-		if (sPressed) {
-			player.setImage(spriteDown.get(stepsTaken).getImage());
-			dy=4;
-			player.move(dx, dy);
+		if (upPressed) {
+			if(leftPressed || rightPressed)   {dy = -2;}
+			else   {dy = -4;}
+			move("up");
+		}
+		if (downPressed) {
+			if(leftPressed || rightPressed)   {dy = 2;}
+			else   {dy = 4;}
+			move("down");
         }
-		if (wPressed) {
-			player.setImage(spriteUp.get(stepsTaken).getImage());
-			dy=-4;
-			player.move(dx, dy);
+		if (leftPressed) {
+			if(upPressed || downPressed)   {dx = -2;}
+			else   {dx = -4;}
+			move("left");
         }
-		if (aPressed) {
-			player.setImage(spriteLeft.get(stepsTaken).getImage());
-			dx=-4;
-			player.move(dx, dy);
+		if (rightPressed) {
+			if(upPressed || downPressed)   {dx = 2;}
+			else   {dx = 4;}
+			move("right");
         }
-		if (dPressed) {
-			player.setImage(spriteRight.get(stepsTaken).getImage());
-			dx=4;
-			player.move(dx, dy);
-        }
-		move();
 	}
+	
+	//manages the use case of user attempting to use multiple movement directions at once, to use diagonal movement
 	@Override
 	public void keyReleased(KeyEvent e) {
-		/*currently only works once. Can go diagonally in one direction, then in another without letting the first key you
-		pressed go, but after trying once again, while still holding the first key, no longer detects that the first key
-		pressed is still being pressed*/
-		if (e.getKeyCode() == KeyEvent.VK_S) {sPressed = false;}
-		if (e.getKeyCode() == KeyEvent.VK_W) {wPressed = false;}
-		if (e.getKeyCode() == KeyEvent.VK_A) {aPressed = false;}
-		if (e.getKeyCode() == KeyEvent.VK_D) {dPressed = false;}
+		if (keyUp(e)) {upPressed = false;}
+		if (keyDown(e)) {downPressed = false;}
+		if (keyLeft(e)) {leftPressed = false;}
+		if (keyRight(e)) {rightPressed = false;}
 		
-		if (sPressed)   {
-			dy = 4;
-		}
-		else if (wPressed)   {
-			dy = -4;
-		}
-		else   {
-			dy=0;
-		}
+		if (upPressed)   {dy = -4;}
+		else if (downPressed)   {dy = 4;}
+		else   {dy = 0;}
 		
-		if (aPressed)   {
-			dx = -4;
-		}
-		else if (dPressed)   {
-			dx = 4;
-		}
-		else   {
-			dx = 0;
-		}
+		if (leftPressed)   {dx = -4;;}
+		else if (rightPressed)   {dx = 4;;}
+		else   {dx = 0;}
 		
-		sPressed = false;
-		wPressed = false;
-		aPressed = false;
-		dPressed = false;
 	}
 }
