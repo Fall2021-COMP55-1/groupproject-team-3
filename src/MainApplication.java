@@ -16,6 +16,7 @@ public class MainApplication extends GraphicsProgram {
 	private SavePane save;
 	private OptionPane options;
 	
+	
 	/* Method: setupInteractions
 	 * -------------------------
 	 * must be called before switching to another
@@ -100,6 +101,7 @@ public class MainApplication extends GraphicsProgram {
 
 	public void init() {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	
 	}
 
 	public void run() {
