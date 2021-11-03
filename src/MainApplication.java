@@ -6,7 +6,7 @@ import acm.program.GraphicsProgram;
 public class MainApplication extends GraphicsProgram {
 	
 	public static final int WINDOW_WIDTH = 800;
-	public static final int WINDOW_HEIGHT = 600;
+	public static final int WINDOW_HEIGHT = 640;
 	public static final String MUSIC_FOLDER = "sounds";
 
 	private GraphicsPane curScreen;
@@ -15,6 +15,7 @@ public class MainApplication extends GraphicsProgram {
 	private NewGamePane newGame;
 	private SavePane save;
 	private OptionPane options;
+	
 	
 	/* Method: setupInteractions
 	 * -------------------------
@@ -100,6 +101,7 @@ public class MainApplication extends GraphicsProgram {
 
 	public void init() {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	
 	}
 
 	public void run() {
