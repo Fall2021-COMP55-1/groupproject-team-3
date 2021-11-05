@@ -9,7 +9,7 @@ import acm.graphics.GObject;
 public class NewGamePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	
+	//private myFirstMapPane;
 	private GParagraph para;
 	private GImage player = new GImage("res/player/PCU1.png");
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
@@ -80,6 +80,8 @@ public class NewGamePane extends GraphicsPane {
 		para = new GParagraph("The new game pane", 150, 300);
 		para.setFont("Arial-24");
 		
+		//myFirstMapPane = new FirstMapPane(this);
+		
 	}
 
 	@Override
@@ -94,6 +96,8 @@ public class NewGamePane extends GraphicsPane {
 			ys+=32;
 			
 		}
+		
+		//myFirstMapPane.showcontent()
 		player.setImage(spriteDown.get(0).getImage());
 		program.add(player, x, y);
 		program.add(para);
@@ -101,6 +105,7 @@ public class NewGamePane extends GraphicsPane {
 
 	@Override
 	public void hideContents() {
+		
 		program.remove(player);
 		program.remove(para);
 	}

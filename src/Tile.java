@@ -18,7 +18,7 @@ public class Tile {
 	private BufferedImage tilesets[];
 	
 	Tile(){
-		File file = new File("res/ls.png");
+		/*File file = new File("res/ls.png");
 		tilesets = new BufferedImage[tilesetW*tilesetH];
 		try {
 			FileInputStream istream = new FileInputStream(file);
@@ -45,7 +45,7 @@ public class Tile {
 				e.printStackTrace();
 			}
 		}
-		
+		*/
 		File mapFile = new File("res/map.txt");
 		map = new String[mapH][mapW];
 		Scanner scanner = null;
