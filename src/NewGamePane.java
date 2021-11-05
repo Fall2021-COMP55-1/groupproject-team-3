@@ -9,16 +9,15 @@ public class NewGamePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 
-	//private myFirstMapPane;
-
-	private GParagraph para;
+	private MapPane map;
+	
 	private Player player = new Player(0, 0);
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
-	private GImage tiles[][];
+	
 	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	//private double playerX=100, playerY=100;
-	private Tile tile = new Tile();	
+	
 	
 	//Shortcut to check on whether WASD / arrow keys are being pressed
 	private boolean keyUp(KeyEvent e)   {
@@ -69,54 +68,32 @@ public class NewGamePane extends GraphicsPane {
 			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
 		}
 		
-		tiles = new GImage[20][25];
-		for (int i=0; i<20; i++) {
-			for (int j=0; j<25; j++) {
-				tiles[i][j]=new GImage(tile.map[i][j]);
-			}
-		}
-		
 	}
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		addImages();
-		para = new GParagraph("The new game pane", 150, 300);
-		para.setFont("Arial-24");
 		
-		//myFirstMapPane = new FirstMapPane(this);
+		map = new MapPane(program);
 		
 	}
 
 	@Override
 	public void showContents() {
-		int xs=0, ys=0;
-		for(int i=0; i<20; i++) {
-			for(int j=0; j<25; j++) {
-				program.add(tiles[i][j],xs,ys);
-				xs+=32;
-			}
-			xs=0;
-			ys+=32;
-			
-		}
-		
-		//myFirstMapPane.showcontent()
+		map.showContents();
 		player.loadImage(spriteDown.get(0).getImage());
 		program.add(player.getImage(), x, y);
-		program.add(para);
+
 	}
 
 	@Override
 	public void hideContents() {
-		
+		map.hideContents();
 		program.remove(player.getImage());
-		program.remove(para);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		para.setText("you need\nto click\non the eyes\nto go back");
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 	}
 	
