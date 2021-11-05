@@ -2,21 +2,22 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 
 public class NewGamePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
+
 	//private myFirstMapPane;
+
 	private GParagraph para;
-	private GImage player = new GImage("res/player/PCU1.png");
+	private Player player = new Player(0, 0);
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
 	private GImage tiles[][];
 	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
-	private double playerX=100, playerY=100;
+	//private double playerX=100, playerY=100;
 	private Tile tile = new Tile();	
 	
 	//Shortcut to check on whether WASD / arrow keys are being pressed
@@ -42,14 +43,17 @@ public class NewGamePane extends GraphicsPane {
 	
 	//shortcut for movement. Works with "up", "down", "left," and "right" as inputs for dir
 	private void move(String dir)   {
-		
-		if (stepsTaken == 1)   {stepsTaken = 0;}
-		else {stepsTaken = 1;}
-		if (dir == "up")   {player.setImage(spriteUp.get(stepsTaken).getImage());}
-		if (dir == "down")   {player.setImage(spriteDown.get(stepsTaken).getImage());}
-		if (dir == "left")   {player.setImage(spriteLeft.get(stepsTaken).getImage());}
-		if (dir == "right")   {player.setImage(spriteRight.get(stepsTaken).getImage());}
+		int legTracker;
+
+		if (stepsTaken == 8)   {stepsTaken = 0;}
+		if (stepsTaken < 4)   {legTracker = 0;}
+		else   {legTracker = 1;}
+		if (dir == "up")   {player.loadImage(spriteUp.get(legTracker).getImage());}
+		if (dir == "down")   {player.loadImage(spriteDown.get(legTracker).getImage());}
+		if (dir == "left")   {player.loadImage(spriteLeft.get(legTracker).getImage());}
+		if (dir == "right")   {player.loadImage(spriteRight.get(legTracker).getImage());}
 		player.move(dx, dy);
+		stepsTaken = stepsTaken + 1;
 	}
 	
 	public void addImages() {
@@ -98,15 +102,15 @@ public class NewGamePane extends GraphicsPane {
 		}
 		
 		//myFirstMapPane.showcontent()
-		player.setImage(spriteDown.get(0).getImage());
-		program.add(player, x, y);
+		player.loadImage(spriteDown.get(0).getImage());
+		program.add(player.getImage(), x, y);
 		program.add(para);
 	}
 
 	@Override
 	public void hideContents() {
 		
-		program.remove(player);
+		program.remove(player.getImage());
 		program.remove(para);
 	}
 
