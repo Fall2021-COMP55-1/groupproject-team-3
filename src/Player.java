@@ -8,7 +8,6 @@ public class Player {
 	private GImage sprite = new GImage("res/player/PCU1.png");
 	private boolean visible;
 	
-	
 	public Player(int x, int y)   {
 		this.x = x;
 		this.y = y;
@@ -23,14 +22,16 @@ public class Player {
 	
 	public boolean isVisible()   {return visible;}
 	
-	public void setVisible(boolean visible)   {this.visible = visible;}
-	
 	public GRect getBounds()   {return new GRect(x, y, width, height);}
+	
+	public void setVisible(boolean visible)   {this.visible = visible;}
 	
 	protected void loadImage(Image image)   {sprite.setImage(image);}
 	
 	protected void move(int x, int y)   {
 		sprite.move(x, y);
+		this.x = this.x + x;
+		this.y = this.y + y;
 	}
 	
 }
