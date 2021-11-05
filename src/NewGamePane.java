@@ -13,9 +13,11 @@ public class NewGamePane extends GraphicsPane {
 	private GParagraph para;
 	private GImage player = new GImage("res/player/PCU1.png");
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
+	private GImage tiles[][];
 	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
-	
+	private double playerX=100, playerY=100;
+	private Tile tile = new Tile();	
 	
 	//Shortcut to check on whether WASD / arrow keys are being pressed
 	private boolean keyUp(KeyEvent e)   {
@@ -62,6 +64,14 @@ public class NewGamePane extends GraphicsPane {
 			spriteLeft.add(new GImage("res/player/PCL" + i + ".png"));
 			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
 		}
+		
+		tiles = new GImage[20][25];
+		for (int i=0; i<20; i++) {
+			for (int j=0; j<25; j++) {
+				tiles[i][j]=new GImage(tile.map[i][j]);
+			}
+		}
+		
 	}
 	
 	public NewGamePane(MainApplication app) {
@@ -69,10 +79,21 @@ public class NewGamePane extends GraphicsPane {
 		addImages();
 		para = new GParagraph("The new game pane", 150, 300);
 		para.setFont("Arial-24");
+		
 	}
 
 	@Override
 	public void showContents() {
+		int xs=0, ys=0;
+		for(int i=0; i<20; i++) {
+			for(int j=0; j<25; j++) {
+				program.add(tiles[i][j],xs,ys);
+				xs+=32;
+			}
+			xs=0;
+			ys+=32;
+			
+		}
 		player.setImage(spriteDown.get(0).getImage());
 		program.add(player, x, y);
 		program.add(para);
@@ -101,7 +122,7 @@ public class NewGamePane extends GraphicsPane {
 		
 		if (upPressed) {
 			if(leftPressed || rightPressed)   {dy = -2;}
-			else   {dy = -4;}
+			else {dy = -4;}
 			move("up");
 		}
 		if (downPressed) {

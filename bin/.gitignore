@@ -5,7 +5,9 @@
 /Interfaceable.class
 /MainApplication.class
 /MenuPane.class
-/SomePane.class
 /NewGamePane.class
 /OptionPane.class
 /SavePane.class
+/SomePane.class
+/Tile.class
+/AABB.class
