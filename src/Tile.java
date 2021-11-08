@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 public class Tile {
 	public String map[][];
+	public String mapPath[][];
 	private int mapW = 25;
 	private int mapH = 20;
 	private int tilesetW = 3;
@@ -63,10 +64,11 @@ public class Tile {
 	        }
 	    }
 		
+		mapPath = new String[mapH][mapW];
 		
 		for(int i=0; i<mapH; i++) {
 			for(int j=0; j<mapW; j++) {
-				map[i][j]="res/tiles/tile"+map[i][j]+".png";
+				mapPath[i][j]="res/tiles/tile"+map[i][j]+".png";
 			}
 		}
 	}
