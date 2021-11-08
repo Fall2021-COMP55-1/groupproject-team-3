@@ -1,39 +1,40 @@
-import java.awt.Image;
 import java.util.ArrayList;
-
 import acm.graphics.GImage;
-import acm.graphics.GRect;
 
-public class Player {
-	private GImage sprite = new GImage("res/player/PCU1.png");
+public class Player extends Entity{
+	private GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
-	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0, width = 32, height = 32;
-	private boolean visible;
+	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
-	
+		
 	public Player(int x, int y)   {
-		this.x = x;
-		this.y = y;
-		visible = true;
+		super(x, y);
 		addImages();
-		loadImage(spriteDown.get(0).getImage());
 	}
 	
+	public int getDX()   {return dx;}
+	
+	public int getDY()   {return dy;}
+	
+	public void setDX(int dx)   {this.dx = dx;}
+	
+	public void setDY(int dy)   {this.dy = dy;}
+	
+	@Override
 	public void addImages() {
 		spriteUp = new ArrayList<GImage>(2);
 		spriteDown = new ArrayList<GImage>(2);
 		spriteLeft = new ArrayList<GImage>(2);
 		spriteRight = new ArrayList<GImage>(2);
-		
+			
 		for (int i = 1; i <= 2; ++i)   {
 			spriteUp.add(new GImage("res/player/PCU" + i + ".png"));
 			spriteDown.add(new GImage("res/player/PCD" + i + ".png"));
 			spriteLeft.add(new GImage("res/player/PCL" + i + ".png"));
 			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
 		}
-		
 	}
-	
+		
 	protected void move(dir direction)   {
 		int legTracker;
 		if (stepsTaken == 8)   {stepsTaken = 0;}
@@ -46,33 +47,11 @@ public class Player {
 		move(dx, dy);
 		stepsTaken = stepsTaken + 1;
 	}
-	
-	public int getDX()   {return dx;}
-	
-	public int getDY()   {return dy;}
-	
-	public int getX()   {return x;}
-	
-	public int getY()   {return y;}
-	
-	public GImage getImage()   {return sprite;}
-	
-	public boolean isVisible()   {return visible;}
-	
-	public GRect getBounds()   {return new GRect(x, y, width, height);}
-	
-	public void setVisible(boolean visible)   {this.visible = visible;}
-	
-	protected void loadImage(Image image)   {sprite.setImage(image);}
-	
+		
 	private void move(int x, int y)   {
 		sprite.move(x, y);
 		this.x = this.x + x;
 		this.y = this.y + y;
-	}
-	
-	public void setDX(int dx)   {this.dx = dx;}
-	
-	public void setDY(int dy)   {this.dy = dy;}
-	
+	}	
 }
+
