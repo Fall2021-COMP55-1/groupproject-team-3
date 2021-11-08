@@ -51,7 +51,17 @@ public class NewGamePane extends GraphicsPane {
 		if (dir == "down")   {player.loadImage(spriteDown.get(legTracker).getImage());}
 		if (dir == "left")   {player.loadImage(spriteLeft.get(legTracker).getImage());}
 		if (dir == "right")   {player.loadImage(spriteRight.get(legTracker).getImage());}
-		player.move(dx, dy);
+		
+		// Check the would-be position to see how far you can move
+		int moveToX = player.getX() + dx;
+		int moveToY = player.getY() + dy;
+		GObject temp = program.getElementAt(moveToX, moveToY);
+		
+		// Convert pixel space to tile space and access it in MapPane
+		int moveTileX = moveToX / 32;
+		int moveTileY = moveToY / 32;
+		
+		
 		stepsTaken = stepsTaken + 1;
 	}
 	
@@ -78,6 +88,12 @@ public class NewGamePane extends GraphicsPane {
 		
 	}
 
+	public boolean canWalk() {
+		//GObject a = getElementAt(player.getX(),player.getY());
+		return true;
+		
+	}
+	
 	@Override
 	public void showContents() {
 		map.showContents();

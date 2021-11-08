@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class Tile {
+public class TileFactory {
 	public String map[][];
 	public String mapPath[][];
 	private int mapW = 25;
@@ -18,7 +18,7 @@ public class Tile {
 	private BufferedImage tileset;
 	private BufferedImage tilesets[];
 	
-	Tile(){
+	TileFactory(){
 		/*File file = new File("res/ls.png");
 		tilesets = new BufferedImage[tilesetW*tilesetH];
 		try {
