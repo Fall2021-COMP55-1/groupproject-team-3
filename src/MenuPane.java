@@ -22,7 +22,7 @@ public class MenuPane extends GraphicsPane {
 		program = app;
 		double X = app.getWidth()/2 - WIDTH/2 -7;
 		background = new GImage("res/texture/Main Menu.png", 0, 0);
-		background.setSize(800,600);
+		background.setSize(800,640);
 		newGame = new GButton("", X, 180, WIDTH, HEIGHT);
 		loadGame = new GButton("", X, 286, WIDTH, HEIGHT);
 		options = new GButton("", X, 392, WIDTH, HEIGHT);

@@ -4,7 +4,6 @@ public class MapPane extends GraphicsPane{
 	
 	private MainApplication program;
 	private GImage tiles[][];
-	private boolean Walkable[][];
 	private TileFactory tileFactory = new TileFactory();	
 	private int tileR = 20;
 	private int tileC = 25;
@@ -12,7 +11,6 @@ public class MapPane extends GraphicsPane{
 	public MapPane(MainApplication app) {
 		this.program = app;
 		addImages();
-		setWalkable();
 	}
 	
 	public void addImages(){
@@ -20,20 +18,6 @@ public class MapPane extends GraphicsPane{
 		for (int i=0; i<tileR; i++) {
 			for (int j=0; j<tileC; j++) {
 				tiles[i][j]=new GImage(tileFactory.mapPath[i][j]);
-			}
-		}
-	}
-	
-	
-	public void setWalkable() {
-		Walkable = new boolean[tileR][tileC];
-		for (int i=0; i<tileR; i++) {
-			for (int j=0; j<tileC; j++) {
-				if (tileFactory.map[i][j]=="0") {
-					Walkable[i][j]=false;
-				}else {
-					Walkable[i][j]=true;
-				}
 			}
 		}
 	}
@@ -49,7 +33,6 @@ public class MapPane extends GraphicsPane{
 			}
 			xs=0;
 			ys+=32;
-			
 		}
 		
 	}
@@ -58,7 +41,13 @@ public class MapPane extends GraphicsPane{
 
 	@Override
 	public void hideContents() {
-		// TODO Auto-generated method stub
 		
+		for(int i=0; i<tileR; i++) {
+			for(int j=0; j<tileC; j++) {
+				program.remove(tiles[i][j]);
+			}
+			
+		}
 	}
 }
+
