@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import acm.graphics.GImage;
+import acm.graphics.GObject;
 
 public class Player extends Entity{
 	private GImage sprite = getImage();
@@ -45,6 +46,15 @@ public class Player extends Entity{
 		if(direction == dir.LEFT)   {loadImage(spriteLeft.get(legTracker).getImage());}
 		if(direction == dir.RIGHT)   {loadImage(spriteRight.get(legTracker).getImage());}
 		move(dx, dy);
+		
+		// Check the would-be position to see how far you can move
+		int moveToX = getX() + dx;
+		int moveToY = getY() + dy;
+		//GObject temp = program.getElementAt(moveToX, moveToY);
+		
+		// Convert pixel space to tile space and access it in MapPane
+		int moveTileX = moveToX / 32;
+		int moveTileY = moveToY / 32;
 		stepsTaken = stepsTaken + 1;
 	}
 		

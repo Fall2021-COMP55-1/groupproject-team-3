@@ -5,7 +5,7 @@ public class MapPane extends GraphicsPane{
 	private MainApplication program;
 	private GImage tiles[][];
 	private boolean Walkable[][];
-	private Tile tile = new Tile();	
+	private TileFactory tileFactory = new TileFactory();	
 	private int tileR = 20;
 	private int tileC = 25;
 	
@@ -19,16 +19,17 @@ public class MapPane extends GraphicsPane{
 		tiles = new GImage[tileR][tileC];
 		for (int i=0; i<tileR; i++) {
 			for (int j=0; j<tileC; j++) {
-				tiles[i][j]=new GImage(tile.map[i][j]);
+				tiles[i][j]=new GImage(tileFactory.mapPath[i][j]);
 			}
 		}
 	}
+	
 	
 	public void setWalkable() {
 		Walkable = new boolean[tileR][tileC];
 		for (int i=0; i<tileR; i++) {
 			for (int j=0; j<tileC; j++) {
-				if (tile.mapPath[i][j]=="0") {
+				if (tileFactory.map[i][j]=="0") {
 					Walkable[i][j]=false;
 				}else {
 					Walkable[i][j]=true;
@@ -36,6 +37,7 @@ public class MapPane extends GraphicsPane{
 			}
 		}
 	}
+	
 	
 	@Override
 	public void showContents() {

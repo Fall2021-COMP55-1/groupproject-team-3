@@ -35,9 +35,14 @@ public class NewGamePane extends GraphicsPane {
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		map = new MapPane(program);
-		
 	}
 
+	public boolean canWalk() {
+		//GObject a = getElementAt(player.getX(),player.getY());
+		return true;
+		
+	}
+	
 	@Override
 	public void showContents() {
 		map.showContents();
