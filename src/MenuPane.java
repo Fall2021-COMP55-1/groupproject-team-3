@@ -14,7 +14,7 @@ public class MenuPane extends GraphicsPane {
 	private GButton exitGame;
 	private GImage background;
 	private final int WIDTH = 200;
-	private final int HEIGHT = 80;
+	private final int HEIGHT = 88;
 
 
 	public MenuPane(MainApplication app) {
@@ -23,10 +23,10 @@ public class MenuPane extends GraphicsPane {
 		double X = app.getWidth()/2 - WIDTH/2 -7;
 		background = new GImage("res/texture/Main Menu.png", 0, 0);
 		background.setSize(800,640);
-		newGame = new GButton("", X, 180, WIDTH, HEIGHT);
-		loadGame = new GButton("", X, 286, WIDTH, HEIGHT);
-		options = new GButton("", X, 392, WIDTH, HEIGHT);
-		exitGame = new GButton("", X, 500, WIDTH, HEIGHT);
+		newGame = new GButton("", X, 190, WIDTH, HEIGHT);
+		loadGame = new GButton("", X, 305, WIDTH, HEIGHT);
+		options = new GButton("", X, 418, WIDTH, HEIGHT);
+		exitGame = new GButton("", X, 532, WIDTH, HEIGHT);
 	}
 	
 
