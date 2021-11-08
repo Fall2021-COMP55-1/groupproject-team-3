@@ -1,23 +1,15 @@
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import acm.graphics.GImage;
 import acm.graphics.GObject;
 
 public class NewGamePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-
 	private MapPane map;
-	
 	private Player player = new Player(0, 0);
-	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
-	
-	private int x = 100, y = 100, dx = 0, dy = 0, stepsTaken = 0;
+	private int x = 100, y = 100;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
-	//private double playerX=100, playerY=100;
-	
 	
 	//Shortcut to check on whether WASD / arrow keys are being pressed
 	private boolean keyUp(KeyEvent e)   {
@@ -40,40 +32,8 @@ public class NewGamePane extends GraphicsPane {
 		else {return false;}
 	}
 	
-	//shortcut for movement. Works with "up", "down", "left," and "right" as inputs for dir
-	private void move(String dir)   {
-		int legTracker;
-
-		if (stepsTaken == 8)   {stepsTaken = 0;}
-		if (stepsTaken < 4)   {legTracker = 0;}
-		else   {legTracker = 1;}
-		if (dir == "up")   {player.loadImage(spriteUp.get(legTracker).getImage());}
-		if (dir == "down")   {player.loadImage(spriteDown.get(legTracker).getImage());}
-		if (dir == "left")   {player.loadImage(spriteLeft.get(legTracker).getImage());}
-		if (dir == "right")   {player.loadImage(spriteRight.get(legTracker).getImage());}
-		player.move(dx, dy);
-		stepsTaken = stepsTaken + 1;
-	}
-	
-	public void addImages() {
-		spriteUp = new ArrayList<GImage>(2);
-		spriteDown = new ArrayList<GImage>(2);
-		spriteLeft = new ArrayList<GImage>(2);
-		spriteRight = new ArrayList<GImage>(2);
-		
-		for (int i = 1; i <= 2; ++i)   {
-			spriteUp.add(new GImage("res/player/PCU" + i + ".png"));
-			spriteDown.add(new GImage("res/player/PCD" + i + ".png"));
-			spriteLeft.add(new GImage("res/player/PCL" + i + ".png"));
-			spriteRight.add(new GImage("res/player/PCR" + i + ".png"));
-		}
-		
-	}
-	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
-		addImages();
-		
 		map = new MapPane(program);
 		
 	}
@@ -81,9 +41,7 @@ public class NewGamePane extends GraphicsPane {
 	@Override
 	public void showContents() {
 		map.showContents();
-		player.loadImage(spriteDown.get(0).getImage());
 		program.add(player.getImage(), x, y);
-
 	}
 
 	@Override
@@ -107,24 +65,24 @@ public class NewGamePane extends GraphicsPane {
 		if (keyRight(e)) {rightPressed = true;}
 		
 		if (upPressed) {
-			if(leftPressed || rightPressed)   {dy = -2;}
-			else {dy = -4;}
-			move("up");
+			if(leftPressed || rightPressed)   {player.setDY(-2);}
+			else {player.setDY(-4);}
+			player.move(Player.dir.UP);
 		}
 		if (downPressed) {
-			if(leftPressed || rightPressed)   {dy = 2;}
-			else   {dy = 4;}
-			move("down");
+			if(leftPressed || rightPressed)   {player.setDY(2);}
+			else   {player.setDY(4);}
+			player.move(Player.dir.DOWN);
         }
 		if (leftPressed) {
-			if(upPressed || downPressed)   {dx = -2;}
-			else   {dx = -4;}
-			move("left");
+			if(upPressed || downPressed)   {player.setDX(-2);;}
+			else   {player.setDX(-4);}
+			player.move(Player.dir.LEFT);
         }
 		if (rightPressed) {
-			if(upPressed || downPressed)   {dx = 2;}
-			else   {dx = 4;}
-			move("right");
+			if(upPressed || downPressed)   {player.setDX(2);;}
+			else   {player.setDX(4);}
+			player.move(Player.dir.RIGHT);
         }
 	}
 	
@@ -136,13 +94,13 @@ public class NewGamePane extends GraphicsPane {
 		if (keyLeft(e)) {leftPressed = false;}
 		if (keyRight(e)) {rightPressed = false;}
 		
-		if (upPressed)   {dy = -4;}
-		else if (downPressed)   {dy = 4;}
-		else   {dy = 0;}
+		if (upPressed)   {player.setDY(-4);}
+		else if (downPressed)   {player.setDY(4);}
+		else   {player.setDY(0);}
 		
-		if (leftPressed)   {dx = -4;;}
-		else if (rightPressed)   {dx = 4;;}
-		else   {dx = 0;}
+		if (leftPressed)   {player.setDX(-4);}
+		else if (rightPressed)   {player.setDX(4);}
+		else   {player.setDX(0);}
 		
 	}
 }
