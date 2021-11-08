@@ -12,7 +12,7 @@ public class MapPane extends GraphicsPane{
 	public MapPane(MainApplication app) {
 		this.program = app;
 		addImages();
-		
+		setWalkable();
 	}
 	
 	public void addImages(){
@@ -20,6 +20,19 @@ public class MapPane extends GraphicsPane{
 		for (int i=0; i<tileR; i++) {
 			for (int j=0; j<tileC; j++) {
 				tiles[i][j]=new GImage(tile.map[i][j]);
+			}
+		}
+	}
+	
+	public void setWalkable() {
+		Walkable = new boolean[tileR][tileC];
+		for (int i=0; i<tileR; i++) {
+			for (int j=0; j<tileC; j++) {
+				if (tile.mapPath[i][j]=="0") {
+					Walkable[i][j]=false;
+				}else {
+					Walkable[i][j]=true;
+				}
 			}
 		}
 	}
