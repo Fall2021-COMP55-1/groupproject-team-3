@@ -54,7 +54,7 @@ public class OptionPane extends GraphicsPane {
 			program.switchToMenu();
 		}
 		if (obj == Credits) {
-			program.switchToMenu();
+			program.switchToCredits();
 		}
 		
 	}
