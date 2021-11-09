@@ -1,13 +1,3 @@
-/Displayable.class
-/GButton.class
-/GParagraph.class
-/GraphicsPane.class
-/Interfaceable.class
-/MainApplication.class
-/MenuPane.class
-/NewGamePane.class
-/OptionPane.class
-/SavePane.class
-/SomePane.class
-/Tile.class
-/AABB.class
+/Entity.class
+/Player$dir.class
+/TileFactory.class
