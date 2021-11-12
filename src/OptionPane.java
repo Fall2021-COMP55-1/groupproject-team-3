@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 import acm.graphics.GImage;
 import acm.graphics.GObject;
+import acm.graphics.GRect;
 
 
 public class OptionPane extends GraphicsPane {
@@ -18,8 +19,11 @@ public class OptionPane extends GraphicsPane {
 	private GImage img;
 	private GButton Credits; 
 	private GButton Back; 
+	private GRect audioBar;
 	private final int WIDTH = 200; 
 	private final int HEIGHT = 88; 
+	private int lastX;
+	private GObject obj;
 
 	public OptionPane(MainApplication app) {
 		super();
@@ -30,7 +34,9 @@ public class OptionPane extends GraphicsPane {
 		img.setSize(800, 640);	
 		Credits = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);
-		
+		audioBar = new GRect(384, 170, 32, 32);
+		audioBar.setFilled(true);
+		audioBar.setFillColor(Color.black);
 	}
 
 	@Override
@@ -38,7 +44,7 @@ public class OptionPane extends GraphicsPane {
 		program.add(img);
 		program.add(Credits);
 		program.add(Back);
-		
+		program.add(audioBar);
 	}
 
 	@Override
@@ -50,15 +56,25 @@ public class OptionPane extends GraphicsPane {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		GObject obj = program.getElementAt(e.getX(), e.getY());
+		lastX = e.getX();
+		obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == Back) {
 			program.switchToMenu();
 		}
 		if (obj == Credits) {
 			program.switchToCredits();
 		}
-		
 	}
-
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (obj == audioBar) {
+			if (audioBar.getX() < 50)   {audioBar.setLocation(50, 170); return;}
+			if (audioBar.getX() > 710)   {audioBar.setLocation(710, 170); return;}
+				audioBar.move(e.getX() - lastX, 0);
+				lastX = e.getX();
+		}
+	}
 }
+
 
