@@ -10,7 +10,6 @@ public class Player extends Entity{
 	private Inventory inventory;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
 	
-		
 	public Player(int x, int y)   {
 		super(x, y);
 		inventory = new Inventory();
