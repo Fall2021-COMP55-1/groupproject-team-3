@@ -5,7 +5,6 @@ public class Monster extends Entity{
 	private GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
 	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0, width, height;
-	private MonsterType type;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
 			
 	public Monster(int x, int y, MonsterType type)   {
@@ -13,22 +12,22 @@ public class Monster extends Entity{
 		addImages();
 		loadImage(this.spriteDown.get(0).getImage());
 	}
-		
-	public int getDX()   {return dx;}
-		
-	public int getDY()   {return dy;}
 	
-	public int getWidth()   {return width;}
+	public int getX()   {return x;}
 	
-	public int getHeight()   {return height;}
-		
-	public void setDX(int dx)   {this.dx = dx;}
-		
-	public void setDY(int dy)   {this.dy = dy;}
+	public int getY()   {return y;}
 	
-	public void setWidth(int width)   {this.width = width;}
+	private int getWidth()   {return width;}
 	
-	public void setHeight(int height)   {this.height = height;}
+	private int getHeight()   {return height;}
+	
+	public void setX()   {this.x = x;}
+	
+	public void setY()   {this.y = y;}
+	
+	private void setWidth(int width)   {this.width = width;}
+	
+	private void setHeight(int height)   {this.height = height;}
 	
 		
 	@Override
@@ -47,35 +46,52 @@ public class Monster extends Entity{
 		}
 	}
 			
-	protected void move(dir direction)   {
+	
+	private void move(dir direction)   {
 		int legTracker;
 		if (stepsTaken == 8)   {stepsTaken = 0;}
 		if (stepsTaken < 4)   {legTracker = 0;}
 		else   {legTracker = 1;}
-		
-		
-		
-		if(direction == dir.UP)   {loadImage(spriteUp.get(legTracker).getImage());}
-		if(direction == dir.DOWN)   {loadImage(spriteDown.get(legTracker).getImage());}
-		if(direction == dir.LEFT)   {loadImage(spriteLeft.get(legTracker).getImage());}
-		if(direction == dir.RIGHT)   {loadImage(spriteRight.get(legTracker).getImage());}
+		if(direction == dir.UP)   {
+			loadImage(spriteUp.get(legTracker).getImage());
+			dx = 0; dy = -4;
+		}
+		if(direction == dir.DOWN)   {
+			loadImage(spriteDown.get(legTracker).getImage());
+			dx = 0; dy = 4;
+		}
+		if(direction == dir.LEFT)   {
+			loadImage(spriteLeft.get(legTracker).getImage());
+			dx = -4; dy = 0;
+		}
+		if(direction == dir.RIGHT)   {
+			loadImage(spriteRight.get(legTracker).getImage());
+			dx = 4; dy = 0;
+		}
 		move(dx, dy);
 			
-		// Check the would-be position to see how far you can move
+		/*// Check the would-be position to see how far you can move
 		int moveToX = getX() + dx;
 		int moveToY = getY() + dy;
 		//GObject temp = program.getElementAt(moveToX, moveToY);
 			
 		// Convert pixel space to tile space and access it in MapPane
 		int moveTileX = moveToX / 32;
-		int moveTileY = moveToY / 32;
+		int moveTileY = moveToY / 32;*/
 		stepsTaken = stepsTaken + 1;
 	}
 			
 	private void move(int x, int y)   {
-		sprite.move(x, y);
-		this.x = this.x + x;
-		this.y = this.y + y;
+		sprite.move(dx, dy);
+		this.x = (int) (sprite.getX() + dx);
+		this.y = (int) (sprite.getY() + dy + 16);
 	}	
+	
+	protected void move(Player player)   {
+		if(player.getX() < x)   {move(dir.LEFT);}
+		if(player.getX() > x)   {move(dir.RIGHT);}
+		if(player.getY() < y)   {move(dir.UP);}
+		if(player.getY() > y)   {move(dir.DOWN);}
+	}
 }
 

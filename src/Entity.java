@@ -13,6 +13,7 @@ public class Entity {
 		this.x = x;
 		this.y = y;
 		visible = true;
+		addImages();
 	}
 	
 	public void addImages() {
