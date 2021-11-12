@@ -2,3 +2,7 @@
 /Player$dir.class
 /TileFactory.class
 /Credits.class
+/Inventory.class
+/Monster$dir.class
+/Monster.class
+/MonsterType.class
