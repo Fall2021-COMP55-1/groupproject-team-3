@@ -8,6 +8,7 @@ public class NewGamePane extends GraphicsPane {
 	private MainApplication program; 
 	private MapPane map;
 	private Player player = new Player(0, 0);
+	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 100, y = 100;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	
@@ -47,6 +48,9 @@ public class NewGamePane extends GraphicsPane {
 	public void showContents() {
 		map.showContents();
 		program.add(player.getImage(), x, y);
+		program.add(monster.getImage(), x + 32, y + 32);
+		player.getInv();
+		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 	}
 
 	@Override
