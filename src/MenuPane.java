@@ -1,6 +1,3 @@
-import java.awt.Color;
-
-
 import java.awt.event.MouseEvent;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
@@ -53,17 +50,9 @@ public class MenuPane extends GraphicsPane {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == newGame) {
-			program.switchToNewGame();
-		}
-		if (obj == loadGame) {
-			program.switchToSave();
-		}	
-		if (obj == options) {
-			program.switchToOptions();
-		}
-		if (obj == exitGame) {
-			System.exit(0);
-		}
+		if (obj == newGame)   {program.switchToNewGame();}
+		if (obj == loadGame)   {program.switchToSave();}	
+		if (obj == options)   {program.switchToOptions();}
+		if (obj == exitGame)   {System.exit(0);}
 	}
 }

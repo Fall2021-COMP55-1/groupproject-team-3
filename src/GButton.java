@@ -59,11 +59,7 @@ public class GButton extends GCompound {
 		label.setFont(new Font(name, style, size - 1));
 	}
 
-	public void setFillColor(Color col) {
-		rect.setFillColor(col);
-	}
+	public void setFillColor(Color col) {rect.setFillColor(col);}
 
-	public void setColor(Color col) {
-		message.setColor(col);
-	}
+	public void setColor(Color col) {message.setColor(col);}
 }

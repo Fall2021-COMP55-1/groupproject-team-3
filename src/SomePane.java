@@ -33,8 +33,6 @@ public class SomePane extends GraphicsPane {
 	public void mousePressed(MouseEvent e) {
 		para.setText("you need\nto click\non the eyes\nto go back");
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == img) {
-			program.switchToMenu();
-		}
+		if (obj == img) {program.switchToMenu();}
 	}
 }

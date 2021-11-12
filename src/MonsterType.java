@@ -1,4 +1,3 @@
-
 public enum MonsterType {
 	TALL, CRY, SUS;
 	

@@ -117,33 +117,19 @@ public class MainApplication extends GraphicsProgram {
 		switchToMenu();
 	}
 
-	public void switchToMenu() {
-		switchToScreen(menu);
-	}
+	public void switchToMenu() {switchToScreen(menu);}
 
-	public void switchToSome() {
-		switchToScreen(somePane);
-	}
+	public void switchToSome() {switchToScreen(somePane);}
 	
-	public void switchToNewGame() {
-		switchToScreen(newGame);
-	}
+	public void switchToNewGame() {switchToScreen(newGame);}
 	
-	public void switchToSave() {
-		switchToScreen(save);
-	}
+	public void switchToSave() {switchToScreen(save);}
 	
-	public void switchToOptions() {
-		switchToScreen(options);
-	}
+	public void switchToOptions() {switchToScreen(options);}
 	
-	public void switchToCredits() {
-		switchToScreen(credits);
-	}
+	public void switchToCredits() {switchToScreen(credits);}
 
 
-	public static void main(String[] args) {
-		new MainApplication().start();
-	}
+	public static void main(String[] args) {new MainApplication().start();}
 
 }

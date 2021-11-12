@@ -1,12 +1,5 @@
 import java.awt.Color;
-
-
-
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
@@ -16,7 +9,7 @@ public class OptionPane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	
-	private GImage img;
+	private GImage background;
 	private GButton Credits; 
 	private GButton Back; 
 	private GRect audioBar;
@@ -30,8 +23,8 @@ public class OptionPane extends GraphicsPane {
 		this.program = app;
 		program = app;
 		double X = app.getWidth()/2 - WIDTH/2 -7;
-		img = new GImage("res/texture/Options.png", 0, 0);
-		img.setSize(800, 640);	
+		background = new GImage("res/texture/Options.png", 0, 0);
+		background.setSize(800, 640);
 		Credits = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);
 		audioBar = new GRect(384, 170, 32, 32);
@@ -41,7 +34,7 @@ public class OptionPane extends GraphicsPane {
 
 	@Override
 	public void showContents() {
-		program.add(img);
+		program.add(background);
 		program.add(Credits);
 		program.add(Back);
 		program.add(audioBar);
@@ -49,7 +42,7 @@ public class OptionPane extends GraphicsPane {
 
 	@Override
 	public void hideContents() {
-		program.remove(img);
+		program.remove(background);
 		program.remove(Credits);
 		program.remove(Back);
 	}

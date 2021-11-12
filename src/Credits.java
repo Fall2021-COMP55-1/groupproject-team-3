@@ -1,11 +1,4 @@
-import java.awt.Color;
-
-
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 
@@ -39,9 +32,7 @@ public class Credits extends GraphicsPane {
 	public void hideContents() {
 		program.remove(credits);
 		program.remove(back);
-		
 	}
-	
 	
 	@Override
 	public void mousePressed(MouseEvent e) {

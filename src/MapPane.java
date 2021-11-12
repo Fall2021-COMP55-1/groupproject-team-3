@@ -22,7 +22,6 @@ public class MapPane extends GraphicsPane{
 		}
 	}
 	
-	
 	@Override
 	public void showContents() {
 		int xs=0, ys=0;
@@ -34,11 +33,8 @@ public class MapPane extends GraphicsPane{
 			xs=0;
 			ys+=32;
 		}
-		
 	}
 	
-	
-
 	@Override
 	public void hideContents() {
 		
@@ -46,7 +42,6 @@ public class MapPane extends GraphicsPane{
 			for(int j=0; j<tileC; j++) {
 				program.remove(tiles[i][j]);
 			}
-			
 		}
 	}
 }
