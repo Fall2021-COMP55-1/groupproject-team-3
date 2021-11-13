@@ -23,7 +23,7 @@ public class OptionPane extends GraphicsPane {
 		this.program = app;
 		program = app;
 		double X = app.getWidth()/2 - WIDTH/2 -7;
-		background = new GImage("res/texture/Options.png", 0, 0);
+		background = new GImage("res/texture/Options Menu.png", 0, 0);
 		background.setSize(800, 640);
 		Credits = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);

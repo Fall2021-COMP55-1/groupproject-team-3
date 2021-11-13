@@ -1,9 +1,4 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 
@@ -26,7 +21,7 @@ public class SavePane extends GraphicsPane {
 		this.program = app;
 		program = app;
 		double X = app.getWidth()/2 - WIDTH/2 -7;
-		img = new GImage("res/texture/load Game.png", 0, 0);
+		img = new GImage("res/texture/Load Game Menu.png", 0, 0);
 		img.setSize(800, 640);	
 		loadGame = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);
