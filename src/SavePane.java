@@ -7,8 +7,7 @@ public class SavePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	
-	private GImage img;
-	private GButton loadGame; 
+	private GImage img; 
 	private GButton Back; 
 	private GButton save1; 
 	private GButton save2;
@@ -23,33 +22,30 @@ public class SavePane extends GraphicsPane {
 		double X = app.getWidth()/2 - WIDTH/2 -7;
 		img = new GImage("res/texture/Load Game Menu.png", 0, 0);
 		img.setSize(800, 640);	
-		loadGame = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);
-		//save1 = new GButton("", X, );
-		//save2 = new GButton("", X, 418, WIDTH, HEIGHT); 
-		//save3 = new GButton("", );
+		save1 = new GButton("", 40, 50, WIDTH, 450);
+		save2 = new GButton("", 300, 50, WIDTH, 450); 
+		save3 = new GButton("", 560, 50, WIDTH, 450);	
 		
 	}
 
 	@Override
 	public void showContents() {
 		program.add(img);
-		program.add(loadGame);
 		program.add(Back);
-		//program.add(save1);
-		//program.add(save2);
-		//program.add(save3);
+		program.add(save1);
+		program.add(save2);
+		program.add(save3);
 		
 	}
 
 	@Override
 	public void hideContents() {
 		program.remove(img);
-		program.remove(loadGame);
 		program.remove(Back);
-		//program.remove(save1);
-		//program.remove(save2);
-		//program.remove(save3);
+		program.remove(save1);
+		program.remove(save2);
+		program.remove(save3);
 	}
 
 	@Override
