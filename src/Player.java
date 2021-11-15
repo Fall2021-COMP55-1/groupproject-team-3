@@ -8,6 +8,7 @@ public class Player extends Entity{
 	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	private Inventory inventory;
+	private String playerDirection;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
 	
 	public Player(int x, int y)   {
@@ -21,6 +22,8 @@ public class Player extends Entity{
 	public int getY()   {return y;}
 	
 	public Inventory getInv()   {return inventory;}
+	
+	public String getDirection()   {return playerDirection;}
 	
 	public void setInv(Inventory inventory)   {this.inventory = inventory;}
 	
@@ -58,36 +61,43 @@ public class Player extends Entity{
 		if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT)   {return true;}
 		else {return false;}
 	}
+
 	
 	public void keyPressed(KeyEvent e) {
 		
-		if (keyUp(e)) {upPressed = true;}
-		if (keyDown(e)) {downPressed = true;}
-		if (keyLeft(e)) {leftPressed = true;}
-		if (keyRight(e)) {rightPressed = true;}
+		if (keyUp(e) || keyDown(e) || keyLeft(e) || keyRight(e))   {
+			if (keyUp(e)) {upPressed = true;}
+			if (keyDown(e)) {downPressed = true;}
+			if (keyLeft(e)) {leftPressed = true;}
+			if (keyRight(e)) {rightPressed = true;}
 		
-		if (upPressed) {
-			if(leftPressed || rightPressed)   {dy = -2;}
-			else {dy = -4;}
-			move(Player.dir.UP);
+			if (upPressed) {
+				if(leftPressed || rightPressed)   {dy = -2;}
+				else {dy = -4;}
+				move(Player.dir.UP);
+				playerDirection = "Up";
+			}
+			if (downPressed) {
+				if(leftPressed || rightPressed)   {dy = 2;}
+				else   {dy = 4;}
+				move(Player.dir.DOWN);
+				playerDirection = "Down";
+			}
+			if (leftPressed) {
+				if(upPressed || downPressed)   {dx = -2;}
+				else   {dx = -4;}
+				move(Player.dir.LEFT);
+				playerDirection = "Left";
+			}
+			if (rightPressed) {
+				if(upPressed || downPressed)   {dx = 2;}
+				else   {dx = 4;}
+				move(Player.dir.RIGHT);
+				playerDirection = "Right";
+			}
+			x = (int) sprite.getX();
+			y = (int) sprite.getY();
 		}
-		if (downPressed) {
-			if(leftPressed || rightPressed)   {dy = 2;}
-			else   {dy = 4;}
-			move(Player.dir.DOWN);
-        }
-		if (leftPressed) {
-			if(upPressed || downPressed)   {dx = -2;}
-			else   {dx = -4;}
-			move(Player.dir.LEFT);
-        }
-		if (rightPressed) {
-			if(upPressed || downPressed)   {dx = 2;}
-			else   {dx = 4;}
-			move(Player.dir.RIGHT);
-        }
-		x = (int) sprite.getX();
-		y = (int) sprite.getY();
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -105,6 +115,11 @@ public class Player extends Entity{
 		else   {dx = 0;}
 		
 	}
+	
+	protected void grabItem(Item item)   {
+		Item newItem = item;
+		inventory.addItem(newItem);
+	}
 		
 	private void move(dir direction)   {
 		int legTracker;
@@ -115,7 +130,9 @@ public class Player extends Entity{
 		if(direction == dir.DOWN)   {loadImage(spriteDown.get(legTracker).getImage());}
 		if(direction == dir.LEFT)   {loadImage(spriteLeft.get(legTracker).getImage());}
 		if(direction == dir.RIGHT)   {loadImage(spriteRight.get(legTracker).getImage());}
-		move(dx, dy);
+		sprite.move(dx, dy);
+		this.x = (int) (sprite.getX() + dx);
+		this.y = (int) (sprite.getY() + dy);
 		
 		/*// Check the would-be position to see how far you can move
 		int moveToX = getX() + dx;
@@ -126,12 +143,6 @@ public class Player extends Entity{
 		int moveTileX = moveToX / 32;
 		int moveTileY = moveToY / 32;*/
 		stepsTaken = stepsTaken + 1;
-	}
-		
-	private void move(int dx, int dy)   {
-		sprite.move(dx, dy);
-		this.x = (int) (sprite.getX() + dx);
-		this.y = (int) (sprite.getY() + dy);
 	}
 }
 

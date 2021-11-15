@@ -22,8 +22,8 @@ public class Inventory {
 
 	public void setSelectedItem(int selectedItem) {this.selectedItem = selectedItem;}
 	
-	public void addItem()   {
-		
+	public void addItem(Item item)   {
+		//invItems.add();
 	}
 
 	

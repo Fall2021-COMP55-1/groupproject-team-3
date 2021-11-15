@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+
+import acm.graphics.GImage;
 import acm.graphics.GRect;
 
 public class Item {
@@ -7,38 +9,44 @@ public class Item {
 	private int x, y, count, width = 32, height = 32;
 	private String name, desc;
 	private boolean used, pickedUp;
+	private GImage sprite;
 	
 
-	public Item (String name)   {this.name = name;}
+	public Item (String name, GImage sprite)   {
+		this.name = name;
+		this.sprite = sprite;
+		}
 	
-	private int getX()   {return x;}
+	public int getX()   {return x;}
 	
-	private int getY()   {return y;}
+	public int getY()   {return y;}
 	
-	private int getCount()   {return count;}
+	public int getCount()   {return count;}
 	
-	private String getName()   {return name;}
+	public String getName()   {return name;}
 	
-	private String getDescription()   {return desc;}
+	public GImage getImage()   {return sprite;}
+	
+	public String getDescription()   {return desc;}
 	
 	public GRect getBounds()   {return new GRect(x, y, width, height);}
 	
-	private boolean isUsed()   {return used;}
+	public boolean isUsed()   {return used;}
 	
-	private boolean isPickedUp()   {return pickedUp;}
+	public boolean isPickedUp()   {return pickedUp;}
 	
-	private void setX(int x)   {this.x = x;}
+	public void setX(int x)   {this.x = x;}
 	
-	private void setY(int y)   {this.y = y;}
+	public void setY(int y)   {this.y = y;}
 	
-	private void setCount(int count)   {this.count = count;}
+	public void setCount(int count)   {this.count = count;}
 	
-	private void setName(String name)   {this.name = name;}
+	public void setName(String name)   {this.name = name;}
 	
-	private void setDescription(String desc)   {this.desc = desc;}
+	public void setDescription(String desc)   {this.desc = desc;}
 	
-	private void setUsed(boolean used)   {this.used = used;}
+	public void setUsed(boolean used)   {this.used = used;}
 	
-	private void setPickedUp(boolean pickedUp)   {this.pickedUp = pickedUp;}
+	public void setPickedUp(boolean pickedUp)   {this.pickedUp = pickedUp;}
 	
 }

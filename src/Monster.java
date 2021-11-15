@@ -13,8 +13,10 @@ public class Monster extends Entity{
 		loadImage(this.spriteDown.get(0).getImage());
 	}
 	
+	@Override
 	public int getX()   {return x;}
 	
+	@Override
 	public int getY()   {return y;}
 	
 	private int getWidth()   {return width;}
