@@ -1,11 +1,15 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.Timer;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
+import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
@@ -14,20 +18,18 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Timer timer;
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
-	private int x = 100, y = 100;
 	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
+	private int x = 384, y = 288, numTimes = 0;
+	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
+		setWalls();
 		map = new MapPane(program);
 		timer = new Timer(100, this);
 		timer.setInitialDelay(1000);
 		timer.start();
-	}
-
-	public boolean canWalk() {
-		//GObject a = getElementAt(player.getX(),player.getY());
-		return true;
+		
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -35,6 +37,35 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		else {return false;}
 	}
 
+	public void setWalls() {
+		GRect wall1 = new GRect(0,0,320, 640);
+		walls.add(wall1);
+		wall1.setColor(Color.red);
+		wall1.setFilled(true);
+		wall1.setVisible(true);
+		GRect wall2 = new GRect(480,0,320,640);
+		walls.add(wall2);
+		GRect wall3 = new GRect(320,0, 160, 256);
+		walls.add(wall3);
+		GRect wall4 = new GRect(320,352,160,288);
+		walls.add(wall4);
+		
+	}
+	
+	//collsion with walls
+	
+	public boolean checkCollision() {
+		Iterator<GRect> iterate = walls.iterator();
+		while(iterate.hasNext()) {
+			GRect temp = iterate.next();
+			if(player.sprite.getBounds().intersects(temp.getBounds())) {
+				player.sprite.move(1, 0);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public void showContents() {
 		map.showContents();
@@ -62,7 +93,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		player.keyPressed(e);
+
+		if(!checkCollision()) {
+			player.keyPressed(e);
+		}
+		
 		if(keyE(e))   {
 			if(player.getDirection() == "Up")   {
 				if(item.getY() >= player.getY() - 64 && item.getY() <= player.getY() - 32)   {
@@ -90,7 +125,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	@Override
-	public void keyReleased(KeyEvent e) {player.keyReleased(e);}
+	public void keyReleased(KeyEvent e) {
+		player.keyReleased(e);}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {monster.move(player);}
