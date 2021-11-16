@@ -1,9 +1,12 @@
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import acm.graphics.GImage;
+import acm.graphics.GRect;
 
 public class Player extends Entity{
-	private GImage sprite = getImage();
+	public GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
 	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
@@ -19,6 +22,8 @@ public class Player extends Entity{
 	public int getX()   {return x;}
 	
 	public int getY()   {return y;}
+	
+	public void setX(int a)   { x=x+a;}
 	
 	public Inventory getInv()   {return inventory;}
 	
@@ -66,6 +71,8 @@ public class Player extends Entity{
 		if (keyLeft(e)) {leftPressed = true;}
 		if (keyRight(e)) {rightPressed = true;}
 		
+		
+		
 		if (upPressed) {
 			if(leftPressed || rightPressed)   {dy = -2;}
 			else {dy = -4;}
@@ -90,6 +97,7 @@ public class Player extends Entity{
 		y = (int) sprite.getY();
 	}
 	
+	
 	public void keyReleased(KeyEvent e) {
 		if (keyUp(e)) {upPressed = false;}
 		if (keyDown(e)) {downPressed = false;}
@@ -104,6 +112,8 @@ public class Player extends Entity{
 		else if (rightPressed)   {dx = 4;}
 		else   {dx = 0;}
 		
+		
+		
 	}
 		
 	private void move(dir direction)   {
@@ -115,16 +125,19 @@ public class Player extends Entity{
 		if(direction == dir.DOWN)   {loadImage(spriteDown.get(legTracker).getImage());}
 		if(direction == dir.LEFT)   {loadImage(spriteLeft.get(legTracker).getImage());}
 		if(direction == dir.RIGHT)   {loadImage(spriteRight.get(legTracker).getImage());}
+		if(sprite.getBounds().getX() + dx < 0) {
+			dx = 0;
+		}else if(sprite.getBounds().getX() + sprite.getWidth() + dx > 800) {
+			dx = 0;
+		}
+		if(sprite.getBounds().getY() + dy < 0) {
+			dy = 0;
+		}else if(sprite.getBounds().getY() + sprite.getHeight() + dy > 640) {
+			dy = 0;
+		}
+		
 		move(dx, dy);
 		
-		/*// Check the would-be position to see how far you can move
-		int moveToX = getX() + dx;
-		int moveToY = getY() + dy;
-		//GObject temp = program.getElementAt(moveToX, moveToY);
-		
-		// Convert pixel space to tile space and access it in MapPane
-		int moveTileX = moveToX / 32;
-		int moveTileY = moveToY / 32;*/
 		stepsTaken = stepsTaken + 1;
 	}
 		
