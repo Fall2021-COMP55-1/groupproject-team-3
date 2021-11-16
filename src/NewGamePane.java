@@ -46,6 +46,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 	}
 	
+	//collsion with walls
 	
 	public boolean checkCollision() {
 		Iterator<GRect> iterate = walls.iterator();
@@ -80,6 +81,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//tried checking collision, it worked but it completely stops moving 
+		
 		if(!checkCollision()) {
 			player.keyPressed(e);
 		}
