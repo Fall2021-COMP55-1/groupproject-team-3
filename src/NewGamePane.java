@@ -86,7 +86,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		while(iterate.hasNext()) {
 			GRect temp = iterate.next();
 			if(player.sprite.getBounds().intersects(temp.getBounds())) {
-				player.sprite.move(-1, 0);
 				return true;
 			}
 		}
@@ -124,9 +123,27 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if(!checkCollision()) {
-			player.keyPressed(e);
+		
+		player.keyPressed(e);
+		if(checkCollision()) {
+			if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+				e.setKeyCode(KeyEvent.VK_DOWN);
+				player.keyPressed(e);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
+				e.setKeyCode(KeyEvent.VK_UP);
+				player.keyPressed(e);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+				e.setKeyCode(KeyEvent.VK_RIGHT);
+				player.keyPressed(e);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				e.setKeyCode(KeyEvent.VK_LEFT);
+				player.keyPressed(e);
+			}
 		}
+		
 		
 		if(keyE(e))   {
 			if(player.getDirection() == "Up")   {
