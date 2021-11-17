@@ -120,8 +120,6 @@ public class Player extends Entity{
 		else if (rightPressed)   {dx = 4;}
 		else   {dx = 0;}
 		
-		
-		
 	}
 	
 	protected void grabItem(Item item)   {
@@ -138,21 +136,14 @@ public class Player extends Entity{
 		if(direction == dir.DOWN)   {loadImage(spriteDown.get(legTracker).getImage());}
 		if(direction == dir.LEFT)   {loadImage(spriteLeft.get(legTracker).getImage());}
 		if(direction == dir.RIGHT)   {loadImage(spriteRight.get(legTracker).getImage());}
-		if(sprite.getBounds().getX() + dx < 0) {
-			dx = 0;
-		}else if(sprite.getBounds().getX() + sprite.getWidth() + dx > 800) {
-			dx = 0;
-		}
-		if(sprite.getBounds().getY() + dy < 0) {
-			dy = 0;
-		}else if(sprite.getBounds().getY() + sprite.getHeight() + dy > 640) {
-			dy = 0;
-		}
-
+		if(sprite.getBounds().getX() + dx < 0) {dx = 0;}
+		else if(sprite.getBounds().getX() + sprite.getWidth() + dx > 800) {dx = 0;}
+		if(sprite.getBounds().getY() + dy < 0) {dy = 0;}
+		else if(sprite.getBounds().getY() + sprite.getHeight() + dy > 640) {dy = 0;}
+		
 		sprite.move(dx, dy);
 		this.x = (int) (sprite.getX() + dx);
 		this.y = (int) (sprite.getY() + dy);
-		
 		stepsTaken = stepsTaken + 1;
 	}
 }

@@ -86,7 +86,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		while(iterate.hasNext()) {
 			GRect temp = iterate.next();
 			if(player.sprite.getBounds().intersects(temp.getBounds())) {
-				player.sprite.move(-1, 0);
+				if(player.getDirection() == "Up")   {player.sprite.move(0, 1);}
+				if(player.getDirection() == "Down")   {player.sprite.move(0, -1);}
+				if(player.getDirection() == "Left")   {player.sprite.move(1, 0);}
+				if(player.getDirection() == "Right")   {player.sprite.move(-1, 0);}
 				return true;
 			}
 		}
