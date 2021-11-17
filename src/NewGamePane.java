@@ -86,10 +86,27 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		while(iterate.hasNext()) {
 			GRect temp = iterate.next();
 			if(player.sprite.getBounds().intersects(temp.getBounds())) {
-				if(player.getDirection() == "Up")   {player.sprite.move(0, 1);}
-				if(player.getDirection() == "Down")   {player.sprite.move(0, -1);}
-				if(player.getDirection() == "Left")   {player.sprite.move(1, 0);}
-				if(player.getDirection() == "Right")   {player.sprite.move(-1, 0);}
+				
+				if(player.getDX() > 0)   {
+					if(player.getDY() > 0)   {player.sprite.move(-2, -2);}
+					if(player.getDY() < 0)   {player.sprite.move(-2, 2);}
+					if(player.getDY() == 0)   {player.sprite.move(-4, 0);}
+				}
+				if(player.getDX() < 0)   {
+					if(player.getDY() > 0)   {player.sprite.move(2, -2);}
+					if(player.getDY() < 0)   {player.sprite.move(2, 2);}
+					if(player.getDY() == 0)   {player.sprite.move(4, 0);}
+				}
+				if(player.getDY() < 0)   {
+					if(player.getDX() > 0)   {player.sprite.move(-2, 2);}
+					if(player.getDX() < 0)   {player.sprite.move(2, 2);}
+					if(player.getDX() == 0)   {player.sprite.move(0, 4);}
+				}
+				if(player.getDY() > 0)   {
+					if(player.getDX() > 0)   {player.sprite.move(-2, -2);}
+					if(player.getDX() < 0)   {player.sprite.move(2, -2);}
+					if(player.getDX() == 0)   {player.sprite.move(0, -4);}
+				}
 				return true;
 			}
 		}
@@ -98,9 +115,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void showContents() {
-		for (int i=0; i<13; i++) {
-			program.add(walls.get(i));
-		}
+		for (int i=0; i<13; i++) {program.add(walls.get(i));}
+		
 		program.add(background);
 		program.add(player.getImage(), x, y);
 		player.setX(x);
@@ -110,9 +126,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		program.add(item.getImage(), x + 100, y + 100);
-		item.setX(x + 100);
-		item.setY(y + 100);
+		program.add(item.getImage(), x, y);
+		item.setX(x);
+		item.setY(y);
 	}
 
 	@Override
@@ -126,10 +142,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-		if(!checkCollision()) {
-			player.keyPressed(e);
-		}
+		player.keyPressed(e);
+		checkCollision();
 		
 		if(keyE(e))   {
 			if(player.getDirection() == "Up")   {
