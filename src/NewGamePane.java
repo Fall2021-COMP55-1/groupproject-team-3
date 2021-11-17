@@ -14,18 +14,18 @@ import acm.graphics.GRectangle;
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	private MapPane map;
+	private GImage background;
 	private Timer timer;
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
-	private int x = 384, y = 288, numTimes = 0;
+	private int x = 482, y = 510;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
-		map = new MapPane(program);
+		background = new GImage("res/livingroom.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(1000);
 		timer.start();
@@ -38,18 +38,45 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 
 	public void setWalls() {
-		GRect wall1 = new GRect(0,0,320, 640);
-		walls.add(wall1);
-		wall1.setColor(Color.red);
+		GRect wall1 = new GRect(0,0,800,64);
 		wall1.setFilled(true);
-		wall1.setVisible(true);
-		GRect wall2 = new GRect(480,0,320,640);
+		walls.add(wall1);
+		GRect wall2 = new GRect(0,64,160,96);
+		wall2.setFilled(true);
 		walls.add(wall2);
-		GRect wall3 = new GRect(320,0, 160, 256);
+		GRect wall3 = new GRect(0,160, 32,480);
+		wall3.setFilled(true);
 		walls.add(wall3);
-		GRect wall4 = new GRect(320,352,160,288);
+		GRect wall4 = new GRect(32,224,128,128);
+		wall4.setFilled(true);
 		walls.add(wall4);
-		
+		GRect wall5 = new GRect(160,256,288,128);
+		wall5.setFilled(true);
+		walls.add(wall5);
+		GRect wall6 = new GRect(32,512,448,128);
+		wall6.setFilled(true);
+		walls.add(wall6);
+		GRect wall7 = new GRect(480,544,64,96);
+		wall7.setFilled(true);
+		walls.add(wall7);
+		GRect wall8 = new GRect(544,512,256,128);
+		wall8.setFilled(true);
+		walls.add(wall8);
+		GRect wall9 = new GRect(576,448,224,64);
+		wall9.setFilled(true);
+		walls.add(wall9);
+		GRect wall10 = new GRect(768,64,32,384);
+		wall10.setFilled(true);
+		walls.add(wall10);
+		GRect wall11 = new GRect(576,64,192,128);
+		wall11.setFilled(true);
+		walls.add(wall11);
+		GRect wall12 = new GRect(576,192,64,96);
+		wall12.setFilled(true);
+		walls.add(wall12);
+		GRect wall13 = new GRect(576,288,192,96);
+		wall13.setFilled(true);
+		walls.add(wall13);
 	}
 	
 	//collsion with walls
@@ -59,7 +86,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		while(iterate.hasNext()) {
 			GRect temp = iterate.next();
 			if(player.sprite.getBounds().intersects(temp.getBounds())) {
-				player.sprite.move(1, 0);
+				player.sprite.move(-1, 0);
 				return true;
 			}
 		}
@@ -68,7 +95,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void showContents() {
-		map.showContents();
+		for (int i=0; i<13; i++) {
+			program.add(walls.get(i));
+		}
+		program.add(background);
 		program.add(player.getImage(), x, y);
 		player.setX(x);
 		player.setY(y);
@@ -84,7 +114,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 
 	@Override
 	public void hideContents() {
-		map.hideContents();
+		program.remove(background);
 		program.remove(player.getImage());
 	}
 
