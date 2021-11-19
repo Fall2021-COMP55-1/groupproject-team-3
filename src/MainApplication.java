@@ -16,6 +16,7 @@ public class MainApplication extends GraphicsProgram {
 	private SavePane save;
 	private OptionPane options;
 	private Credits credits; 
+	private BedRoomGamePane bedroom;
 	
 	
 	/* Method: setupInteractions
@@ -113,6 +114,7 @@ public class MainApplication extends GraphicsProgram {
 		save = new SavePane(this);
 		options = new OptionPane(this);
 		credits = new Credits(this);
+		bedroom = new BedRoomGamePane(this);
 		setupInteractions();
 		switchToMenu();
 	}
@@ -129,6 +131,7 @@ public class MainApplication extends GraphicsProgram {
 	
 	public void switchToCredits() {switchToScreen(credits);}
 
+	public void switchToBedRoom() {switchToScreen(bedroom);}
 
 	public static void main(String[] args) {new MainApplication().start();}
 
