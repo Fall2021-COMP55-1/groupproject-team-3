@@ -1,20 +1,19 @@
-import java.util.ArrayList;
-
 import acm.graphics.GImage;
 import acm.graphics.GRect;
 
 public class Item {
 	
-	public ArrayList<Item> items;
 	private int x, y, count, width = 32, height = 32;
 	private String name, desc;
 	private boolean used, pickedUp;
 	private GImage sprite;
+	public ItemType type;
 	
 
-	public Item (String name, GImage sprite) {
+	public Item (String name, GImage sprite, ItemType type) {
 		this.name = name;
 		this.sprite = sprite;
+		this.type = type;
 		count = 1;  
 	}
 	
@@ -49,6 +48,10 @@ public class Item {
 	
 	public void setUsed(boolean used)   {this.used = used;}
 	
-	public void setPickedUp(boolean pickedUp)   {this.pickedUp = pickedUp;}
-	
+	public void setPickedUp(boolean pickedUp)   {
+		this.pickedUp = pickedUp;
+		if (pickedUp == true)   {
+			System.out.println("Item of type " + type.toString() + ", called \"" + name + ",\" was picked up");
+			}
+	}
 }
