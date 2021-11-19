@@ -19,6 +19,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
+	private Item itemKey = new Item("Box",new GImage("res/inventory/Key.png"));
 	private int x = 482, y = 510;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
@@ -127,6 +128,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(item.getImage(), x, y);
 		item.setX(x);
 		item.setY(y);
+		
+		program.add(itemKey.getImage(), 200, 100);
+		itemKey.setX(x);
+		itemKey.setY(y);
 	}
 
 	@Override

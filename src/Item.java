@@ -12,11 +12,13 @@ public class Item {
 	private GImage sprite;
 	
 
-	public Item (String name, GImage sprite)   {
+	public Item (String name, GImage sprite) {
 		this.name = name;
 		this.sprite = sprite;
-		}
+		count = 1;  
+	}
 	
+
 	public int getX()   {return x;}
 	
 	public int getY()   {return y;}

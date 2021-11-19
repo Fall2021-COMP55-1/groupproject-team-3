@@ -1,6 +1,7 @@
 /AABB.class
 /Credits.class
 /Displayable.class
+/Door.class
 /Entity.class
 /GButton.class
 /GParagraph.class
@@ -9,7 +10,6 @@
 /Inventory.class
 /Item.class
 /MainApplication.class
-/MapPane.class
 /MenuPane.class
 /Monster$dir.class
 /Monster.class
@@ -18,6 +18,6 @@
 /OptionPane.class
 /Player$dir.class
 /Player.class
+/RoomType.class
 /SavePane.class
 /SomePane.class
-/TileFactory.class
