@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,8 +8,8 @@ import javax.swing.Timer;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
-import acm.graphics.GRectangle;
 //experimenting on git
+
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
@@ -18,12 +17,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Timer timer;
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
-	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
-	private Item itemKey = new Item("Box",new GImage("res/inventory/Key.png"));
-	private Item itemKnife = new Item("Box",new GImage("res/inventory/Knife.png"));
-	private Item itemCandle = new Item("Box", new GImage("res/inventory/Candle.png"));
-	private Item itemSmallKey = new Item("Box", new GImage("res/inventory/Small Key.png"));
-	private Item itemSmallKnife = new Item("Box", new GImage("res/inventory/Small Knife.png")); 
+	private ArrayList<Item> items = new ArrayList <Item>();
+	private Item itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON);
+	private Item itemKey = new Item("Hallway Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private int x = 482, y = 510;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
@@ -32,9 +28,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		setWalls();
 		background = new GImage("res/livingroom.png");
 		timer = new Timer(100, this);
-		timer.setInitialDelay(1000);
+		timer.setInitialDelay(6000);
 		timer.start();
-		
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -129,40 +124,27 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		program.add(item.getImage(), x, y);
-		item.setX(x);
-		item.setY(y);
 		
-		program.add(itemKey.getImage(), 200, 100);
-		itemKey.setX(x);
-		itemKey.setY(y);
+		items.add(itemKnife);
+		items.add(itemKey);
+		items.get(0).setX(x);
+		items.get(0).setY(y);
+		items.get(1).setX(200);
+		items.get(1).setY(100);
+		for (int i = 0; i < items.size(); ++i)   {
+			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
+		}
 		
-		program.add(itemKnife.getImage(), 100, 190);
-		itemKnife.setX(x);
-		itemKnife.setY(y);
-		
-		program.add(itemCandle.getImage(), 300, 100);
-		itemCandle.setX(x);
-		itemCandle.setY(y);
-		
-		program.add(itemSmallKey.getImage(), 400, 200);
-		itemSmallKey.setX(x);
-		itemSmallKey.setY(y);
-		
-		program.add(itemSmallKnife.getImage(), 500, 300);
-		itemSmallKnife.setX(x);
-		itemSmallKnife.setY(y);
 	}
 
 	@Override
 	public void hideContents() {
 		program.remove(background);
 		program.remove(player.getImage());
-		program.remove(itemKey.getImage());
-		program.remove(itemKnife.getImage());
-		program.remove(itemCandle.getImage());
-		program.remove(itemSmallKey.getImage());
-		program.remove(itemSmallKnife.getImage());
+		program.remove(monster.getImage());
+		for (int i = 0; i < items.size(); ++i)   {
+			program.remove(items.get(i).getImage());
+		}
 	}
 
 	@Override
@@ -173,35 +155,34 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		player.keyPressed(e);
 		checkCollision();
 		
-		if(keyE(e))   {
-			if(player.getDirection() == "Up")   {
-				if(item.getY() >= player.getY() - 64 && item.getY() <= player.getY() - 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from up");
+		if(keyE(e))   {	
+			for (int i = 0; i < items.size(); ++i)   {
+				if(player.getDirection() == "Up")   {
+					if(items.get(i).getY() >= player.getY() - 64 && items.get(i).getY() <= player.getY() - 32)   {
+						player.grabItem(items.get(i));
+						items.get(i).setPickedUp(true);}
 				}
-			}
-			if(player.getDirection() == "Down")   {
-				if(item.getY() <= player.getY() + 64 && item.getY() >= player.getY() + 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from down");}
-				
+				if(player.getDirection() == "Down")   {
+					if(items.get(i).getY() <= player.getY() + 64 && items.get(i).getY() >= player.getY() + 32)   {
+						player.grabItem(items.get(i));
+						items.get(i).setPickedUp(true);}	
 				}
-			if(player.getDirection() == "Left")   {
-				if(item.getX() >= player.getX() - 64 && item.getX() <= player.getX() - 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from left");}
-			}
-			if(player.getDirection() == "Right")   {
-				if(item.getX() <= player.getX() + 64 && item.getX() >= player.getX() + 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from right");}
+				if(player.getDirection() == "Left")   {
+					if(items.get(i).getX() >= player.getX() - 64 && items.get(i).getX() <= player.getX() - 32)   {
+						player.grabItem(items.get(i));
+						items.get(i).setPickedUp(true);}
+				}
+				if(player.getDirection() == "Right")   {
+					if(items.get(i).getX() <= player.getX() + 64 && items.get(i).getX() >= player.getX() + 32)   {
+						player.grabItem(items.get(i));
+						items.get(i).setPickedUp(true);}
+				}
 			}
 		}
 	}
 	
 	@Override
-	public void keyReleased(KeyEvent e) {
-		player.keyReleased(e);}
+	public void keyReleased(KeyEvent e) {player.keyReleased(e);}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {monster.move(player);}

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-
 import acm.graphics.GImage;
 
 public class Inventory {
@@ -11,6 +10,7 @@ public class Inventory {
 	private int listSpacing, selectedItem = 0;
 	
 	public Inventory()   {	
+		
 		
 	}
 	
