@@ -20,6 +20,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
 	private Item itemKey = new Item("Box",new GImage("res/inventory/Key.png"));
+	private Item itemKnife = new Item("Box",new GImage("res/inventory/Knife.png"));
+	private Item itemCandle = new Item("Box", new GImage("res/inventory/Candle.png"));
+	private Item itemSmallKey = new Item("Box", new GImage("res/inventory/Small Key.png"));
+	private Item itemSmallKnife = new Item("Box", new GImage("res/inventory/Small Knife.png")); 
 	private int x = 482, y = 510;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
@@ -132,12 +136,33 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(itemKey.getImage(), 200, 100);
 		itemKey.setX(x);
 		itemKey.setY(y);
+		
+		program.add(itemKnife.getImage(), 100, 190);
+		itemKnife.setX(x);
+		itemKnife.setY(y);
+		
+		program.add(itemCandle.getImage(), 300, 100);
+		itemCandle.setX(x);
+		itemCandle.setY(y);
+		
+		program.add(itemSmallKey.getImage(), 400, 200);
+		itemSmallKey.setX(x);
+		itemSmallKey.setY(y);
+		
+		program.add(itemSmallKnife.getImage(), 500, 300);
+		itemSmallKnife.setX(x);
+		itemSmallKnife.setY(y);
 	}
 
 	@Override
 	public void hideContents() {
 		program.remove(background);
 		program.remove(player.getImage());
+		program.remove(itemKey.getImage());
+		program.remove(itemKnife.getImage());
+		program.remove(itemCandle.getImage());
+		program.remove(itemSmallKey.getImage());
+		program.remove(itemSmallKnife.getImage());
 	}
 
 	@Override
