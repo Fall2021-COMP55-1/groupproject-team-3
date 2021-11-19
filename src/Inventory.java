@@ -10,8 +10,6 @@ public class Inventory {
 	private int listSpacing, selectedItem = 0;
 	
 	public Inventory()   {	
-		
-		
 	}
 	
 	public int getListSpacing() {return listSpacing;}
@@ -23,11 +21,10 @@ public class Inventory {
 	public void setSelectedItem(int selectedItem) {this.selectedItem = selectedItem;}
 	
 	public void addItem(Item item)   {
-		//invItems.add();
+		invItems.add(item);
+		for(int i = 0; i < invItems.size(); ++i)   {
+			invItems.get(i).getInvSprite().setLocation(200 + (32 * i), INVENTORY_Y + 32);
+			invItems.get(i).setY(INVENTORY_Y);
+		}
 	}
-
-	
-	
-	
-
 }

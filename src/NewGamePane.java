@@ -18,9 +18,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private ArrayList<Item> items = new ArrayList <Item>();
 	private Item itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON);
-	private Item itemKey = new Item("Hallway Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
+	private Item itemKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private int x = 482, y = 510;
-	private Door bedroomMap;
+	private GRect doorBed = new GRect(64,128,64,64);
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
 	public NewGamePane(MainApplication app) {
@@ -30,8 +30,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
 		timer.start();
-		bedroomMap = new Door(64,128,64,64);
-		
+		doorBed.setVisible(false);
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -126,7 +125,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		program.add(bedroomMap.getRect());
+		program.add(doorBed);
 		items.add(itemKnife);
 		items.add(itemKey);
 		items.get(0).setX(x);
@@ -139,6 +138,13 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 	}
 
+	private void grab(int i)   {
+		player.grabItem(items.get(i));
+		items.get(i).setPickedUp(true);
+		program.remove(items.get(i).getImage());
+		program.add(items.get(i).getInvSprite());
+	}
+	
 	@Override
 	public void hideContents() {
 		program.remove(background);
@@ -146,7 +152,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for(int i=0; i<13; i++) {
 			program.remove(walls.get(i));
 		}
-		program.remove(bedroomMap.getRect());
+		program.remove(doorBed);
 		program.remove(monster.getImage());
 		for (int i = 0; i < items.size(); ++i)   {
 			program.remove(items.get(i).getImage());
@@ -156,7 +162,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == bedroomMap.getRect()) {
+		if (obj == doorBed) {
 			program.switchToBedRoom();
 		}
 	}
@@ -170,23 +176,19 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			for (int i = 0; i < items.size(); ++i)   {
 				if(player.getDirection() == "Up")   {
 					if(items.get(i).getY() >= player.getY() - 64 && items.get(i).getY() <= player.getY() - 32)   {
-						player.grabItem(items.get(i));
-						items.get(i).setPickedUp(true);}
+						grab(i);}
 				}
 				if(player.getDirection() == "Down")   {
 					if(items.get(i).getY() <= player.getY() + 64 && items.get(i).getY() >= player.getY() + 32)   {
-						player.grabItem(items.get(i));
-						items.get(i).setPickedUp(true);}	
+						grab(i);}	
 				}
 				if(player.getDirection() == "Left")   {
 					if(items.get(i).getX() >= player.getX() - 64 && items.get(i).getX() <= player.getX() - 32)   {
-						player.grabItem(items.get(i));
-						items.get(i).setPickedUp(true);}
+						grab(i);}
 				}
 				if(player.getDirection() == "Right")   {
 					if(items.get(i).getX() <= player.getX() + 64 && items.get(i).getX() >= player.getX() + 32)   {
-						player.grabItem(items.get(i));
-						items.get(i).setPickedUp(true);}
+						grab(i);}
 				}
 			}
 		}

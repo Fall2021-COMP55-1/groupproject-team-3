@@ -6,13 +6,14 @@ public class Item {
 	private int x, y, count, width = 32, height = 32;
 	private String name, desc;
 	private boolean used, pickedUp;
-	private GImage sprite;
+	private GImage sprite, invSprite;
 	public ItemType type;
 	
 
 	public Item (String name, GImage sprite, ItemType type) {
 		this.name = name;
 		this.sprite = sprite;
+		setInvSprite(new GImage("res/inventory/" + name + ".png", x, y));
 		this.type = type;
 		count = 1;  
 	}
@@ -27,6 +28,8 @@ public class Item {
 	public String getName()   {return name;}
 	
 	public GImage getImage()   {return sprite;}
+	
+	public void setImage(GImage image)   {sprite = image;}
 	
 	public String getDescription()   {return desc;}
 	
@@ -54,4 +57,8 @@ public class Item {
 			System.out.println("Item of type " + type.toString() + ", called \"" + name + ",\" was picked up");
 			}
 	}
+
+	public GImage getInvSprite() {return invSprite;}
+
+	public void setInvSprite(GImage invSprite) {this.invSprite = invSprite;}
 }

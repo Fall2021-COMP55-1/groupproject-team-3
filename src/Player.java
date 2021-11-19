@@ -1,9 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import acm.graphics.GImage;
-import acm.graphics.GRect;
 
 public class Player extends Entity{
 	public GImage sprite = getImage();
