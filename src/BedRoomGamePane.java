@@ -18,8 +18,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Timer timer;
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
-	private Item item = new Item("Box",new GImage ("res/player/PCU1.png"));
-	private Item itemKey = new Item("Box",new GImage("res/inventory/Key.png"));
 	private int x = 722, y = 474;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
@@ -107,19 +105,15 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		program.add(item.getImage(), x, y);
-		item.setX(x);
-		item.setY(y);
-		
-		program.add(itemKey.getImage(), 200, 100);
-		itemKey.setX(x);
-		itemKey.setY(y);
 	}
 
 	@Override
 	public void hideContents() {
 		program.remove(background);
 		program.remove(player.getImage());
+		for(int i=0; i<7; i++) {
+			program.remove(walls.get(i));
+		}
 	}
 
 	@Override
@@ -131,31 +125,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	public void keyPressed(KeyEvent e) {
 		player.keyPressed(e);
 		checkCollision();
-		
-		if(keyE(e))   {
-			if(player.getDirection() == "Up")   {
-				if(item.getY() >= player.getY() - 64 && item.getY() <= player.getY() - 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from up");
-				}
-			}
-			if(player.getDirection() == "Down")   {
-				if(item.getY() <= player.getY() + 64 && item.getY() >= player.getY() + 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from down");}
-				
-				}
-			if(player.getDirection() == "Left")   {
-				if(item.getX() >= player.getX() - 64 && item.getX() <= player.getX() - 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from left");}
-			}
-			if(player.getDirection() == "Right")   {
-				if(item.getX() <= player.getX() + 64 && item.getX() >= player.getX() + 32)   {
-					player.grabItem(item);
-					System.out.println("Item got from right");}
-			}
-		}
 	}
 	
 	@Override

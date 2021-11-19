@@ -20,7 +20,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON);
 	private Item itemKey = new Item("Hallway Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private int x = 482, y = 510;
-	private GRect doorBed=new GRect(64,128,64,64);;
+	private GRect doorBed=new GRect(64,128,64,64);
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
 	public NewGamePane(MainApplication app) {
@@ -30,6 +30,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
 		timer.start();
+		doorBed.setVisible(false);
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -155,7 +156,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == doorBed) {
-			System.out.print("Door pressed");
 			program.switchToBedRoom();
 		}
 	}
