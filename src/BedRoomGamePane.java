@@ -24,6 +24,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKnife = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON);
 	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	
+	private GImage choice1, choice2; 
+	private GButton choose1, choose2;
+	ChoiceHandler choiceHandler = new ChoiceHandler();  	
+	
 	
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
@@ -32,6 +36,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		timer = new Timer(100, this);
 		timer.setInitialDelay(1000);
 		timer.start();
+		
+		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
+		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
+		choice1.setSize(150, 40);
+		choice2.setSize(150, 40); 
 		
 	}
 	
@@ -118,6 +127,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i = 0; i < items.size(); ++i)   {
 			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
 		}
+		
+		program.add(choice1);
+		program.add(choice2);
+		
+				
 	}
 	
 	private void grab(int i) {
@@ -137,6 +151,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i = 0; i < items.size(); ++i) {
 			program.remove(items.get(i).getImage());
 		}
+		
+		program.remove(choice1);
+		program.remove(choice2);
 	}
 
 	@Override
@@ -156,5 +173,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {monster.move(player);}
+	
+	public class ChoiceHandler implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			
+		}
+	}
 	
 }
