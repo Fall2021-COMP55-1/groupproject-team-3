@@ -1,4 +1,5 @@
 /AABB.class
+/BedRoomGamePane.class
 /Credits.class
 /Displayable.class
 /Door.class
@@ -9,6 +10,7 @@
 /Interfaceable.class
 /Inventory.class
 /Item.class
+/ItemType.class
 /MainApplication.class
 /MenuPane.class
 /Monster$dir.class

@@ -154,7 +154,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		}
 		program.remove(doorBed);
 		program.remove(monster.getImage());
-		for (int i = 0; i < items.size(); ++i)   {
+		for (int i = 0; i < items.size(); ++i) {
 			program.remove(items.get(i).getImage());
 		}
 	}
@@ -166,6 +166,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.switchToBedRoom();
 		}
 	}
+	
 	
 	@Override
 	public void keyPressed(KeyEvent e) {

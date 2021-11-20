@@ -20,6 +20,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 722, y = 474;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
+	private ArrayList<Item> items = new ArrayList <Item>();
+	private Item itemKnife = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON);
+	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
+	
 	
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
@@ -105,6 +109,22 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
+		items.add(itemKnife);
+		items.add(itemKey);
+		items.get(0).setX(x);
+		items.get(0).setY(y);
+		items.get(1).setX(200);
+		items.get(1).setY(200);
+		for (int i = 0; i < items.size(); ++i)   {
+			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
+		}
+	}
+	
+	private void grab(int i) {
+		player.grabItem(items.get(i));
+		items.get(i).setPickedUp(true);
+		program.remove(items.get(i).getImage());
+		program.add(items.get(i).getInvSprite());
 	}
 
 	@Override
@@ -113,6 +133,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(player.getImage());
 		for(int i=0; i<7; i++) {
 			program.remove(walls.get(i));
+		}
+		for (int i = 0; i < items.size(); ++i) {
+			program.remove(items.get(i).getImage());
 		}
 	}
 
