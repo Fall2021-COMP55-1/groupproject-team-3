@@ -25,7 +25,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	
 	private GImage choice1, choice2; 
-	private GButton choose1, choose2;
+	private GButton killHim, spareHim;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
 	
 	
@@ -41,6 +41,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
 		choice1.setSize(150, 40);
 		choice2.setSize(150, 40); 
+		killHim = new GButton("", 500, 555, 150, 40);
+		spareHim = new GButton("", 500, 600, 150, 40); 
 		
 	}
 	
@@ -130,7 +132,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		program.add(choice1);
 		program.add(choice2);
-		
+		program.add(killHim);
+		program.add(spareHim);
 				
 	}
 	
@@ -154,6 +157,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		program.remove(choice1);
 		program.remove(choice2);
+		program.remove(killHim);
+		program.remove(spareHim);
 	}
 
 	@Override
