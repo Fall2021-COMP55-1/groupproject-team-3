@@ -27,6 +27,8 @@ public class Player extends Entity{
 	
 	public void setX(int a)   { x=x+a;}
 	
+	public void setY(int a)   { y=y+a;}
+	
 	public Inventory getInv()   {return inventory;}
 	
 	public String getDirection()   {return playerDirection;}

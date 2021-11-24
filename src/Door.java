@@ -8,6 +8,7 @@ import javax.swing.Timer;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 
 public class Door {
 	private GRect doorBound;

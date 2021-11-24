@@ -21,17 +21,17 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON);
 	private Item itemKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private int x = 482, y = 510;
-	private GRect doorBed = new GRect(64,128,64,64);
+	private Door doorBed, doorBath, outBath;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
+		setDoors();
 		background = new GImage("res/livingroom.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
 		timer.start();
-		doorBed.setVisible(false);
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -39,6 +39,12 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		else {return false;}
 	}
 
+	public void setDoors() {
+		doorBed = new Door(64,128,64,64);
+		doorBath = new Door(672,362,32,64);
+		outBath = new Door(672,283,32,10);
+	}
+	
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,64);
 		wall1.setFilled(true);
@@ -126,7 +132,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monster.setY(y + 32);
 		player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		program.add(doorBed);
+		program.add(doorBed.getRect());
+		program.add(doorBath.getRect());
+		program.add(outBath.getRect());
 		items.add(itemKnife);
 		items.add(itemKey);
 		items.get(0).setX(x);
@@ -153,7 +161,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for(int i=0; i<13; i++) {
 			program.remove(walls.get(i));
 		}
-		program.remove(doorBed);
+		program.remove(doorBed.getRect());
+		program.remove(doorBath.getRect());
+		program.remove(outBath.getRect());
 		program.remove(monster.getImage());
 		for (int i = 0; i < items.size(); ++i) {
 			program.remove(items.get(i).getImage());
@@ -163,9 +173,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == doorBed) {
-			program.switchToBedRoom();
-		}
+		
 	}
 	
 	
@@ -173,6 +181,20 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void keyPressed(KeyEvent e) {
 		player.keyPressed(e);
 		checkCollision();
+		if(player.sprite.getBounds().intersects(doorBed.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.switchToBedRoom();
+		}
+		
+		if(player.sprite.getBounds().intersects(doorBath.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 672,250);
+		}
+		
+		if(player.sprite.getBounds().intersects(outBath.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 672,400);
+
+		}
 		
 		if(keyE(e))   {	
 			for (int i = 0; i < items.size(); ++i)   {
