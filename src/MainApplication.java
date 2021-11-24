@@ -17,6 +17,7 @@ public class MainApplication extends GraphicsProgram {
 	private OptionPane options;
 	private Credits credits; 
 	private BedRoomGamePane bedroom;
+	public boolean fromBed = false;
 	
 	
 	/* Method: setupInteractions

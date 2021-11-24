@@ -40,8 +40,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 
 	public void setDoors() {
-		doorBed = new Door(64,128,64,64);
-		doorBath = new Door(672,362,32,64);
+		doorBed = new Door(64,150,64,20);
+		doorBath = new Door(672,380,32,20);
 		outBath = new Door(672,283,32,10);
 	}
 	
@@ -124,9 +124,15 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<13; i++) {program.add(walls.get(i));}
 		
 		program.add(background);
-		program.add(player.getImage(), x, y);
-		player.setX(x);
-		player.setY(y);
+		if (!program.fromBed) {
+			program.add(player.getImage(), x, y);
+			player.setX(x);
+			player.setY(y);
+		} else {
+			program.add(player.getImage(),85,176);
+			player.setX(85);
+			player.setY(176);
+		}
 		program.add(monster.getImage(), x + 32, y + 32);
 		monster.setX(x + 32);
 		monster.setY(y + 32);

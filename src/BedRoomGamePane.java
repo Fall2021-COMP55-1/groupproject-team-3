@@ -23,7 +23,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private ArrayList<Item> items = new ArrayList <Item>();
 	private Item itemKnife = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON);
 	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
-	
+	private Door doorLiving, doorBedL, doorBedR, doorHallL, doorHallR;
 	private GImage choice1, choice2; 
 	private GButton killHim, spareHim, back;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
@@ -32,6 +32,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
+		setDoors();
 		background = new GImage("res/bedrooms.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(1000);
@@ -51,7 +52,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		if (e.getKeyCode() == KeyEvent.VK_E)   {return true;}
 		else {return false;}
 	}
-
+	
+	public void setDoors() {
+		doorLiving = new Door(704,510,64,4);
+		doorBedL = new Door(128,340,32,20);
+		doorBedR = new Door(672,340,32,20);
+		doorHallL = new Door(128,252,32,5);
+		doorHallR = new Door(672,252,32,5);
+	}
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,96);
 		wall1.setFilled(true);
@@ -130,7 +138,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i = 0; i < items.size(); ++i)   {
 			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
 		}
-		
+		program.add(doorLiving.getRect());
+		program.add(doorBedL.getRect());
+		program.add(doorBedR.getRect());
+		program.add(doorHallL.getRect());
+		program.add(doorHallR.getRect());
 		program.add(choice1);
 		program.add(choice2);
 		program.add(killHim);
@@ -149,6 +161,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void hideContents() {
 		program.remove(background);
+		program.remove(doorLiving.getRect());
+		program.remove(doorBedL.getRect());
+		program.remove(doorBedR.getRect());
+		program.remove(doorHallL.getRect());
+		program.remove(doorHallR.getRect());
+
 		program.remove(player.getImage());
 		for(int i=0; i<7; i++) {
 			program.remove(walls.get(i));
@@ -181,6 +199,31 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		player.keyPressed(e);
+		if(player.sprite.getBounds().intersects(doorLiving.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.fromBed = true;
+			program.switchToNewGame();
+		}
+		
+		if(player.sprite.getBounds().intersects(doorBedL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 128,219);
+		}
+		
+		if(player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 672,219);
+		}
+		
+		if(player.sprite.getBounds().intersects(doorHallL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 128,374);
+		}
+		
+		if(player.sprite.getBounds().intersects(doorHallR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(player.getImage());
+			program.add(player.getImage(), 672,374);
+		}
+		
 		checkCollision();
 	}
 	

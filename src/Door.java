@@ -16,7 +16,7 @@ public class Door {
 	
 	Door(int x, int y, int width, int height){
 		doorBound = new GRect(x,y,width,height);
-		doorBound.setVisible(false);
+		doorBound.setVisible(true);
 	}
 	
 	GRect getRect() {
