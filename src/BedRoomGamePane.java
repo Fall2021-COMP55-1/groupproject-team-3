@@ -25,7 +25,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private Door doorLiving, doorBedL, doorBedR, doorHallL, doorHallR;
 	private GImage choice1, choice2; 
-	private GButton killHim, spareHim, back;
+	private GButton killHim, spareHim;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
 	
 	
@@ -44,7 +44,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40); 
-		back = new GButton("", 650, 450, 150, 80); 
 		
 	}
 	
@@ -147,7 +146,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.add(choice2);
 		program.add(killHim);
 		program.add(spareHim);
-		program.add(back);
 				
 	}
 	
@@ -179,7 +177,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(choice2);
 		program.remove(killHim);
 		program.remove(spareHim);
-		program.remove(back);
 	}
 
 	@Override
@@ -191,9 +188,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		if (obj == spareHim) {
 			// Something will happen here
 		}
-		if (obj == back) {
-			program.switchToNewGame();
-		}
+	
 	}
 	
 	@Override
