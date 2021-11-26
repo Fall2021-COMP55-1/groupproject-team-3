@@ -246,7 +246,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.remove(ResumeGame);
 			program.remove(SaveGame);
 			program.remove(Quit);
-			//program.switchToMenu(); If using this line of code then going back to the game will cause a glitch with the Main Menu. 
+			//program.switchToMenu();  
 		}
 		
 	}
