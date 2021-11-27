@@ -9,18 +9,22 @@ public class Inventory {
 	public static final int INVENTORY_X = 200;
 	public static final int INVENTORY_Y = 576;
 	public static final GImage INVENTORY_IMG = new GImage("res/inventory/HotBar.png");
-	private int listSpacing, selectedItem = 0;
+	private int listSpacing=0;
+	private Item selectedItem = null;
 	
 	public Inventory()   {	
 	}
 	
+	public int numInvItems() {
+		return invItems.size();
+	}
 	public int getListSpacing() {return listSpacing;}
 	
-	public int getSelectedItem() {return selectedItem;}
+	public Item getSelectedItem() {return selectedItem;}
 
 	public void setListSpacing(int listSpacing) {this.listSpacing = listSpacing;}
 
-	public void setSelectedItem(int selectedItem) {this.selectedItem = selectedItem;}
+	public void setSelectedItem(Item item) {this.selectedItem = item;}
 	
 	public void addItem(Item item)   {
 		invItems.add(item);

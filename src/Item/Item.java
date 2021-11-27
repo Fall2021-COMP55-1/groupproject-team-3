@@ -9,6 +9,7 @@ public class Item {
 	private boolean used, pickedUp;
 	private GImage sprite, invSprite;
 	public ItemType type;
+	private RoomType roomType;
 	private String map;
 
 	public Item (String name, GImage sprite, ItemType type, String mapName) {
@@ -18,6 +19,14 @@ public class Item {
 		this.type = type;
 		count = 1;  
 		map = mapName;
+	}
+	
+	public void setRoomType(RoomType roomType) {
+		this.roomType=roomType;
+	}
+	
+	public RoomType getRoomType() {
+		return roomType;
 	}
 	
 	public void setMap(String mapName) {

@@ -23,6 +23,17 @@ public class Door {
 		this.locked = locked;
 	}
 	
+	public void setRoomType(RoomType roomType) {
+		this.roomType=roomType;
+	}
+	
+	public void unlock() {
+		locked = false;
+	}
+	public RoomType getRoomType() {
+		return roomType;
+	}
+	
 	public boolean isLocked() {
 		return locked;
 	}

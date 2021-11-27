@@ -30,7 +30,7 @@ public class Player extends Entity{
 	
 	public void setX(int a)   { x=x+a;}
 		
-	public Inventory getInv()   {return inventory;}
+	public Inventory getInv()   {return getInventory();}
 	
 	public String getDirection()   {return playerDirection;}
 	
@@ -128,7 +128,7 @@ public class Player extends Entity{
 	
 	public void grabItem(Item item)   {
 		//Item newItem = item;
-		inventory.addItem(item);
+		getInventory().addItem(item);
 	}
 		
 	private void move(dir direction)   {
@@ -150,5 +150,10 @@ public class Player extends Entity{
 		this.y = (int) (sprite.getY() + dy);
 		stepsTaken = stepsTaken + 1;
 	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
 }
 
