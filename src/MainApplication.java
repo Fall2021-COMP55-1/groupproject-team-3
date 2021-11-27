@@ -26,10 +26,6 @@ public class MainApplication extends GraphicsProgram {
 		items.add(item);
 	}
 	
-	public void deleteItem(Item item) {
-		items.remove(item);
-	}
-	
 	public int numItems() {
 		return items.size();
 	}

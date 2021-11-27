@@ -62,11 +62,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	
 	public void setDoors() {
-		doorLiving = new Door(704,510,64,4);
-		doorBedL = new Door(128,340,32,20);
-		doorBedR = new Door(672,340,32,20);
-		doorHallL = new Door(128,252,32,5);
-		doorHallR = new Door(672,252,32,5);
+		doorLiving = new Door(704,510,64,4, false);
+		doorBedL = new Door(128,340,32,20, true);
+		doorBedR = new Door(672,340,32,20, true);
+		doorHallL = new Door(128,252,32,5, false);
+		doorHallR = new Door(672,252,32,5, false);
 	}
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,96);

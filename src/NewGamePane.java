@@ -53,9 +53,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 
 	public void setDoors() {
-		doorBed = new Door(64,150,64,20);
-		doorBath = new Door(672,380,32,20);
-		outBath = new Door(672,283,32,10);
+		doorBed = new Door(64,150,64,20, true);
+		doorBath = new Door(672,380,32,20, false);
+		outBath = new Door(672,283,32,10, false);
 	}
 	
 	public void setWalls() {

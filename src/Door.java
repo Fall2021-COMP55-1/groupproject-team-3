@@ -13,13 +13,18 @@ import acm.graphics.GRectangle;
 public class Door {
 	private GRect doorBound;
 	private RoomType roomType;
+	private boolean locked;
 	
-	Door(int x, int y, int width, int height){
+	Door(int x, int y, int width, int height, boolean locked){
 		doorBound = new GRect(x,y,width,height);
 		doorBound.setVisible(true);
+		locked = locked;
 	}
 	
-	GRect getRect() {
+	public boolean isLocked() {
+		return locked;
+	}
+	public GRect getRect() {
 		return doorBound;
 	}
 }
