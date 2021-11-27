@@ -129,9 +129,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			player.setX(x);
 			player.setY(y);
 		} else {
-			program.add(player.getImage(),85,176);
+			program.add(player.getImage(),85,172);
 			player.setX(85);
-			player.setY(176);
+			player.setY(172);
 		}
 		program.add(monster.getImage(), x + 32, y + 32);
 		monster.setX(x + 32);
