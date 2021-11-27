@@ -19,6 +19,7 @@ public class MainApplication extends GraphicsProgram {
 	private Credits credits; 
 	private BedRoomGamePane bedroom;
 	public boolean fromBed = false;
+	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
 	
 	public void addItem(Item item) {

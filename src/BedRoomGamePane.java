@@ -14,7 +14,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private MainApplication program; 
 	private GImage background;
 	private Timer timer;
-	private Player player = new Player(0, 0);
+	//private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 722, y = 474;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
@@ -107,27 +107,27 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		Iterator<GRect> iterate = walls.iterator();
 		while(iterate.hasNext()) {
 			GRect temp = iterate.next();
-			if(player.sprite.getBounds().intersects(temp.getBounds())) {
+			if(program.player.sprite.getBounds().intersects(temp.getBounds())) {
 				
-				if(player.getDX() > 0)   {
-					if(player.getDY() > 0)   {player.sprite.move(-2, -2);}
-					if(player.getDY() < 0)   {player.sprite.move(-2, 2);}
-					if(player.getDY() == 0)   {player.sprite.move(-4, 0);}
+				if(program.player.getDX() > 0)   {
+					if(program.player.getDY() > 0)   {program.player.sprite.move(-2, -2);}
+					if(program.player.getDY() < 0)   {program.player.sprite.move(-2, 2);}
+					if(program.player.getDY() == 0)   {program.player.sprite.move(-4, 0);}
 				}
-				if(player.getDX() < 0)   {
-					if(player.getDY() > 0)   {player.sprite.move(2, -2);}
-					if(player.getDY() < 0)   {player.sprite.move(2, 2);}
-					if(player.getDY() == 0)   {player.sprite.move(4, 0);}
+				if(program.player.getDX() < 0)   {
+					if(program.player.getDY() > 0)   {program.player.sprite.move(2, -2);}
+					if(program.player.getDY() < 0)   {program.player.sprite.move(2, 2);}
+					if(program.player.getDY() == 0)   {program.player.sprite.move(4, 0);}
 				}
-				if(player.getDY() < 0)   {
-					if(player.getDX() > 0)   {player.sprite.move(-2, 2);}
-					if(player.getDX() < 0)   {player.sprite.move(2, 2);}
-					if(player.getDX() == 0)   {player.sprite.move(0, 4);}
+				if(program.player.getDY() < 0)   {
+					if(program.player.getDX() > 0)   {program.player.sprite.move(-2, 2);}
+					if(program.player.getDX() < 0)   {program.player.sprite.move(2, 2);}
+					if(program.player.getDX() == 0)   {program.player.sprite.move(0, 4);}
 				}
-				if(player.getDY() > 0)   {
-					if(player.getDX() > 0)   {player.sprite.move(-2, -2);}
-					if(player.getDX() < 0)   {player.sprite.move(2, -2);}
-					if(player.getDX() == 0)   {player.sprite.move(0, -4);}
+				if(program.player.getDY() > 0)   {
+					if(program.player.getDX() > 0)   {program.player.sprite.move(-2, -2);}
+					if(program.player.getDX() < 0)   {program.player.sprite.move(2, -2);}
+					if(program.player.getDX() == 0)   {program.player.sprite.move(0, -4);}
 				}
 				return true;
 			}
@@ -140,18 +140,21 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<7; i++) {program.add(walls.get(i));}
 		
 		program.add(background);
-		program.add(player.getImage(), x, y);
-		player.setX(x);
-		player.setY(y);
+		program.add(program.player.getImage(), x, y);
+		program.player.setX(x);
+		program.player.setY(y);
 		program.add(monster.getImage(), x + 32, y + 32);
 		monster.setX(x + 32);
 		monster.setY(y + 32);
-		player.getInv();
+		program.player.getInv();
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 		
 		for (int i = 0; i < program.numItems(); i++)   {
-			if (program.itemAt(i).getMap()=="bedR") {
+			if (program.itemAt(i).getMap()=="bedR"  && !program.itemAt(i).isPickedUp()) {
 				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
+			}
+			if (program.itemAt(i).isPickedUp()) {
+				program.add(program.itemAt(i).getInvSprite());
 			}
 		}
 		program.add(doorLiving.getRect());
@@ -175,7 +178,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	private void grab(Item item)   {
-		player.grabItem(item);
+		program.player.grabItem(item);
 		item.setPickedUp(true);
 		program.remove(item.getImage());
 		program.add(item.getInvSprite());
@@ -190,14 +193,13 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(doorHallL.getRect());
 		program.remove(doorHallR.getRect());
 
-		program.remove(player.getImage());
+		program.remove(program.player.getImage());
 		for(int i=0; i<7; i++) {
 			program.remove(walls.get(i));
 		}
 		for (int i = 0; i < program.numItems(); ++i)   {
-			if (program.itemAt(i).getMap()=="bedR") {
-				program.remove(program.itemAt(i).getImage());
-			}
+			program.remove(program.itemAt(i).getImage());
+			program.add(program.itemAt(i).getInvSprite());
 		}
 		
 		program.remove(choice1);
@@ -263,36 +265,36 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		player.keyPressed(e);
+		program.player.keyPressed(e);
 		checkCollision();
 		
-		if(player.sprite.getBounds().intersects(doorLiving.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+		if(program.player.sprite.getBounds().intersects(doorLiving.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.fromBed = true;
 			program.switchToNewGame();
 		}
 		
-		if(player.sprite.getBounds().intersects(doorBedL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
-			program.remove(player.getImage());
-			program.add(player.getImage(), 128,219);
+		if(program.player.sprite.getBounds().intersects(doorBedL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(program.player.getImage());
+			program.add(program.player.getImage(), 128,219);
 		}
 		
-		if(player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
-			program.remove(player.getImage());
-			program.add(player.getImage(), 672,219);
+		if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(program.player.getImage());
+			program.add(program.player.getImage(), 672,219);
 		}
 		
-		if(player.sprite.getBounds().intersects(doorHallL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
-			program.remove(player.getImage());
-			program.add(player.getImage(), 128,374);
+		if(program.player.sprite.getBounds().intersects(doorHallL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(program.player.getImage());
+			program.add(program.player.getImage(), 128,374);
 		}
 		
-		if(player.sprite.getBounds().intersects(doorHallR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
-			program.remove(player.getImage());
-			program.add(player.getImage(), 672,374);
+		if(program.player.sprite.getBounds().intersects(doorHallR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			program.remove(program.player.getImage());
+			program.add(program.player.getImage(), 672,374);
 		}
 		
 		for (int i=0; i<program.numItems(); i++) {
-			if(program.itemAt(i).getMap() == "bedR" && e.getKeyCode()==KeyEvent.VK_E && player.sprite.getBounds().intersects(program.itemAt(i).getImage().getBounds())) {
+			if(program.itemAt(i).getMap() == "bedR" && e.getKeyCode()==KeyEvent.VK_E && program.player.sprite.getBounds().intersects(program.itemAt(i).getImage().getBounds())) {
 				grab(program.itemAt(i));
 			}
 		}
@@ -301,10 +303,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		player.keyReleased(e);}
+		program.player.keyReleased(e);}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {monster.move(player);}
+	public void actionPerformed(ActionEvent e) {monster.move(program.player);}
 	
 	public class ChoiceHandler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
