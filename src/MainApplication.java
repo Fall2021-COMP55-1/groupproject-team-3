@@ -1,5 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import acm.program.GraphicsProgram;
 
@@ -18,8 +19,23 @@ public class MainApplication extends GraphicsProgram {
 	private Credits credits; 
 	private BedRoomGamePane bedroom;
 	public boolean fromBed = false;
+	private ArrayList<Item> items = new ArrayList <Item>();
 	
+	public void addItem(Item item) {
+		items.add(item);
+	}
 	
+	public void deleteItem(Item item) {
+		items.remove(item);
+	}
+	
+	public int numItems() {
+		return items.size();
+	}
+	
+	public Item itemAt(int i) {
+		return items.get(i);
+	}
 	/* Method: setupInteractions
 	 * -------------------------
 	 * must be called before switching to another

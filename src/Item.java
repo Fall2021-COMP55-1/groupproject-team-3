@@ -8,17 +8,23 @@ public class Item {
 	private boolean used, pickedUp;
 	private GImage sprite, invSprite;
 	public ItemType type;
-	
+	private String map;
 
-	public Item (String name, GImage sprite, ItemType type) {
+	public Item (String name, GImage sprite, ItemType type, String mapName) {
 		this.name = name;
 		this.sprite = sprite;
 		setInvSprite(new GImage("res/inventory/" + name + ".png", x, y));
 		this.type = type;
 		count = 1;  
+		map = mapName;
 	}
 	
-
+	public void setMap(String mapName) {
+		map = mapName;
+	}
+	public String getMap() {
+		return map;
+	}
 	public int getX()   {return x;}
 	
 	public int getY()   {return y;}

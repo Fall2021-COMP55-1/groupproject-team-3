@@ -17,9 +17,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Timer timer;
 	private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
-	private ArrayList<Item> items = new ArrayList <Item>();
-	private Item itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON);
-	private Item itemKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private int x = 482, y = 510;
 	private Door doorBed, doorBath, outBath;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
@@ -30,6 +27,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		this.program = app;
 		setWalls();
 		setDoors();
+		setItems();
 		background = new GImage("res/livingroom.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
@@ -52,11 +50,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		Quit.setVisible(false); 
 		Quit1 = new GButton("", 255, 400, 250, 60); 
 			
-	}
-	
-	private boolean keyE(KeyEvent e)   {
-		if (e.getKeyCode() == KeyEvent.VK_E)   {return true;}
-		else {return false;}
 	}
 
 	public void setDoors() {
@@ -106,7 +99,19 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		wall13.setFilled(true);
 		walls.add(wall13);
 	}
+	
+	public void setItems() {
+		Item itemKnife1 = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
+		itemKnife1.setX(734);
+		itemKnife1.setY(259);
+		program.addItem(itemKnife1);
 		
+		Item itemKey1 = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "livingR");
+		itemKey1.setX(200);
+		itemKey1.setY(100);
+		program.addItem(itemKey1);
+	}
+	
 	public boolean checkCollision() {
 		Iterator<GRect> iterate = walls.iterator();
 		while(iterate.hasNext()) {
@@ -161,14 +166,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(doorBed.getRect());
 		program.add(doorBath.getRect());
 		program.add(outBath.getRect());
-		items.add(itemKnife);
-		items.add(itemKey);
-		items.get(0).setX(x);
-		items.get(0).setY(y);
-		items.get(1).setX(200);
-		items.get(1).setY(100);
-		for (int i = 0; i < items.size(); ++i)   {
-			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
+		
+		for (int i = 0; i < program.numItems(); i++)   {
+			if (program.itemAt(i).getMap()=="livingR") {
+				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
+			}
 		}
 		
 		program.add(MainMenu);
@@ -182,11 +184,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 	}
 
-	private void grab(int i)   {
-		player.grabItem(items.get(i));
-		items.get(i).setPickedUp(true);
-		program.remove(items.get(i).getImage());
-		program.add(items.get(i).getInvSprite());
+	private void grab(Item item)   {
+		player.grabItem(item);
+		item.setPickedUp(true);
+		program.remove(item.getImage());
+		program.add(item.getInvSprite());
 	}
 	
 	@Override
@@ -200,8 +202,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(doorBath.getRect());
 		program.remove(outBath.getRect());
 		program.remove(monster.getImage());
-		for (int i = 0; i < items.size(); ++i) {
-			program.remove(items.get(i).getImage());
+		
+		for (int i = 0; i < program.numItems(); ++i)   {
+			if (program.itemAt(i).getMap()=="livingR") {
+				program.remove(program.itemAt(i).getImage());
+			}
 		}
 		
 		program.remove(MainMenu);
@@ -271,24 +276,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 
 		}
 		
-		if(keyE(e))   {	
-			for (int i = 0; i < items.size(); ++i)   {
-				if(player.getDirection() == "Up")   {
-					if(items.get(i).getY() >= player.getY() - 64 && items.get(i).getY() <= player.getY() - 32)   {
-						grab(i);}
-				}
-				if(player.getDirection() == "Down")   {
-					if(items.get(i).getY() <= player.getY() + 64 && items.get(i).getY() >= player.getY() + 32)   {
-						grab(i);}	
-				}
-				if(player.getDirection() == "Left")   {
-					if(items.get(i).getX() >= player.getX() - 64 && items.get(i).getX() <= player.getX() - 32)   {
-						grab(i);}
-				}
-				if(player.getDirection() == "Right")   {
-					if(items.get(i).getX() <= player.getX() + 64 && items.get(i).getX() >= player.getX() + 32)   {
-						grab(i);}
-				}
+		
+		for (int i=0; i<program.numItems(); i++) {
+			if(program.itemAt(i).getMap() == "livingR" && e.getKeyCode()==KeyEvent.VK_E && player.sprite.getBounds().intersects(program.itemAt(i).getImage().getBounds())) {
+				grab(program.itemAt(i));
 			}
 		}
 	}

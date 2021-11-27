@@ -124,8 +124,8 @@ public class Player extends Entity{
 	}
 	
 	protected void grabItem(Item item)   {
-		Item newItem = item;
-		inventory.addItem(newItem);
+		//Item newItem = item;
+		inventory.addItem(item);
 	}
 		
 	private void move(dir direction)   {
