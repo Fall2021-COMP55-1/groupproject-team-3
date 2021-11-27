@@ -24,8 +24,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private Item itemKnife = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON);
 	private Item itemKey = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY);
 	private Door doorLiving, doorBedL, doorBedR, doorHallL, doorHallR;
-	private GImage choice1, choice2; 
-	private GButton killHim, spareHim;
+	private GImage choice1, choice2, MainMenu, ResumeGame, SaveGame, Quit; 
+	private GButton killHim, spareHim, MainMenu2, ResumeGame1, SaveGame1, Quit1;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
 	
 	
@@ -44,6 +44,23 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40); 
+		
+		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
+		MainMenu.setSize(150, 40);
+		MainMenu2 = new GButton("", 50, 555, 150, 40); 
+		
+		ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
+		ResumeGame.setSize(250, 60); 
+		ResumeGame.setVisible(false);
+		ResumeGame1 = new GButton("", 255, 200, 250, 60); 
+		SaveGame = new GImage("res/texture/Save Game.png", 255, 300);
+		SaveGame.setSize(250, 60);  
+		SaveGame.setVisible(false); 
+		SaveGame1 = new GButton("", 255, 300, 250, 60); 
+		Quit = new GImage("res/texture/Quit.png", 255, 400);
+		Quit.setSize(250, 60);
+		Quit.setVisible(false); 
+		Quit1 = new GButton("", 255, 400, 250, 60); 
 		
 	}
 	
@@ -146,6 +163,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.add(choice2);
 		program.add(killHim);
 		program.add(spareHim);
+		program.add(MainMenu);
+		program.add(MainMenu2);
+		program.add(ResumeGame);
+		program.add(ResumeGame1);
+		program.add(SaveGame);
+		program.add(SaveGame1);
+		program.add(Quit);
+		program.add(Quit1);
 				
 	}
 	
@@ -177,16 +202,59 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(choice2);
 		program.remove(killHim);
 		program.remove(spareHim);
+		program.remove(MainMenu);
+		program.remove(MainMenu2);
+		program.remove(ResumeGame);
+		program.remove(ResumeGame1);
+		program.remove(SaveGame);
+		program.remove(SaveGame1);
+		program.remove(Quit);
+		program.remove(Quit1);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
+		if (obj == MainMenu2) {
+			ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
+			ResumeGame.setSize(250, 60);
+			ResumeGame1 = new GButton("", 255, 200, 250, 60); 
+			program.add(ResumeGame); 
+			SaveGame = new GImage("res/texture/Save Game.png", 255, 300); 
+			SaveGame.setSize(250, 60);
+			SaveGame1 = new GButton("", 255, 300, 250, 60);
+			program.add(SaveGame);
+			Quit = new GImage("res/texture/Quit.png", 255, 400);
+			Quit.setSize(250, 60);
+			Quit1 = new GButton("", 255, 400, 250, 60);
+			program.add(Quit); 
+		}
+		
+		if (obj == ResumeGame) {	 
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+		}
+		if (obj == SaveGame) {
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+		}
+		if (obj == Quit) {
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+			//program.switchToMenu(); If using this line of code then going back to the game will cause a glitch with the Main Menu. 
+		}
 		if (obj == killHim) {
 			// Something will happen here
+			program.remove(choice1);
+			program.remove(choice2);
 		}
 		if (obj == spareHim) {
 			// Something will happen here
+			program.remove(choice1);
+			program.remove(choice2);
 		}
 	
 	}

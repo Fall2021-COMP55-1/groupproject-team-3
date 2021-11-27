@@ -23,6 +23,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private int x = 482, y = 510;
 	private Door doorBed, doorBath, outBath;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
+	private GImage MainMenu, ResumeGame, SaveGame, Quit; 
+	private GButton MainMenu2, ResumeGame1, SaveGame1, Quit1; 
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
@@ -32,6 +34,24 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
 		timer.start();
+		
+		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
+		MainMenu.setSize(150, 40);
+		MainMenu2 = new GButton("", 50, 555, 150, 40); 
+		
+		ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
+		ResumeGame.setSize(250, 60); 
+		ResumeGame.setVisible(false);
+		ResumeGame1 = new GButton("", 255, 200, 250, 60); 
+		SaveGame = new GImage("res/texture/Save Game.png", 255, 300);
+		SaveGame.setSize(250, 60);  
+		SaveGame.setVisible(false); 
+		SaveGame1 = new GButton("", 255, 300, 250, 60); 
+		Quit = new GImage("res/texture/Quit.png", 255, 400);
+		Quit.setSize(250, 60);
+		Quit.setVisible(false); 
+		Quit1 = new GButton("", 255, 400, 250, 60); 
+			
 	}
 	
 	private boolean keyE(KeyEvent e)   {
@@ -151,6 +171,15 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(items.get(i).getImage(), items.get(i).getX(), items.get(i).getY());
 		}
 		
+		program.add(MainMenu);
+		program.add(MainMenu2);
+		program.add(ResumeGame);
+		program.add(ResumeGame1);
+		program.add(SaveGame);
+		program.add(SaveGame1);
+		program.add(Quit);
+		program.add(Quit1);
+		
 	}
 
 	private void grab(int i)   {
@@ -174,11 +203,51 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for (int i = 0; i < items.size(); ++i) {
 			program.remove(items.get(i).getImage());
 		}
+		
+		program.remove(MainMenu);
+		program.remove(MainMenu2);
+		program.remove(ResumeGame);
+		program.remove(ResumeGame1);
+		program.remove(SaveGame);
+		program.remove(SaveGame1);
+		program.remove(Quit);
+		program.remove(Quit1);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
+		if (obj == MainMenu2) {
+			ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
+			ResumeGame.setSize(250, 60);
+			ResumeGame1 = new GButton("", 255, 200, 250, 60); 
+			program.add(ResumeGame); 
+			SaveGame = new GImage("res/texture/Save Game.png", 255, 300); 
+			SaveGame.setSize(250, 60);
+			SaveGame1 = new GButton("", 255, 300, 250, 60);
+			program.add(SaveGame);
+			Quit = new GImage("res/texture/Quit.png", 255, 400);
+			Quit.setSize(250, 60);
+			Quit1 = new GButton("", 255, 400, 250, 60);
+			program.add(Quit); 
+		}
+		
+		if (obj == ResumeGame) {	 
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+		}
+		if (obj == SaveGame) {
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+		}
+		if (obj == Quit) {
+			program.remove(ResumeGame);
+			program.remove(SaveGame);
+			program.remove(Quit);
+			//program.switchToMenu();  
+		}
 		
 	}
 	
