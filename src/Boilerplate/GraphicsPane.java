@@ -1,3 +1,4 @@
+package Boilerplate;
 
 /* File: GraphicsPane.java
  * -----------------------

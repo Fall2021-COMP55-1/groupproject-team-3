@@ -1,3 +1,4 @@
+package Entity;
 import java.awt.Image;
 import java.util.ArrayList;
 import acm.graphics.GImage;

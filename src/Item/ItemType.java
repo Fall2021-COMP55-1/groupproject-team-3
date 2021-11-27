@@ -1,3 +1,4 @@
+package Item;
 public enum ItemType {
 	WEAPON, KEY, HEALING;
 	

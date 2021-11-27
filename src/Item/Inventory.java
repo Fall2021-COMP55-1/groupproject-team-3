@@ -1,4 +1,6 @@
+package Item;
 import java.util.ArrayList;
+
 import acm.graphics.GImage;
 
 public class Inventory {

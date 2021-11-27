@@ -1,4 +1,6 @@
+package Entity;
 import java.util.ArrayList;
+
 import acm.graphics.GImage;
 
 public class Monster extends Entity{
@@ -89,7 +91,7 @@ public class Monster extends Entity{
 		this.y = (int) (sprite.getY() + dy + 16);
 	}	
 	
-	protected void move(Player player)   {
+	public void move(Player player)   {
 		if(player.getX() < x)   {move(dir.LEFT);}
 		if(player.getX() > x)   {move(dir.RIGHT);}
 		if(player.getY() < y)   {move(dir.UP);}

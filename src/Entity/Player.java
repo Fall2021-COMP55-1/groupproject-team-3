@@ -1,5 +1,8 @@
+package Entity;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
+import Item.*;
 import acm.graphics.GImage;
 
 public class Player extends Entity{
@@ -123,7 +126,7 @@ public class Player extends Entity{
 		
 	}
 	
-	protected void grabItem(Item item)   {
+	public void grabItem(Item item)   {
 		//Item newItem = item;
 		inventory.addItem(item);
 	}

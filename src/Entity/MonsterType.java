@@ -1,3 +1,4 @@
+package Entity;
 public enum MonsterType {
 	TALL, CRY, SUS;
 	

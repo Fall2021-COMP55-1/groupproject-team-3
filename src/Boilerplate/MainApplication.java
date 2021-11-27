@@ -1,6 +1,12 @@
+package Boilerplate;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import Entity.*;
+import Item.*;
+import GamePanes.*;
 
 import acm.program.GraphicsProgram;
 

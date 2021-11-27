@@ -1,3 +1,4 @@
+package Boilerplate;
 /*
  * File: GButton.java
  * ------------------

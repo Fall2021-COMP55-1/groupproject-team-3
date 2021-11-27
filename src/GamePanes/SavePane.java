@@ -1,4 +1,9 @@
+package GamePanes;
 import java.awt.event.MouseEvent;
+
+import Boilerplate.GButton;
+import Boilerplate.GraphicsPane;
+import Boilerplate.MainApplication;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 

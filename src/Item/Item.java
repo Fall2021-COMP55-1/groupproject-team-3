@@ -1,3 +1,4 @@
+package Item;
 import acm.graphics.GImage;
 import acm.graphics.GRect;
 
