@@ -28,10 +28,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private int x = 482, y = 510;
 	private Door doorBed, doorBath, outBath;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
-	private GImage MainMenu, ResumeGame, SaveGame, Quit; 
+	private GImage MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
 	private GButton MainMenu2, ResumeGame1, SaveGame1, Quit1; 
 	private GRect redBox = null;
 	private GLabel description = null, usedKey = null, lockedDoor = null;
+	private GParagraph healthPoints; 
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
@@ -46,7 +47,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
 		MainMenu.setSize(150, 40);
 		MainMenu2 = new GButton("", 50, 555, 150, 40); 
-		
 		ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
 		ResumeGame.setSize(250, 60); 
 		ResumeGame.setVisible(false);
@@ -59,6 +59,16 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		Quit.setSize(250, 60);
 		Quit.setVisible(false); 
 		Quit1 = new GButton("", 255, 400, 250, 60); 
+		
+		healthPoints = new GParagraph("HP:", 220, 590);
+		healthPoints.setColor(Color.white); 
+		healthPoints.setFont("Arial-12");
+		HP1 = new GImage("res/texture/HP.png", 245, 580);
+		HP1.setSize(30, 20);
+		HP2 = new GImage("res/texture/HP.png", 270, 580);
+		HP2.setSize(30, 20); 
+		HP3 = new GImage("res/texture/HP.png", 295, 580);
+		HP3.setSize(30, 20); 
 			
 	}
 
@@ -190,7 +200,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			}
 		}
 		
-		
 		program.add(MainMenu);
 		program.add(MainMenu2);
 		program.add(ResumeGame);
@@ -199,6 +208,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(SaveGame1);
 		program.add(Quit);
 		program.add(Quit1);
+		program.add(healthPoints);
+		program.add(HP1);
+		program.add(HP2);
+		program.add(HP3);
 		
 	}
 
@@ -238,6 +251,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(SaveGame1);
 		program.remove(Quit);
 		program.remove(Quit1);
+		program.remove(healthPoints);
+		program.remove(HP1); 
+		program.remove(HP2);
+		program.remove(HP3);
 	}
 
 	@Override
