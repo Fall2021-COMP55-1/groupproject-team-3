@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import javax.swing.Timer;
 
@@ -195,10 +196,12 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			if (program.itemAt(i).getMap()=="livingR" && !program.itemAt(i).isPickedUp()) {
 				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
 			}
-			if (program.itemAt(i).isPickedUp()) {
-				program.add(program.itemAt(i).getInvSprite());
-			}
 		}
+		
+		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
+			program.add(program.player.getInventory().itemAt(i).getInvSprite());
+		}
+		
 		
 		program.add(MainMenu);
 		program.add(MainMenu2);
@@ -236,7 +239,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 		for (int i = 0; i < program.numItems(); ++i)   {
 			program.remove(program.itemAt(i).getImage());
-			program.remove(program.itemAt(i).getInvSprite());
+		}
+		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
+			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		
 		program.remove(redBox);
@@ -325,9 +330,21 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 				usedKey.setColor(Color.white);
 				program.add(usedKey);
 				doorBed.unlock();
+				program.player.getInventory().deleteItem(getSelectedItem());
+				program.remove(getSelectedItem().getInvSprite());
+				int delay = 5000;
+			    ActionListener taskPerformer = new ActionListener() {
+			    	public void actionPerformed(ActionEvent evt) {
+			        program.remove(usedKey);
+			    	}
+			    };
+			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+			    tick.setRepeats(false);
+			    tick.start();
 			}
 		}
-		
+
+	
 		if(program.player.sprite.getBounds().intersects(doorBed.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			if (!doorBed.isLocked()) {
 				program.switchToBedRoom();
@@ -335,6 +352,15 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 				lockedDoor = new GLabel("Door is locked!", 210, 544);
 				lockedDoor.setColor(Color.white);
 				program.add(lockedDoor);
+				int delay = 5000;
+			    ActionListener taskPerformer = new ActionListener() {
+			    	public void actionPerformed(ActionEvent evt) {
+			        program.remove(lockedDoor);
+			    	}
+			    };
+			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+			    tick.setRepeats(false);
+			    tick.start();
 			}
 		}
 		
@@ -396,6 +422,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void keyReleased(KeyEvent e) {program.player.keyReleased(e);}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {monster.move(program.player);}
+	public void actionPerformed(ActionEvent e) {
+		monster.move(program.player);
+
+	}
 	
 }

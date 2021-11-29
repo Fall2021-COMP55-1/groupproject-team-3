@@ -14,6 +14,7 @@ import Item.*;
 import Boilerplate.*;
 
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
 
@@ -30,6 +31,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private GImage choice1, choice2, MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
 	private GButton killHim, spareHim, MainMenu2, ResumeGame1, SaveGame1, Quit1;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
+	private GRect redBox = null;
+	private GLabel description = null, usedKey = null, lockedDoor = null;
 	private GParagraph healthPoints; 
 	
 	
@@ -82,6 +85,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		doorLiving = new Door(704,510,64,4, false);
 		doorBedL = new Door(128,340,32,20, true);
 		doorBedR = new Door(672,340,32,20, true);
+		doorBedR.setRoomType(RoomType.BEDROOMR);
 		doorHallL = new Door(128,252,32,5, false);
 		doorHallR = new Door(672,252,32,5, false);
 	}
@@ -111,12 +115,15 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	public void setItems() {
 		Item itemKnife2 = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON, "bedR");
-		itemKnife2.setX(116);
-		itemKnife2.setY(184);
+		itemKnife2.setX(422);
+		itemKnife2.setY(217);
+		itemKnife2.setDescription("Knife to Kill");
 		program.addItem(itemKnife2);
 		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
-		itemKey2.setX(422);
-		itemKey2.setY(217);
+		itemKey2.setX(116);
+		itemKey2.setY(184);
+		itemKey2.setRoomType(RoomType.BEDROOMR);
+		itemKey2.setDescription("Key to master bedroom");
 		program.addItem(itemKey2);
 	}
 	
@@ -170,15 +177,18 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			if (program.itemAt(i).getMap()=="bedR"  && !program.itemAt(i).isPickedUp()) {
 				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
 			}
-			if (program.itemAt(i).isPickedUp()) {
-				program.add(program.itemAt(i).getInvSprite());
-			}
 		}
+		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
+			program.add(program.player.getInventory().itemAt(i).getInvSprite());
+		}
+			
+		
 		program.add(doorLiving.getRect());
 		program.add(doorBedL.getRect());
 		program.add(doorBedR.getRect());
 		program.add(doorHallL.getRect());
 		program.add(doorHallR.getRect());
+		
 		program.add(choice1);
 		program.add(choice2);
 		program.add(killHim);
@@ -220,7 +230,18 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 		for (int i = 0; i < program.numItems(); ++i)   {
 			program.remove(program.itemAt(i).getImage());
-			program.add(program.itemAt(i).getInvSprite());
+		}
+		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
+			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
+		}
+		if(redBox!=null) {
+			program.remove(redBox);
+		}
+		if(description!=null) {
+			program.remove(description);
+		}
+		if(usedKey!=null) {
+			program.remove(usedKey);
 		}
 		
 		program.remove(choice1);
@@ -286,6 +307,23 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.remove(choice2);
 		}
 	
+		Item temp=null;
+		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
+			if (obj == program.player.getInventory().invItems.get(i).getInvSprite()) {
+				if(redBox!=null) {
+					program.remove(redBox);
+					program.remove(description);
+				}
+				temp= program.player.getInventory().invItems.get(i);
+				redBox = new GRect(obj.getX(),obj.getY(),32,32);
+				redBox.setColor(Color.red);
+				program.add(redBox);
+				description = new GLabel(temp.getDescription(),210,576);
+				description.setColor(Color.white);
+				program.add(description);
+				program.player.getInventory().setSelectedItem(temp);
+			}
+		}
 	}
 	
 	@Override
@@ -303,11 +341,46 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.add(program.player.getImage(), 128,219);
 		}
 		
-		if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
-			program.remove(program.player.getImage());
-			program.add(program.player.getImage(), 672,219);
+		if(getSelectedItem()!=null) {
+			if(getSelectedItem().getRoomType()==RoomType.BEDROOMR && program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
+				if(lockedDoor!=null) {program.remove(lockedDoor);}
+				usedKey = new GLabel("Opened the door with key!", 210, 544);
+				usedKey.setColor(Color.white);
+				program.add(usedKey);
+				doorBedR.unlock();
+				program.player.getInventory().deleteItem(getSelectedItem());
+				program.remove(getSelectedItem().getInvSprite());
+				int delay = 5000;
+			    ActionListener taskPerformer = new ActionListener() {
+			    	public void actionPerformed(ActionEvent evt) {
+			        program.remove(usedKey);
+			    	}
+			    };
+			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+			    tick.setRepeats(false);
+			    tick.start();
+			}
 		}
 		
+		if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			if (!doorBedR.isLocked()) {
+				program.remove(program.player.getImage());
+				program.add(program.player.getImage(), 672,219);
+			}else {
+				lockedDoor = new GLabel("Door is locked!", 210, 544);
+				lockedDoor.setColor(Color.white);
+				program.add(lockedDoor);
+				int delay = 5000;
+			    ActionListener taskPerformer = new ActionListener() {
+			    	public void actionPerformed(ActionEvent evt) {
+			        program.remove(lockedDoor);
+			    	}
+			    };
+			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+			    tick.setRepeats(false);
+			    tick.start();
+			}
+		}
 		if(program.player.sprite.getBounds().intersects(doorHallL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.remove(program.player.getImage());
 			program.add(program.player.getImage(), 128,374);
@@ -324,6 +397,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			}
 		}
 		
+	}
+	
+	public Item getSelectedItem() {
+		return program.player.getInventory().getSelectedItem();
 	}
 	
 	@Override

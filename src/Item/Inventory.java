@@ -33,4 +33,12 @@ public class Inventory {
 			invItems.get(i).setY(INVENTORY_Y);
 		}
 	}
+	
+	public void deleteItem(Item item) {
+		invItems.remove(item);
+	}
+	
+	public Item itemAt(int i) {
+		return invItems.get(i);
+	}
 }
