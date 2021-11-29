@@ -23,7 +23,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private MainApplication program; 
 	private GImage background;
 	private Timer timer;
-	//private Player player = new Player(0, 0);
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 722, y = 474;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
@@ -32,7 +31,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private GButton killHim, spareHim, MainMenu2, ResumeGame1, SaveGame1, Quit1;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
 	private GRect redBox = null;
-	private GLabel description = null, usedKey = null, lockedDoor = null;
+	private GLabel description = null, usedKey = null, lockedDoor = null, wrongItem = null;
 	private GParagraph healthPoints; 
 	
 	
@@ -80,15 +79,20 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		HP3.setSize(30, 20); 
 	}
 	
-	
 	public void setDoors() {
+		//door to living room map
 		doorLiving = new Door(704,510,64,4, false);
+		//door to left bedroom
 		doorBedL = new Door(128,340,32,20, true);
+		//door to right bedroom
 		doorBedR = new Door(672,340,32,20, true);
 		doorBedR.setRoomType(RoomType.BEDROOMR);
+		//door to hallway from left bedroom
 		doorHallL = new Door(128,252,32,5, false);
+		//door to hallway from right bedroom
 		doorHallR = new Door(672,252,32,5, false);
 	}
+	
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,96);
 		wall1.setFilled(true);
@@ -161,28 +165,33 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	@Override
 	public void showContents() {
+		//walls
 		for (int i=0; i<7; i++) {program.add(walls.get(i));}
-		
+		//background image
 		program.add(background);
+		//player
 		program.add(program.player.getImage(), x, y);
 		program.player.setX(x);
 		program.player.setY(y);
+		//monster
 		program.add(monster.getImage(), x + 32, y + 32);
 		monster.setX(x + 32);
 		monster.setY(y + 32);
-		program.player.getInv();
-		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 		
+		program.player.getInv();
+		//inventory hot bar image
+		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
+		//items on the map
 		for (int i = 0; i < program.numItems(); i++)   {
 			if (program.itemAt(i).getMap()=="bedR"  && !program.itemAt(i).isPickedUp()) {
 				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
 			}
 		}
+		//items on the inventory hot bar
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-			
-		
+		//doors
 		program.add(doorLiving.getRect());
 		program.add(doorBedL.getRect());
 		program.add(doorBedR.getRect());
@@ -234,15 +243,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		if(redBox!=null) {
-			program.remove(redBox);
-		}
-		if(description!=null) {
-			program.remove(description);
-		}
-		if(usedKey!=null) {
-			program.remove(usedKey);
-		}
+		
+		if(redBox!=null) {program.remove(redBox);}
+		if(description!=null) {program.remove(description);}
+		if (usedKey!=null) {program.remove(usedKey);}
+		if(lockedDoor!=null) {program.remove(lockedDoor);}
+		if(wrongItem!=null) {program.remove(wrongItem);}
 		
 		program.remove(choice1);
 		program.remove(choice2);
@@ -307,6 +313,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.remove(choice2);
 		}
 	
+		//to select item on the inventory hot bar
 		Item temp=null;
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			if (obj == program.player.getInventory().invItems.get(i).getInvSprite()) {
@@ -331,72 +338,83 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.player.keyPressed(e);
 		checkCollision();
 		
+		//back to livingroom map
 		if(program.player.sprite.getBounds().intersects(doorLiving.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.fromBed = true;
 			program.switchToNewGame();
 		}
-		
+		//get into left bedroom
 		if(program.player.sprite.getBounds().intersects(doorBedL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.remove(program.player.getImage());
 			program.add(program.player.getImage(), 128,219);
 		}
-		
+		//unlock the right bedroom with key
 		if(getSelectedItem()!=null) {
-			if(getSelectedItem().getRoomType()==RoomType.BEDROOMR && program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
-				if(lockedDoor!=null) {program.remove(lockedDoor);}
-				usedKey = new GLabel("Opened the door with key!", 210, 544);
-				usedKey.setColor(Color.white);
-				program.add(usedKey);
-				doorBedR.unlock();
-				program.player.getInventory().deleteItem(getSelectedItem());
-				program.remove(getSelectedItem().getInvSprite());
-				int delay = 5000;
-			    ActionListener taskPerformer = new ActionListener() {
-			    	public void actionPerformed(ActionEvent evt) {
-			        program.remove(usedKey);
-			    	}
-			    };
-			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
-			    tick.setRepeats(false);
-			    tick.start();
+			if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
+				if (getSelectedItem().getRoomType()==RoomType.BEDROOMR) {
+					if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
+					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
+					usedKey = new GLabel("Opened the door with key!", 210, 544);
+					usedKey.setColor(Color.white);
+					program.add(usedKey);
+					doorBedR.unlock();
+					program.player.getInventory().deleteItem(getSelectedItem());
+					program.remove(getSelectedItem().getInvSprite());
+					program.remove(redBox);
+					program.remove(description);
+					label5sec(usedKey);
+				}else {
+					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
+					wrongItem = new GLabel("Wrong item!", 210, 544);
+					wrongItem.setColor(Color.white);
+					program.add(wrongItem);
+					label5sec(wrongItem);
+				}
 			}
 		}
-		
+		//get into right bedroom
 		if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			if (!doorBedR.isLocked()) {
 				program.remove(program.player.getImage());
 				program.add(program.player.getImage(), 672,219);
 			}else {
+				if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
 				lockedDoor = new GLabel("Door is locked!", 210, 544);
 				lockedDoor.setColor(Color.white);
 				program.add(lockedDoor);
-				int delay = 5000;
-			    ActionListener taskPerformer = new ActionListener() {
-			    	public void actionPerformed(ActionEvent evt) {
-			        program.remove(lockedDoor);
-			    	}
-			    };
-			    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
-			    tick.setRepeats(false);
-			    tick.start();
+				label5sec(lockedDoor);
 			}
 		}
+		//get out of left bedroom
 		if(program.player.sprite.getBounds().intersects(doorHallL.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.remove(program.player.getImage());
 			program.add(program.player.getImage(), 128,374);
 		}
-		
+		//get out of right bedroom
 		if(program.player.sprite.getBounds().intersects(doorHallR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			program.remove(program.player.getImage());
 			program.add(program.player.getImage(), 672,374);
 		}
-		
+		//pick up item with E
 		for (int i=0; i<program.numItems(); i++) {
 			if(program.itemAt(i).getMap() == "bedR" && e.getKeyCode()==KeyEvent.VK_E && program.player.sprite.getBounds().intersects(program.itemAt(i).getImage().getBounds())) {
 				grab(program.itemAt(i));
 			}
 		}
 		
+	}
+	
+	public void label5sec(GLabel label) {
+		//label to disappear after 5 sec
+		int delay = 5000;
+	    ActionListener taskPerformer = new ActionListener() {
+	    	public void actionPerformed(ActionEvent evt) {
+	        label.setVisible(false);
+	    	}
+	    };
+	    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+	    tick.setRepeats(false);
+	    tick.start();
 	}
 	
 	public Item getSelectedItem() {
