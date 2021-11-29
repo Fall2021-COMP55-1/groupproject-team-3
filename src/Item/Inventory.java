@@ -35,6 +35,15 @@ public class Inventory {
 		this.selectedItem = item;
 	}
 	
+	public boolean setSelectedItem(int idx) {
+		int maxItems = numInvItems();
+		if (idx < 0 || idx >= maxItems) { return false; }
+	
+		Item selected = invItems.get(idx);
+		setSelectedItem(selected);
+		return true;
+	}
+	
 	public void setSelectedItem(GObject obj) {
 		for (int i=0; i<numInvItems(); i++) {
 			Item detected = invItems.get(i);

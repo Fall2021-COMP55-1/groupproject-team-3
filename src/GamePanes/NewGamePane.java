@@ -380,16 +380,31 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		}
 		
 		//attemted to select item with 12345 key
+		Inventory playerInv = program.player.getInventory();
 		if(e.getKeyCode()==KeyEvent.VK_1) {
-			
-		}else if(e.getKeyCode()==KeyEvent.VK_2) {
-			
-		}else if(e.getKeyCode()==KeyEvent.VK_3) {
-			
-		}else if(e.getKeyCode()==KeyEvent.VK_4) {
-			
-		}else if(e.getKeyCode()==KeyEvent.VK_5) {
-			
+			if (playerInv.setSelectedItem(0)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_2) {
+			if (playerInv.setSelectedItem(1)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_3) {
+			if (playerInv.setSelectedItem(2)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_4) {
+			if (playerInv.setSelectedItem(3)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_5) {
+			if (playerInv.setSelectedItem(4)) {
+				playerInv.drawSelectedItem(program);
+			}
 		}
 		
 	}
