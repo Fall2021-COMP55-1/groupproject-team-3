@@ -19,7 +19,10 @@ public class Inventory {
 	private GRect redBox = null;
 	private GLabel description = null;
 	
-	public Inventory()   {	
+	public Inventory() {	
+		redBox = new GRect(0, 0, 32, 32);
+		description = new GLabel("", 210, 576);
+		setHighlightVisible(false);
 	}
 	
 	public int numInvItems() {
@@ -54,17 +57,23 @@ public class Inventory {
 	}
 	
 	public void drawSelectedItem(MainApplication program) {
-		if(redBox!=null) {
-			program.remove(redBox);
-			program.remove(description);
-		}
+		setHighlightVisible(true);
 		GImage selectedItemSprite = selectedItem.getInvSprite();
-		redBox = new GRect(selectedItemSprite.getX(), selectedItemSprite.getY(),32,32);
+		
+		redBox.setLocation(selectedItemSprite.getX(), selectedItemSprite.getY());
 		redBox.setColor(Color.red);
 		program.add(redBox);
-		description = new GLabel(selectedItem.getDescription(),210,576);
+		
+		description.setLabel(selectedItem.getDescription());
 		description.setColor(Color.white);
 		program.add(description);
+	}
+	
+	public void setHighlightVisible(boolean state) {
+		if (redBox != null) {	
+			redBox.setVisible(state);
+			description.setVisible(state);
+		}
 	}
 	
 	public void addItem(Item item)   {
@@ -75,6 +84,7 @@ public class Inventory {
 	public void deleteItem(Item item) {
 		invItems.remove(item);
 		updateItemGui();
+		setHighlightVisible(false);
 	}
 	
 	public void updateItemGui() {
