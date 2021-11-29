@@ -30,8 +30,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	private GImage MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
 	private GButton MainMenu2, ResumeGame1, SaveGame1, Quit1; 
-	private GRect redBox = null;
-	private GLabel description = null, usedKey = null, lockedDoor = null, wrongItem = null;
+
+	private GLabel usedKey = null, lockedDoor = null, wrongItem = null;
 	private GParagraph healthPoints; 
 	
 	public NewGamePane(MainApplication app) {
@@ -253,8 +253,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		
-		if(redBox!=null) {program.remove(redBox);}
-		if(description!=null) {program.remove(description);}
+		//if(redBox!=null) {program.remove(redBox);}
+		//if(description!=null) {program.remove(description);}
 		if (usedKey!=null) {program.remove(usedKey);}
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
@@ -309,24 +309,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		}
 		
 		//click item in hot bar to select
-		Item temp=null;
-		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
-			if (obj == program.player.getInventory().invItems.get(i).getInvSprite()) {
-				if(redBox!=null) {
-					program.remove(redBox);
-					program.remove(description);
-				}
-				temp= program.player.getInventory().invItems.get(i);
-				redBox = new GRect(obj.getX(),obj.getY(),32,32);
-				redBox.setColor(Color.red);
-				program.add(redBox);
-				description = new GLabel(temp.getDescription(),210,576);
-				description.setColor(Color.white);
-				program.add(description);
-				program.player.getInventory().setSelectedItem(temp);
-			}
-		}
-		
+		Inventory playerInv = program.player.getInventory();
+		playerInv.setSelectedItem(obj);
+		playerInv.drawSelectedItem(program);
+
 	}
 	
 	@Override
@@ -346,8 +332,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 					doorBed.unlock();
 					program.player.getInventory().deleteItem(getSelectedItem());
 					program.remove(getSelectedItem().getInvSprite());
-					program.remove(redBox);
-					program.remove(description);
+					//program.remove(redBox);
+					//program.remove(description);
 					label5sec(usedKey);
 				}else {
 					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
@@ -394,17 +380,17 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		}
 		
 		//attemted to select item with 12345 key
-		/*if(e.getKeyCode()==KeyEvent.VK_1) {
-			selectItem(270,608);
+		if(e.getKeyCode()==KeyEvent.VK_1) {
+			
 		}else if(e.getKeyCode()==KeyEvent.VK_2) {
-			selectItem(300,608);
+			
 		}else if(e.getKeyCode()==KeyEvent.VK_3) {
-			selectItem(330,608);
+			
 		}else if(e.getKeyCode()==KeyEvent.VK_4) {
-			selectItem(360,608);
+			
 		}else if(e.getKeyCode()==KeyEvent.VK_5) {
-			selectItem(390,608);
-		}*/
+			
+		}
 		
 	}
 	
