@@ -8,6 +8,7 @@ public class Monster extends Entity{
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
 	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0, width, height;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
+	private Player player;
 			
 	public Monster(int x, int y, MonsterType type)   {
 		super(x, y);
@@ -20,18 +21,6 @@ public class Monster extends Entity{
 	
 	@Override
 	public int getY()   {return y;}
-	
-	private int getWidth()   {return width;}
-	
-	private int getHeight()   {return height;}
-	
-	public void setX()   {this.x = x;}
-	
-	public void setY()   {this.y = y;}
-	
-	private void setWidth(int width)   {this.width = width;}
-	
-	private void setHeight(int height)   {this.height = height;}
 	
 		
 	@Override
@@ -73,16 +62,19 @@ public class Monster extends Entity{
 			dx = 4; dy = 0;
 		}
 		move(dx, dy);
-			
-		/*// Check the would-be position to see how far you can move
-		int moveToX = getX() + dx;
-		int moveToY = getY() + dy;
-		//GObject temp = program.getElementAt(moveToX, moveToY);
-			
-		// Convert pixel space to tile space and access it in MapPane
-		int moveTileX = moveToX / 32;
-		int moveTileY = moveToY / 32;*/
 		stepsTaken = stepsTaken + 1;
+		if (touchPlayer())   {
+				player.setHP(player.getHP() - 1);
+				if(player.getHP() >= 0)   {
+					System.out.println("Player has been hit and their HP is now: " + player.getHP());
+				}
+		}
+	}
+	
+	public boolean touchPlayer() {
+		if(player == null)   {return false;}
+		if(this.sprite.getBounds().intersects(player.sprite.getBounds()))   {return true;}
+		return false;
 	}
 			
 	private void move(int x, int y)   {
@@ -92,6 +84,7 @@ public class Monster extends Entity{
 	}	
 	
 	public void move(Player player)   {
+		this.player = player;
 		if(player.getX() < x)   {move(dir.LEFT);}
 		if(player.getX() > x)   {move(dir.RIGHT);}
 		if(player.getY() < y)   {move(dir.UP);}

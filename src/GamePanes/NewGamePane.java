@@ -40,9 +40,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		setDoors();
 		setItems();
 		background = new GImage("res/livingroom.png");
-		timer = new Timer(100, this);
-		timer.setInitialDelay(6000);
-		timer.start();
 		
 		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
 		MainMenu.setSize(150, 40);
@@ -69,6 +66,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		HP2.setSize(30, 20); 
 		HP3 = new GImage("res/texture/HP.png", 295, 580);
 		HP3.setSize(30, 20); 
+		
+		timer = new Timer(100, this);
+		timer.setInitialDelay(3000);
+		timer.start();
 			
 	}
 
@@ -431,7 +432,14 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		monster.move(program.player);
-
+		if(monster.touchPlayer())   {
+			timer.restart();
+			if(program.player.getHP() == 2)   {program.remove(HP3);}
+			if(program.player.getHP() == 1)   {program.remove(HP2);}
+			if(program.player.getHP() <= 0)   {
+				program.remove(HP1);
+				timer.stop();
+			}
+		}
 	}
-	
 }

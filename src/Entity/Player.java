@@ -8,7 +8,7 @@ import acm.graphics.GImage;
 public class Player extends Entity{
 	public GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
-	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
+	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0, HP = 3;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	private Inventory inventory;
 	private String playerDirection;
@@ -28,6 +28,8 @@ public class Player extends Entity{
 	
 	public int getDY()   {return dy;}
 	
+	public int getHP()   {return HP;}
+	
 	public void setX(int a)   { x=x+a;}
 		
 	public Inventory getInv()   {return getInventory();}
@@ -35,6 +37,8 @@ public class Player extends Entity{
 	public String getDirection()   {return playerDirection;}
 	
 	public void setInv(Inventory inventory)   {this.inventory = inventory;}
+	
+	public void setHP(int HP)   {this.HP = HP;}
 	
 	@Override
 	public void addImages() {
@@ -70,7 +74,6 @@ public class Player extends Entity{
 		if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT)   {return true;}
 		else {return false;}
 	}
-
 	
 	public void keyPressed(KeyEvent e) {
 		
@@ -109,7 +112,6 @@ public class Player extends Entity{
 		}
 	}
 	
-	
 	public void keyReleased(KeyEvent e) {
 		if (keyUp(e)) {upPressed = false;}
 		if (keyDown(e)) {downPressed = false;}
@@ -123,7 +125,6 @@ public class Player extends Entity{
 		if (leftPressed)   {dx = -4;}
 		else if (rightPressed)   {dx = 4;}
 		else   {dx = 0;}
-		
 	}
 	
 	public void grabItem(Item item)   {
