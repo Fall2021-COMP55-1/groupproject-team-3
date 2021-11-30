@@ -1,6 +1,7 @@
 package GamePanes;
 
 import Boilerplate.*;
+
 import Item.*;
 import Entity.*;
 
@@ -22,15 +23,20 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	private GImage background;
-	private Timer timer;
+	
+	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 482, y = 510;
+	
 	private Door doorBed, doorBath, outBath;
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
 	private GLabel usedKey = null, lockedDoor = null, wrongItem = null;
-	private GImage MainMenu, HP1, HP2, HP3; 
+	private GImage MainMenu; 
 	private GButton MainMenu2;
+	//health
 	private GParagraph healthPoints; 
+	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
+	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 	
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
@@ -39,11 +45,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		setItems();
 		setGUI();
 		background = new GImage("res/livingroom.png");
-		timer = new Timer(100, this);
-		timer.setInitialDelay(6000);
-		timer.start();
+		monsterTimer = new Timer(100, this);
+		monsterTimer.setInitialDelay(3000);
+		monsterTimer.start();
 	}
-
+	
 	public void setDoors() {
 		//door to bedroom map
 		doorBed = new Door(64,150,64,20, true);
@@ -119,12 +125,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 620);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		HP1 = new GImage("res/texture/HP.png", 75, 610);
-		HP1.setSize(30, 20);
-		HP2 = new GImage("res/texture/HP.png", 100, 610);
-		HP2.setSize(30, 20); 
-		HP3 = new GImage("res/texture/HP.png", 125, 610);
-		HP3.setSize(30, 20);
 	}
 	
 	public boolean checkCollision() {
@@ -199,7 +199,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		addgui();
+		addgui();		
+		
 	}
 
 	private void grab(Item item)   {
@@ -229,7 +230,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		
-		if (usedKey!=null) {program.remove(usedKey);}
+		if(usedKey!=null) {program.remove(usedKey);}
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
@@ -360,22 +361,41 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		return program.player.getInventory().getSelectedItem();
 	}
 	
+	public void updatePlayerHeartsGUI(int hp) {
+		int heartLen = playerHearts.size();
+		int dif = hp - heartLen;
+		if (dif > 0) {
+			for (int i = 0; i < dif; i++) {
+				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
+				heart.setSize(30, 20);
+				heart.setVisible(true); 
+				playerHearts.add(heart);
+				program.add(heart); 
+			}
+		}
+		else if (dif < 0) {
+			dif = dif * -1; // Absolute value
+			for (int i = 0; i < dif; i++) {
+				int end = playerHearts.size() - 1;
+				GImage heart = playerHearts.get(end);
+				program.remove(heart);
+				playerHearts.remove(end);
+			}
+		}
+	}
+	
 	public void addgui() {	
 		program.add(MainMenu);
 		program.add(MainMenu2);
 		program.add(healthPoints);
-		program.add(HP1);
-		program.add(HP2);
-		program.add(HP3);
+		updatePlayerHeartsGUI(program.player.getHP());
 	}
 
 	public void removegui() {
 		program.remove(MainMenu);
 		program.remove(MainMenu2);
 		program.remove(healthPoints);
-		program.remove(HP1); 
-		program.remove(HP2);
-		program.remove(HP3);
+		updatePlayerHeartsGUI(0);
 	}
 
 	@Override
@@ -384,7 +404,20 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		monster.move(program.player);
+		if(monster.touchPlayer())   {
+			program.player.setHP(program.player.getHP() - 1);
+			updatePlayerHeartsGUI(program.player.getHP());
+			if(program.player.getHP() >= 0)   {
+				System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
+			}
 
+			if (program.player.getHP() <= 0)   {
+				monsterTimer.stop();
+			}
+
+			else {
+				 monsterTimer.restart();
+			}
+		}
 	}
-	
 }

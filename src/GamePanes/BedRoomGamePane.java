@@ -22,19 +22,26 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	private GImage background;
-	private Timer timer;
+	
+	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
+	
 	private int x = 722, y = 474;
+	
 	ArrayList <GRect> walls = new ArrayList <GRect>();
+	private GLabel usedKey = null, lockedDoor = null, wrongItem = null;
 	private Door doorLiving, doorBedL, doorBedR, doorHallL, doorHallR;
-	private GImage choice1, choice2, MainMenu, HP1, HP2, HP3; 
+	
+	private GImage choice1, choice2, MainMenu; 
 	private GButton killHim, spareHim, MainMenu2;
-	ChoiceHandler choiceHandler = new ChoiceHandler();  	
-	private GRect redBox = null;
-	private GLabel description = null, usedKey = null, lockedDoor = null, wrongItem = null;
+	
+	ChoiceHandler choiceHandler = new ChoiceHandler();  
+	
+	//health
 	private GParagraph healthPoints; 
-	
-	
+	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
+	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 
+
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
@@ -42,10 +49,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		setItems();
 		setGUI();
 		background = new GImage("res/bedrooms.png");
-		timer = new Timer(100, this);
-		timer.setInitialDelay(1000);
-		timer.start();
-		
+		monsterTimer = new Timer(100, this);
+		monsterTimer.setInitialDelay(6000);
+		monsterTimer.start();
 	}
 	
 	public void setDoors() {
@@ -94,12 +100,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 620);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		HP1 = new GImage("res/texture/HP.png", 75, 610);
-		HP1.setSize(30, 20);
-		HP2 = new GImage("res/texture/HP.png", 100, 610);
-		HP2.setSize(30, 20); 
-		HP3 = new GImage("res/texture/HP.png", 125, 610);
-		HP3.setSize(30, 20);
 		
 		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
 		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
@@ -166,7 +166,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.player.setX(x);
 		program.player.setY(y);
 		//monster
-		program.add(monster.getImage(), x + 32, y + 32);
+		program.add(monster.getImage(), x + 30, y + 50);
 		monster.setX(x + 32);
 		monster.setY(y + 32);
 		
@@ -221,9 +221,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		
-		if(redBox!=null) {program.remove(redBox);}
-		if(description!=null) {program.remove(description);}
-		if (usedKey!=null) {program.remove(usedKey);}
+		if(usedKey!=null) {program.remove(usedKey);}
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
@@ -367,32 +365,51 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		return program.player.getInventory().getSelectedItem();
 	}
 	
+	public void updatePlayerHeartsGUI(int hp) {
+		int heartLen = playerHearts.size();
+		int dif = hp - heartLen;
+		if (dif > 0) {
+			for (int i = 0; i < dif; i++) {
+				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
+				heart.setSize(30, 20);
+				heart.setVisible(true); 
+				playerHearts.add(heart);
+				program.add(heart); 
+			}
+		}
+		else if (dif < 0) {
+			dif = dif * -1; // Absolute value
+			for (int i = 0; i < dif; i++) {
+				int end = playerHearts.size() - 1;
+				GImage heart = playerHearts.get(end);
+				program.remove(heart);
+				playerHearts.remove(end);
+			}
+		}
+	}
+	
 	public void addgui() {	
 		program.add(MainMenu);
 		program.add(MainMenu2);
 		program.add(healthPoints);
-		program.add(HP1);
-		program.add(HP2);
-		program.add(HP3);
 		
 		program.add(choice1);
 		program.add(choice2);
 		program.add(killHim);
 		program.add(spareHim);
+		updatePlayerHeartsGUI(program.player.getHP());
 	}
 
 	public void removegui() {
 		program.remove(MainMenu);
 		program.remove(MainMenu2);
 		program.remove(healthPoints);
-		program.remove(HP1); 
-		program.remove(HP2);
-		program.remove(HP3);
 		
 		program.remove(choice1);
 		program.remove(choice2);
 		program.remove(killHim);
 		program.remove(spareHim);
+		updatePlayerHeartsGUI(0);
 	}
 	
 	@Override
@@ -400,7 +417,24 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.player.keyReleased(e);}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {monster.move(program.player);}
+	public void actionPerformed(ActionEvent e) {
+		monster.move(program.player);
+		if(monster.touchPlayer())   {
+			program.player.setHP(program.player.getHP() - 1);
+			updatePlayerHeartsGUI(program.player.getHP());
+			if(program.player.getHP() >= 0)   {
+				System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
+			}
+
+			if (program.player.getHP() <= 0)   {
+				monsterTimer.stop();
+			}
+
+			else {
+				 monsterTimer.restart();
+			}
+		}
+	}
 	
 	public class ChoiceHandler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
