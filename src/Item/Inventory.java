@@ -21,7 +21,7 @@ public class Inventory {
 	
 	public Inventory() {	
 		redBox = new GRect(0, 0, 32, 32);
-		description = new GLabel("", 210, 576);
+		description = new GLabel("", 210, 600);
 		setHighlightVisible(false);
 	}
 	
@@ -58,15 +58,17 @@ public class Inventory {
 	
 	public void drawSelectedItem(MainApplication program) {
 		setHighlightVisible(true);
-		GImage selectedItemSprite = selectedItem.getInvSprite();
+		if(selectedItem!=null) {
+			GImage selectedItemSprite = selectedItem.getInvSprite();
+			redBox.setLocation(selectedItemSprite.getX(), selectedItemSprite.getY());
+			redBox.setColor(Color.red);
+			program.add(redBox);
+			
+			description.setLabel(selectedItem.getDescription());
+			description.setColor(Color.white);
+			program.add(description);
+		}
 		
-		redBox.setLocation(selectedItemSprite.getX(), selectedItemSprite.getY());
-		redBox.setColor(Color.red);
-		program.add(redBox);
-		
-		description.setLabel(selectedItem.getDescription());
-		description.setColor(Color.white);
-		program.add(description);
 	}
 	
 	public void setHighlightVisible(boolean state) {

@@ -1,5 +1,6 @@
 package Boilerplate;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import Entity.*;
 import Item.*;
 import GamePanes.*;
-
+import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
 
 public class MainApplication extends GraphicsProgram {
@@ -17,7 +18,7 @@ public class MainApplication extends GraphicsProgram {
 	public static final String MUSIC_FOLDER = "sounds";
 
 	private GraphicsPane curScreen;
-	private SomePane somePane;
+	private PausePane pause;
 	private MenuPane menu;
 	private NewGamePane newGame;
 	private SavePane save;
@@ -27,6 +28,7 @@ public class MainApplication extends GraphicsProgram {
 	public boolean fromBed = false;
 	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
+	
 	
 	public void addItem(Item item) {
 		items.add(item);
@@ -128,7 +130,7 @@ public class MainApplication extends GraphicsProgram {
 
 	public void run() {
 		System.out.println("Let's make something awesome!");
-		somePane = new SomePane(this);
+		pause = new PausePane(this);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
 		save = new SavePane(this);
@@ -141,7 +143,7 @@ public class MainApplication extends GraphicsProgram {
 
 	public void switchToMenu() {switchToScreen(menu);}
 
-	public void switchToSome() {switchToScreen(somePane);}
+	public void switchToPause() {switchToScreen(pause);}
 	
 	public void switchToNewGame() {switchToScreen(newGame);}
 	

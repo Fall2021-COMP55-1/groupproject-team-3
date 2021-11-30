@@ -27,8 +27,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private int x = 722, y = 474;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
 	private Door doorLiving, doorBedL, doorBedR, doorHallL, doorHallR;
-	private GImage choice1, choice2, MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
-	private GButton killHim, spareHim, MainMenu2, ResumeGame1, SaveGame1, Quit1;
+	private GImage choice1, choice2, MainMenu, HP1, HP2, HP3; 
+	private GButton killHim, spareHim, MainMenu2;
 	ChoiceHandler choiceHandler = new ChoiceHandler();  	
 	private GRect redBox = null;
 	private GLabel description = null, usedKey = null, lockedDoor = null, wrongItem = null;
@@ -40,43 +40,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		setWalls();
 		setDoors();
 		setItems();
+		setGUI();
 		background = new GImage("res/bedrooms.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(1000);
 		timer.start();
 		
-		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
-		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
-		choice1.setSize(150, 40);
-		choice2.setSize(150, 40); 
-		killHim = new GButton("", 500, 555, 150, 40);
-		spareHim = new GButton("", 500, 600, 150, 40); 
-		
-		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
-		MainMenu.setSize(150, 40);
-		MainMenu2 = new GButton("", 50, 555, 150, 40); 
-		ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
-		ResumeGame.setSize(250, 60); 
-		ResumeGame.setVisible(false);
-		ResumeGame1 = new GButton("", 255, 200, 250, 60); 
-		SaveGame = new GImage("res/texture/Save Game.png", 255, 300);
-		SaveGame.setSize(250, 60);  
-		SaveGame.setVisible(false); 
-		SaveGame1 = new GButton("", 255, 300, 250, 60); 
-		Quit = new GImage("res/texture/Quit.png", 255, 400);
-		Quit.setSize(250, 60);
-		Quit.setVisible(false); 
-		Quit1 = new GButton("", 255, 400, 250, 60); 
-		
-		healthPoints = new GParagraph("HP:", 220, 590);
-		healthPoints.setColor(Color.white); 
-		healthPoints.setFont("Arial-12");
-		HP1 = new GImage("res/texture/HP.png", 245, 580);
-		HP1.setSize(30, 20);
-		HP2 = new GImage("res/texture/HP.png", 270, 580);
-		HP2.setSize(30, 20); 
-		HP3 = new GImage("res/texture/HP.png", 295, 580);
-		HP3.setSize(30, 20); 
 	}
 	
 	public void setDoors() {
@@ -115,6 +84,29 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		GRect wall7 = new GRect(704,512,64,128);
 		wall7.setFilled(true);
 		walls.add(wall7);
+	}
+	
+	public void setGUI() {
+		MainMenu = new GImage("res/texture/pause.png", 768, 0); 
+		MainMenu.setSize(32, 32);
+		MainMenu.setVisible(true);
+		MainMenu2 = new GButton("", 768, 0, 32, 32); 
+		healthPoints = new GParagraph("HP:", 50, 620);
+		healthPoints.setColor(Color.white); 
+		healthPoints.setFont("Arial-12");
+		HP1 = new GImage("res/texture/HP.png", 75, 610);
+		HP1.setSize(30, 20);
+		HP2 = new GImage("res/texture/HP.png", 100, 610);
+		HP2.setSize(30, 20); 
+		HP3 = new GImage("res/texture/HP.png", 125, 610);
+		HP3.setSize(30, 20);
+		
+		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
+		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
+		choice1.setSize(150, 40);
+		choice2.setSize(150, 40); 
+		killHim = new GButton("", 500, 555, 150, 40);
+		spareHim = new GButton("", 500, 600, 150, 40); 
 	}
 	
 	public void setItems() {
@@ -198,22 +190,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.add(doorHallL.getRect());
 		program.add(doorHallR.getRect());
 		
-		program.add(choice1);
-		program.add(choice2);
-		program.add(killHim);
-		program.add(spareHim);
-		program.add(MainMenu);
-		program.add(MainMenu2);
-		program.add(ResumeGame);
-		program.add(ResumeGame1);
-		program.add(SaveGame);
-		program.add(SaveGame1);
-		program.add(Quit);
-		program.add(Quit1);
-		program.add(healthPoints);
-		program.add(HP1);
-		program.add(HP2);
-		program.add(HP3);
+		addgui();
 				
 	}
 	
@@ -250,57 +227,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
-		program.remove(choice1);
-		program.remove(choice2);
-		program.remove(killHim);
-		program.remove(spareHim);
-		program.remove(MainMenu);
-		program.remove(MainMenu2);
-		program.remove(ResumeGame);
-		program.remove(ResumeGame1);
-		program.remove(SaveGame);
-		program.remove(SaveGame1);
-		program.remove(Quit);
-		program.remove(Quit1);
-		program.remove(healthPoints);
-		program.remove(HP1);
-		program.remove(HP2);
-		program.remove(HP3);
+		removegui();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == MainMenu2) {
-			ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
-			ResumeGame.setSize(250, 60);
-			ResumeGame1 = new GButton("", 255, 200, 250, 60); 
-			program.add(ResumeGame); 
-			SaveGame = new GImage("res/texture/Save Game.png", 255, 300); 
-			SaveGame.setSize(250, 60);
-			SaveGame1 = new GButton("", 255, 300, 250, 60);
-			program.add(SaveGame);
-			Quit = new GImage("res/texture/Quit.png", 255, 400);
-			Quit.setSize(250, 60);
-			Quit1 = new GButton("", 255, 400, 250, 60);
-			program.add(Quit); 
-		}
-		
-		if (obj == ResumeGame) {	 
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-		}
-		if (obj == SaveGame) {
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-		}
-		if (obj == Quit) {
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-			//program.switchToMenu(); If using this line of code then going back to the game will cause a glitch with the Main Menu. 
+			program.switchToPause();
 		}
 		if (obj == killHim) {
 			// Something will happen here
@@ -314,23 +248,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 	
 		//to select item on the inventory hot bar
-		Item temp=null;
-		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
-			if (obj == program.player.getInventory().invItems.get(i).getInvSprite()) {
-				if(redBox!=null) {
-					program.remove(redBox);
-					program.remove(description);
-				}
-				temp= program.player.getInventory().invItems.get(i);
-				redBox = new GRect(obj.getX(),obj.getY(),32,32);
-				redBox.setColor(Color.red);
-				program.add(redBox);
-				description = new GLabel(temp.getDescription(),210,576);
-				description.setColor(Color.white);
-				program.add(description);
-				program.player.getInventory().setSelectedItem(temp);
-			}
-		}
+		Inventory playerInv = program.player.getInventory();
+		playerInv.setSelectedItem(obj);
+		playerInv.drawSelectedItem(program);
 	}
 	
 	@Override
@@ -352,19 +272,17 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		if(getSelectedItem()!=null) {
 			if(program.player.sprite.getBounds().intersects(doorBedR.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
 				if (getSelectedItem().getRoomType()==RoomType.BEDROOMR) {
-					if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
-					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
+					if(wrongItem!=null) {wrongItem.setVisible(false);} 
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
 					usedKey = new GLabel("Opened the door with key!", 210, 544);
 					usedKey.setColor(Color.white);
 					program.add(usedKey);
 					doorBedR.unlock();
 					program.player.getInventory().deleteItem(getSelectedItem());
 					program.remove(getSelectedItem().getInvSprite());
-					program.remove(redBox);
-					program.remove(description);
 					label5sec(usedKey);
 				}else {
-					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
 					wrongItem = new GLabel("Wrong item!", 210, 544);
 					wrongItem.setColor(Color.white);
 					program.add(wrongItem);
@@ -378,7 +296,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 				program.remove(program.player.getImage());
 				program.add(program.player.getImage(), 672,219);
 			}else {
-				if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
+				if(wrongItem!=null) {wrongItem.setVisible(false);}
 				lockedDoor = new GLabel("Door is locked!", 210, 544);
 				lockedDoor.setColor(Color.white);
 				program.add(lockedDoor);
@@ -402,6 +320,34 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			}
 		}
 		
+		//to select item with 12345 key
+		Inventory playerInv = program.player.getInventory();
+		if(e.getKeyCode()==KeyEvent.VK_1) {
+			if (playerInv.setSelectedItem(0)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_2) {
+			if (playerInv.setSelectedItem(1)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_3) {
+			if (playerInv.setSelectedItem(2)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_4) {
+			if (playerInv.setSelectedItem(3)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_5) {
+			if (playerInv.setSelectedItem(4)) {
+				playerInv.drawSelectedItem(program);
+			}
+		}
+		
 	}
 	
 	public void label5sec(GLabel label) {
@@ -419,6 +365,34 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	
 	public Item getSelectedItem() {
 		return program.player.getInventory().getSelectedItem();
+	}
+	
+	public void addgui() {	
+		program.add(MainMenu);
+		program.add(MainMenu2);
+		program.add(healthPoints);
+		program.add(HP1);
+		program.add(HP2);
+		program.add(HP3);
+		
+		program.add(choice1);
+		program.add(choice2);
+		program.add(killHim);
+		program.add(spareHim);
+	}
+
+	public void removegui() {
+		program.remove(MainMenu);
+		program.remove(MainMenu2);
+		program.remove(healthPoints);
+		program.remove(HP1); 
+		program.remove(HP2);
+		program.remove(HP3);
+		
+		program.remove(choice1);
+		program.remove(choice2);
+		program.remove(killHim);
+		program.remove(spareHim);
 	}
 	
 	@Override

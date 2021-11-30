@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import javax.swing.Timer;
 
@@ -27,11 +26,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 482, y = 510;
 	private Door doorBed, doorBath, outBath;
-	ArrayList <GRect> walls = new ArrayList <GRect>();
-	private GImage MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
-	private GButton MainMenu2, ResumeGame1, SaveGame1, Quit1; 
-
+	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
 	private GLabel usedKey = null, lockedDoor = null, wrongItem = null;
+	private GImage MainMenu, HP1, HP2, HP3; 
+	private GButton MainMenu2;
 	private GParagraph healthPoints; 
 	
 	public NewGamePane(MainApplication app) {
@@ -39,37 +37,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		setWalls();
 		setDoors();
 		setItems();
+		setGUI();
 		background = new GImage("res/livingroom.png");
 		timer = new Timer(100, this);
 		timer.setInitialDelay(6000);
 		timer.start();
-		
-		MainMenu = new GImage("res/texture/Game Menu.png", 50, 555); 
-		MainMenu.setSize(150, 40);
-		MainMenu2 = new GButton("", 50, 555, 150, 40); 
-		ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
-		ResumeGame.setSize(250, 60); 
-		ResumeGame.setVisible(false);
-		ResumeGame1 = new GButton("", 255, 200, 250, 60); 
-		SaveGame = new GImage("res/texture/Save Game.png", 255, 300);
-		SaveGame.setSize(250, 60);  
-		SaveGame.setVisible(false); 
-		SaveGame1 = new GButton("", 255, 300, 250, 60); 
-		Quit = new GImage("res/texture/Quit.png", 255, 400);
-		Quit.setSize(250, 60);
-		Quit.setVisible(false); 
-		Quit1 = new GButton("", 255, 400, 250, 60); 
-		
-		healthPoints = new GParagraph("HP:", 220, 590);
-		healthPoints.setColor(Color.white); 
-		healthPoints.setFont("Arial-12");
-		HP1 = new GImage("res/texture/HP.png", 245, 580);
-		HP1.setSize(30, 20);
-		HP2 = new GImage("res/texture/HP.png", 270, 580);
-		HP2.setSize(30, 20); 
-		HP3 = new GImage("res/texture/HP.png", 295, 580);
-		HP3.setSize(30, 20); 
-			
 	}
 
 	public void setDoors() {
@@ -139,6 +111,22 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.addItem(bedroomKey);
 	}
 	
+	public void setGUI() {
+		MainMenu = new GImage("res/texture/pause.png", 768, 0); 
+		MainMenu.setSize(32, 32);
+		MainMenu.setVisible(true);
+		MainMenu2 = new GButton("", 768, 0, 32, 32); 
+		healthPoints = new GParagraph("HP:", 50, 620);
+		healthPoints.setColor(Color.white); 
+		healthPoints.setFont("Arial-12");
+		HP1 = new GImage("res/texture/HP.png", 75, 610);
+		HP1.setSize(30, 20);
+		HP2 = new GImage("res/texture/HP.png", 100, 610);
+		HP2.setSize(30, 20); 
+		HP3 = new GImage("res/texture/HP.png", 125, 610);
+		HP3.setSize(30, 20);
+	}
+	
 	public boolean checkCollision() {
 		Iterator<GRect> iterate = walls.iterator();
 		while(iterate.hasNext()) {
@@ -172,6 +160,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	@Override
+	
 	public void showContents() {
 		//walls
 		for (int i=0; i<13; i++) {program.add(walls.get(i));}
@@ -210,21 +199,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		
-	
-		program.add(MainMenu);
-		program.add(MainMenu2);
-		program.add(ResumeGame);
-		program.add(ResumeGame1);
-		program.add(SaveGame);
-		program.add(SaveGame1);
-		program.add(Quit);
-		program.add(Quit1);
-		program.add(healthPoints);
-		program.add(HP1);
-		program.add(HP2);
-		program.add(HP3);
-		
+		addgui();
 	}
 
 	private void grab(Item item)   {
@@ -246,6 +221,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(outBath.getRect());
 		program.remove(monster.getImage());
 		
+		program.remove(Inventory.INVENTORY_IMG);
 		for (int i = 0; i < program.numItems(); ++i)   {
 			program.remove(program.itemAt(i).getImage());
 		}
@@ -253,59 +229,19 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		
-		//if(redBox!=null) {program.remove(redBox);}
-		//if(description!=null) {program.remove(description);}
 		if (usedKey!=null) {program.remove(usedKey);}
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
-		program.remove(MainMenu);
-		program.remove(MainMenu2);
-		program.remove(ResumeGame);
-		program.remove(ResumeGame1);
-		program.remove(SaveGame);
-		program.remove(SaveGame1);
-		program.remove(Quit);
-		program.remove(Quit1);
-		program.remove(healthPoints);
-		program.remove(HP1); 
-		program.remove(HP2);
-		program.remove(HP3);
+		removegui();
 	}
+	
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == MainMenu2) {
-			ResumeGame = new GImage("res/texture/Resume Game.png", 255, 200); 
-			ResumeGame.setSize(250, 60);
-			ResumeGame1 = new GButton("", 255, 200, 250, 60); 
-			program.add(ResumeGame); 
-			SaveGame = new GImage("res/texture/Save Game.png", 255, 300); 
-			SaveGame.setSize(250, 60);
-			SaveGame1 = new GButton("", 255, 300, 250, 60);
-			program.add(SaveGame);
-			Quit = new GImage("res/texture/Quit.png", 255, 400);
-			Quit.setSize(250, 60);
-			Quit1 = new GButton("", 255, 400, 250, 60);
-			program.add(Quit); 
-		}
-		
-		if (obj == ResumeGame) {	 
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-		}
-		if (obj == SaveGame) {
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-		}
-		if (obj == Quit) {
-			program.remove(ResumeGame);
-			program.remove(SaveGame);
-			program.remove(Quit);
-			//program.switchToMenu();  
+			program.switchToPause();
 		}
 		
 		//click item in hot bar to select
@@ -324,20 +260,18 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		if(getSelectedItem()!=null) {
 			if(program.player.sprite.getBounds().intersects(doorBed.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
 				if(getSelectedItem().getRoomType()==RoomType.BEDROOMS) {
-					if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
-					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
-					usedKey = new GLabel("Unlocked the door with key!", 210, 544);
+					if(wrongItem!=null) {wrongItem.setVisible(false);} 
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					usedKey = new GLabel("Unlocked the door with key!", 210, 550);
 					usedKey.setColor(Color.white);
 					program.add(usedKey);
 					doorBed.unlock();
 					program.player.getInventory().deleteItem(getSelectedItem());
 					program.remove(getSelectedItem().getInvSprite());
-					//program.remove(redBox);
-					//program.remove(description);
 					label5sec(usedKey);
 				}else {
-					if(lockedDoor!=null) {if(lockedDoor.isVisible()) {lockedDoor.setVisible(false);}}
-					wrongItem = new GLabel("Wrong item!", 210, 544);
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					wrongItem = new GLabel("Wrong item!", 210, 575);
 					wrongItem.setColor(Color.white);
 					program.add(wrongItem);
 					label5sec(wrongItem);
@@ -351,8 +285,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			if (!doorBed.isLocked()) {
 				program.switchToBedRoom();
 			}else {
-				if(wrongItem!=null) {if (wrongItem.isVisible()) {wrongItem.setVisible(false);}} 
-				lockedDoor = new GLabel("Door is locked!", 210, 544);
+				if(wrongItem!=null) {wrongItem.setVisible(false);}
+				lockedDoor = new GLabel("Door is locked!", 210, 550);
 				lockedDoor.setColor(Color.white);
 				program.add(lockedDoor);
 				label5sec(lockedDoor);
@@ -379,7 +313,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			}
 		}
 		
-		//attemted to select item with 12345 key
+		//to select item with 12345 key
 		Inventory playerInv = program.player.getInventory();
 		if(e.getKeyCode()==KeyEvent.VK_1) {
 			if (playerInv.setSelectedItem(0)) {
@@ -426,6 +360,24 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		return program.player.getInventory().getSelectedItem();
 	}
 	
+	public void addgui() {	
+		program.add(MainMenu);
+		program.add(MainMenu2);
+		program.add(healthPoints);
+		program.add(HP1);
+		program.add(HP2);
+		program.add(HP3);
+	}
+
+	public void removegui() {
+		program.remove(MainMenu);
+		program.remove(MainMenu2);
+		program.remove(healthPoints);
+		program.remove(HP1); 
+		program.remove(HP2);
+		program.remove(HP3);
+	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {program.player.keyReleased(e);}
 
