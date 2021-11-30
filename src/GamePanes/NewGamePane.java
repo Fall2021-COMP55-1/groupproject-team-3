@@ -1,6 +1,7 @@
 package GamePanes;
 
 import Boilerplate.*;
+
 import Item.*;
 import Entity.*;
 
@@ -22,13 +23,15 @@ import acm.graphics.GRect;
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
+	private static final int heartRootX = 245, heartRootY = 580, heartWidth = 30;
 	private GImage background;
-	private Timer timer;
+	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 482, y = 510;
 	private Door doorBed, doorBath, outBath;
 	ArrayList <GRect> walls = new ArrayList <GRect>();
-	private GImage MainMenu, ResumeGame, SaveGame, Quit, HP1, HP2, HP3; 
+	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 
+	private GImage MainMenu, ResumeGame, SaveGame, Quit; 
 	private GButton MainMenu2, ResumeGame1, SaveGame1, Quit1; 
 	private GRect redBox = null;
 	private GLabel description = null, usedKey = null, lockedDoor = null, wrongItem = null;
@@ -60,17 +63,40 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 220, 590);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		HP1 = new GImage("res/texture/HP.png", 245, 580);
-		HP1.setSize(30, 20);
-		HP2 = new GImage("res/texture/HP.png", 270, 580);
-		HP2.setSize(30, 20); 
-		HP3 = new GImage("res/texture/HP.png", 295, 580);
-		HP3.setSize(30, 20); 
+		//HP1 = new GImage("res/texture/HP.png", 245, 580);
+		//HP1.setSize(30, 20);
+		//HP2 = new GImage("res/texture/HP.png", 270, 580);
+		//HP2.setSize(30, 20); 
+		//HP3 = new GImage("res/texture/HP.png", 295, 580);
+		//HP3.setSize(30, 20); 
 		
-		timer = new Timer(100, this);
-		timer.setInitialDelay(3000);
-		timer.start();
+		monsterTimer = new Timer(100, this);
+		monsterTimer.setInitialDelay(3000);
+		monsterTimer.start();
 			
+	}
+	
+	public void updatePlayerHeartsGUI(int hp) {
+		int heartLen = playerHearts.size();
+		int dif = hp - heartLen;
+		if (dif > 0) {
+			for (int i = 0; i < dif; i++) {
+				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
+				heart.setSize(30, 20);
+				heart.setVisible(true); 
+				playerHearts.add(heart);
+				program.add(heart); 
+			}
+		}
+		else if (dif < 0) {
+			dif = dif * -1; // Absolute value
+			for (int i = 0; i < dif; i++) {
+				int end = playerHearts.size() - 1;
+				GImage heart = playerHearts.get(end);
+				program.remove(heart);
+				playerHearts.remove(end);
+			}
+		}
 	}
 
 	public void setDoors() {
@@ -222,9 +248,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(Quit);
 		program.add(Quit1);
 		program.add(healthPoints);
-		program.add(HP1);
-		program.add(HP2);
-		program.add(HP3);
+		updatePlayerHeartsGUI(program.player.getHP());
 		
 	}
 
@@ -269,9 +293,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(Quit);
 		program.remove(Quit1);
 		program.remove(healthPoints);
-		program.remove(HP1); 
-		program.remove(HP2);
-		program.remove(HP3);
+		updatePlayerHeartsGUI(0);
 	}
 
 	@Override
@@ -433,13 +455,20 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		monster.move(program.player);
 		if(monster.touchPlayer())   {
-			timer.restart();
-			if(program.player.getHP() == 2)   {program.remove(HP3);}
-			if(program.player.getHP() == 1)   {program.remove(HP2);}
-			if(program.player.getHP() <= 0)   {
-				program.remove(HP1);
-				timer.stop();
+			program.player.setHP(program.player.getHP() - 1);
+			updatePlayerHeartsGUI(program.player.getHP());
+			if(program.player.getHP() >= 0)   {
+				System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
+			}
+	
+			if (program.player.getHP() <= 0)   {
+				monsterTimer.stop();
+			}
+			
+			else {
+				 monsterTimer.restart();
 			}
 		}
+		
 	}
 }

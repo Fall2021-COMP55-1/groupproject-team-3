@@ -63,12 +63,12 @@ public class Monster extends Entity{
 		}
 		move(dx, dy);
 		stepsTaken = stepsTaken + 1;
-		if (touchPlayer())   {
+		/*if (touchPlayer())   {
 				player.setHP(player.getHP() - 1);
 				if(player.getHP() >= 0)   {
 					System.out.println("Player has been hit and their HP is now: " + player.getHP());
 				}
-		}
+		} */
 	}
 	
 	public boolean touchPlayer() {
