@@ -30,9 +30,9 @@ public class Monster extends Entity{
 		spriteLeft = new ArrayList<GImage>(2);
 		spriteRight = new ArrayList<GImage>(2);
 				
-		for (int i = 1; i <= 2; ++i)   {
+		for (int i = 1; i <= 3; ++i)   {
 			//replace player sprites with monster sprites later
-			spriteUp.add(new GImage("res/monsters/Tall Monster.png"));
+			spriteUp.add(new GImage("res/monsters/Tall Monster Back.png"));
 			spriteDown.add(new GImage("res/monsters/Tall Monster.png"));
 			spriteLeft.add(new GImage("res/monsters/Tall Monster.png"));
 			spriteRight.add(new GImage("res/monsters/Tall Monster.png"));
