@@ -25,6 +25,7 @@ public class MainApplication extends GraphicsProgram {
 	private OptionPane options;
 	private Credits credits; 
 	private BedRoomGamePane bedroom;
+	private WinPane win;
 	public boolean fromBed = false;
 	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
@@ -137,6 +138,7 @@ public class MainApplication extends GraphicsProgram {
 		options = new OptionPane(this);
 		credits = new Credits(this);
 		bedroom = new BedRoomGamePane(this);
+		win = new WinPane(this);
 		setupInteractions();
 		switchToMenu();
 	}
@@ -154,6 +156,8 @@ public class MainApplication extends GraphicsProgram {
 	public void switchToCredits() {switchToScreen(credits);}
 
 	public void switchToBedRoom() {switchToScreen(bedroom);}
+	
+	public void switchToWin() {switchToScreen(win);}
 
 	public static void main(String[] args) {new MainApplication().start();}
 

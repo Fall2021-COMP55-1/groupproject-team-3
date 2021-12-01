@@ -19,7 +19,7 @@ public class Door {
 	
 	public Door(int x, int y, int width, int height, boolean locked){
 		doorBound = new GRect(x,y,width,height);
-		doorBound.setVisible(false);
+		doorBound.setVisible(true);
 		this.locked = locked;
 	}
 	

@@ -9,7 +9,7 @@ public class Player extends Entity{
 	public GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
 	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
-	public int HP=3;
+	private int HP=3;
 	private boolean upPressed = false, downPressed = false, leftPressed = false, rightPressed = false;
 	private Inventory inventory;
 	private String playerDirection;

@@ -28,7 +28,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int x = 482, y = 510;
 	
-	private Door doorBed, doorBath, outBath;
+	private Door doorBed, doorBath, outBath, winning;
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
 	private GLabel usedKey = null, lockedDoor = null, wrongItem = null;
 	private GImage MainMenu; 
@@ -58,6 +58,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		doorBath = new Door(672,380,32,20, false);
 		//door to hallway from bathroom
 		outBath = new Door(672,283,32,10, false);
+		winning = new Door(480,540,65,10, true);
+		winning.setRoomType(RoomType.OUT);
 	}
 	
 	public void setWalls() {
@@ -189,6 +191,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.add(doorBed.getRect());
 		program.add(doorBath.getRect());
 		program.add(outBath.getRect());
+		program.add(winning.getRect());
 		//items on the map
 		for (int i = 0; i < program.numItems(); i++)   {
 			if (program.itemAt(i).getMap()=="livingR" && !program.itemAt(i).isPickedUp()) {
@@ -220,6 +223,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(doorBed.getRect());
 		program.remove(doorBath.getRect());
 		program.remove(outBath.getRect());
+		program.remove(winning.getRect());
 		program.remove(monster.getImage());
 		
 		program.remove(Inventory.INVENTORY_IMG);
@@ -242,6 +246,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == MainMenu2) {
+
+			Inventory inv = program.player.getInventory();
+			inv.redBox.setVisible(false);
 			program.switchToPause();
 		}
 		
@@ -305,6 +312,42 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.remove(program.player.getImage());
 			program.add(program.player.getImage(), 672,400);
 
+		}
+		
+		//unlocked the house door with key
+		if(getSelectedItem()!=null) {
+			if(program.player.sprite.getBounds().intersects(winning.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
+				if(getSelectedItem().getRoomType()==RoomType.OUT) {
+					if(wrongItem!=null) {wrongItem.setVisible(false);} 
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					usedKey = new GLabel("Unlocked the door with key!", 210, 550);
+					usedKey.setColor(Color.white);
+					program.add(usedKey);
+					winning.unlock();
+					program.player.getInventory().deleteItem(getSelectedItem());
+					program.remove(getSelectedItem().getInvSprite());
+					label5sec(usedKey);
+				}else {
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					wrongItem = new GLabel("Wrong item!", 210, 575);
+					wrongItem.setColor(Color.white);
+					program.add(wrongItem);
+					label5sec(wrongItem);
+				}	
+			}
+		}
+
+		//get outta house
+		if(program.player.sprite.getBounds().intersects(winning.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			if (!winning.isLocked()) {
+				program.switchToWin();
+			}else {
+				if(wrongItem!=null) {wrongItem.setVisible(false);}
+				lockedDoor = new GLabel("Door is locked!", 210, 550);
+				lockedDoor.setColor(Color.white);
+				program.add(lockedDoor);
+				label5sec(lockedDoor);
+			}
 		}
 		
 		//pick up item by E
@@ -396,6 +439,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(MainMenu2);
 		program.remove(healthPoints);
 		updatePlayerHeartsGUI(0);
+		
+		Inventory inv = program.player.getInventory();
+		program.remove(inv.redBox);
 	}
 
 	@Override

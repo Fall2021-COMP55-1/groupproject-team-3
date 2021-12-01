@@ -16,7 +16,7 @@ public class Inventory {
 	public static final GImage INVENTORY_IMG = new GImage("res/inventory/HotBar.png");
 	private int listSpacing=0;
 	private Item selectedItem = null;
-	private GRect redBox = null;
+	public GRect redBox = null;
 	private GLabel description = null;
 	
 	public Inventory() {	

@@ -110,11 +110,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	public void setItems() {
-		Item itemKnife2 = new Item("Knife",new GImage("res/inventory/Small Knife.png"), ItemType.WEAPON, "bedR");
-		itemKnife2.setX(422);
-		itemKnife2.setY(217);
-		itemKnife2.setDescription("Knife to Kill");
-		program.addItem(itemKnife2);
+		Item winningKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
+		winningKey.setX(422);
+		winningKey.setY(217);
+		winningKey.setRoomType(RoomType.OUT);
+		winningKey.setDescription("Key of the house");
+		program.addItem(winningKey);
 		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
 		itemKey2.setX(116);
 		itemKey2.setY(184);
@@ -211,6 +212,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(doorHallR.getRect());
 
 		program.remove(program.player.getImage());
+		program.remove(monster.getImage());
 		for(int i=0; i<7; i++) {
 			program.remove(walls.get(i));
 		}
