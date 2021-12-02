@@ -418,7 +418,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		if (dif > 0) {
 			for (int i = 0; i < dif; i++) {
 				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
-				heart.setSize(30, 20);
+				heart.setSize(32, 32);
 				heart.setVisible(true); 
 				playerHearts.add(heart);
 				program.add(heart); 
