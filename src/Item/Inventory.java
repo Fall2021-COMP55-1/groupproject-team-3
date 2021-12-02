@@ -16,8 +16,9 @@ public class Inventory {
 	public static final GImage INVENTORY_IMG = new GImage("res/inventory/HotBar.png");
 	private int listSpacing=0;
 	private Item selectedItem = null;
-	public GRect redBox = null;
+	private GRect redBox = null;
 	private GLabel description = null;
+	
 	
 	public Inventory() {	
 		redBox = new GRect(0, 0, 32, 32);
@@ -58,6 +59,7 @@ public class Inventory {
 	
 	public void drawSelectedItem(MainApplication program) {
 		setHighlightVisible(true);
+		Item selectedItem = program.player.getInventory().getSelectedItem();
 		if(selectedItem!=null) {
 			GImage selectedItemSprite = selectedItem.getInvSprite();
 			redBox.setLocation(selectedItemSprite.getX(), selectedItemSprite.getY());
@@ -71,6 +73,7 @@ public class Inventory {
 		
 	}
 	
+	
 	public void setHighlightVisible(boolean state) {
 		if (redBox != null) {	
 			redBox.setVisible(state);
@@ -78,16 +81,18 @@ public class Inventory {
 		}
 	}
 	
+	public void deleteItem(MainApplication program, Item item) {
+		Inventory inv= program.player.getInventory();
+		inv.invItems.remove(item);
+		inv.updateItemGui();
+		setHighlightVisible(false);
+	}
+	
 	public void addItem(Item item)   {
 		invItems.add(item);
 		updateItemGui();
 	}
 	
-	public void deleteItem(Item item) {
-		invItems.remove(item);
-		updateItemGui();
-		setHighlightVisible(false);
-	}
 	
 	public void updateItemGui() {
 		for(int i = 0; i < invItems.size(); ++i)   {

@@ -1,4 +1,5 @@
 package GamePanes;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import Boilerplate.GButton;
@@ -60,4 +61,11 @@ public class MenuPane extends GraphicsPane {
 		if (obj == options)   {program.switchToOptions();}
 		if (obj == exitGame)   {System.exit(0);}
 	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }

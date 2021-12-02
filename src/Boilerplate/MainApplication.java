@@ -27,9 +27,12 @@ public class MainApplication extends GraphicsProgram {
 	private BedRoomGamePane bedroom;
 	private GoodEndPane goodEnd;
 	private BadEndPane badEnd;
-	public boolean fromBed = false;
+	public boolean fromBedtoLiving = false;
+	public boolean fromPausetoBed = false;
+	public boolean fromPausetoLiving = false;
 	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
+	public int lastPlayerX, lastPlayerY;
 	
 	
 	public void addItem(Item item) {
