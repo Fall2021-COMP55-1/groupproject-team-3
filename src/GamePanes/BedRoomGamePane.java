@@ -50,7 +50,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		setGUI();
 		background = new GImage("res/bedrooms.png");
 		monsterTimer = new Timer(100, this);
-		monsterTimer.setInitialDelay(3000);
 	}
 	
 	public void setDoors() {
@@ -165,28 +164,27 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		//background image
 		program.add(background);
 		//player
+		System.out.println(program.fromPausetoBed);
 		if (program.fromPausetoBed) {
 			program.add(program.player.getImage(),program.lastPlayerX, program.lastPlayerY);
 			program.player.setX(program.lastPlayerX);
 			program.player.setY(program.lastPlayerY);
+			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
+			monster.setX(program.lastMonsterX);
+			monster.setY(program.lastMonsterY);
+			program.fromPausetoBed=false;
+			monsterTimer.setInitialDelay(0);
 		} else {
 			program.add(program.player.getImage(), playerX, playerY);
 			program.player.setX(playerX);
 			program.player.setY(playerY);
-		}
-	
-		//monster
-		if(program.fromPausetoBed) {
-			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
-			monster.setX(program.lastMonsterX);
-			monster.setY(program.lastMonsterY);
-		}else {
 			program.add(monster.getImage(), playerX + 16, playerY + 50);
 			monster.setX(playerX + 16);
 			monster.setY(playerY + 50);
+			monsterTimer.setInitialDelay(3000);
 		}
 		
-		program.player.getInv();
+		program.player.getInventory();
 		//inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 		//items on the map

@@ -47,7 +47,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		setGUI();
 		background = new GImage("res/livingroom.png");
 		monsterTimer = new Timer(100, this);
-		monsterTimer.setInitialDelay(3000);
 	}
 	
 	public void setDoors() {
@@ -176,34 +175,38 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		//background image
 		program.add(background);
 		
-		//player location
+		//player and monster location
 		if (program.fromBedtoLiving) {
 			program.add(program.player.getImage(),85,172);
 			program.player.setX(85);
 			program.player.setY(172);
+			program.add(monster.getImage(), 35, 102);
+			monster.setX(35);
+			monster.setY(102);
+			program.fromBedtoLiving=false;
+			monsterTimer.setInitialDelay(1000);
 		} else if (program.fromPausetoLiving) {
 			program.add(program.player.getImage(),program.lastPlayerX, program.lastPlayerY);
 			program.player.setX(program.lastPlayerX);
 			program.player.setY(program.lastPlayerY);
+			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
+			monster.setX(program.lastMonsterX);
+			monster.setY(program.lastMonsterY);
+			program.fromPausetoLiving=false;
+			monsterTimer.setInitialDelay(0);
 		} else {
 			program.add(program.player.getImage(), playerX, playerY);
 			program.player.setX(playerX);
 			program.player.setY(playerY);
-		
-		}
-		//monster location
-		if(program.fromPausetoLiving) {
-			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
-			monster.setX(program.lastMonsterX);
-			monster.setY(program.lastMonsterY);
-		}else {
-			program.add(monster.getImage(), playerX + 16, playerY + 50);
-			monster.setX(playerX + 16);
+			program.add(monster.getImage(), playerX + 20, playerY + 50);
+			monster.setX(playerX + 20);
 			monster.setY(playerY + 50);
+			monsterTimer.setInitialDelay(3000);
 		}
 		
 		
-		program.player.getInv();
+		
+		program.player.getInventory();
 		//Inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 		//doors

@@ -34,13 +34,13 @@ public class Player extends Entity{
 	public int getDY()   {return dy;}
 		
 	public void setX(int a)   { x=x+a;}
-		
-	public Inventory getInv()   {return getInventory();}
 	
 	public String getDirection()   {return playerDirection;}
 	
 	public void setInv(Inventory inventory)   {this.inventory = inventory;}
-		
+	
+	public Inventory getInventory() {return inventory;}
+	
 	@Override
 	public void addImages() {
 		spriteUp = new ArrayList<GImage>(2);
@@ -153,9 +153,7 @@ public class Player extends Entity{
 		stepsTaken = stepsTaken + 1;
 	}
 
-	public Inventory getInventory() {
-		return inventory;
-	}
+	
 
 }
 
