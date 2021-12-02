@@ -51,7 +51,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		background = new GImage("res/bedrooms.png");
 		monsterTimer = new Timer(100, this);
 		monsterTimer.setInitialDelay(6000);
-		monsterTimer.start();
+		
 	}
 	
 	public void setDoors() {
@@ -190,9 +190,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.add(doorBedR.getRect());
 		program.add(doorHallL.getRect());
 		program.add(doorHallR.getRect());
-		
+		program.player.getInventory().setHighlightVisible(true);
 		addgui();
-				
+		monsterTimer.start();
 	}
 	
 	private void grab(Item item)   {
@@ -222,12 +222,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		
+		program.remove(Inventory.INVENTORY_IMG);
 		if(usedKey!=null) {program.remove(usedKey);}
 		if(lockedDoor!=null) {program.remove(lockedDoor);}
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
 		removegui();
+		monsterTimer.stop();
+		program.player.getInventory().setHighlightVisible(false);
 	}
 
 	@Override
@@ -368,8 +370,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	public void updatePlayerHeartsGUI(int hp) {
+		
 		int heartLen = playerHearts.size();
 		int dif = hp - heartLen;
+		System.out.print("Heart Array: " + heartLen + ", Incoming HP Value: " + hp + "\n");
 		if (dif > 0) {
 			for (int i = 0; i < dif; i++) {
 				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
@@ -422,19 +426,21 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		monster.move(program.player);
 		if(monster.touchPlayer())   {
+			if (program.player.getHP() <= 0)   {
+				monsterTimer.stop();
+				// switch to a game over pane and stop all logic
+			}
+
+			else {
+				 monsterTimer.restart();
+			}
 			program.player.setHP(program.player.getHP() - 1);
 			updatePlayerHeartsGUI(program.player.getHP());
 			if(program.player.getHP() >= 0)   {
 				System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
 			}
 
-			if (program.player.getHP() <= 0)   {
-				monsterTimer.stop();
-			}
 
-			else {
-				 monsterTimer.restart();
-			}
 		}
 	}
 	

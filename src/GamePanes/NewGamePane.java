@@ -47,7 +47,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		background = new GImage("res/livingroom.png");
 		monsterTimer = new Timer(100, this);
 		monsterTimer.setInitialDelay(3000);
-		monsterTimer.start();
+
 	}
 	
 	public void setDoors() {
@@ -180,9 +180,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.player.setY(172);
 		}
 		//monster location
-		program.add(monster.getImage(), x + 32, y + 32);
-		monster.setX(x + 32);
-		monster.setY(y + 32);
+		program.add(monster.getImage(), x + 16, y + 50);
+		monster.setX(x + 16);
+		monster.setY(y + 50);
 		
 		program.player.getInv();
 		//Inventory hot bar image
@@ -203,7 +203,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		addgui();		
-		
+		monsterTimer.start();
 	}
 
 	private void grab(Item item)   {
@@ -239,6 +239,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		if(wrongItem!=null) {program.remove(wrongItem);}
 		
 		removegui();
+		monsterTimer.stop();
 	}
 	
 
@@ -340,7 +341,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		//get outta house
 		if(program.player.sprite.getBounds().intersects(winning.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			if (!winning.isLocked()) {
-				program.switchToWin();
+				program.switchToGoodEnd();
 			}else {
 				if(wrongItem!=null) {wrongItem.setVisible(false);}
 				lockedDoor = new GLabel("Door is locked!", 210, 550);
@@ -407,10 +408,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void updatePlayerHeartsGUI(int hp) {
 		int heartLen = playerHearts.size();
 		int dif = hp - heartLen;
+		System.out.print("Heart Array: " + heartLen + ", Incoming HP Value: " + hp + "\n");
 		if (dif > 0) {
 			for (int i = 0; i < dif; i++) {
 				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
-				heart.setSize(32, 32);
+				heart.setSize(30, 20);
 				heart.setVisible(true); 
 				playerHearts.add(heart);
 				program.add(heart); 
@@ -452,6 +454,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monster.move(program.player);
 		if(monster.touchPlayer())   {
 			program.player.setHP(program.player.getHP() - 1);
+			if(program.player.getHP()==0) {program.switchToBadEnd();}
 			updatePlayerHeartsGUI(program.player.getHP());
 			if(program.player.getHP() >= 0)   {
 				System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
