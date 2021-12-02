@@ -192,9 +192,16 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 		}
 		//monster location
-		program.add(monster.getImage(), playerX + 16, playerY + 50);
-		monster.setX(playerX + 16);
-		monster.setY(playerY + 50);
+		if(program.fromPausetoLiving) {
+			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
+			monster.setX(program.lastMonsterX);
+			monster.setY(program.lastMonsterY);
+		}else {
+			program.add(monster.getImage(), playerX + 16, playerY + 50);
+			monster.setX(playerX + 16);
+			monster.setY(playerY + 50);
+		}
+		
 		
 		program.player.getInv();
 		//Inventory hot bar image
@@ -271,6 +278,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.fromPausetoLiving = true;
 			program.lastPlayerX=program.player.getX();
 			program.lastPlayerY=program.player.getY();
+			program.lastMonsterX=monster.getX();
+			program.lastMonsterY=monster.getY();
+			
 			//redBox still shows
 			program.player.getInventory().setHighlightVisible(false);
 			program.switchToPause();

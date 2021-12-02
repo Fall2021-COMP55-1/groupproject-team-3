@@ -33,6 +33,7 @@ public class MainApplication extends GraphicsProgram {
 	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
 	public int lastPlayerX, lastPlayerY;
+	public int lastMonsterX, lastMonsterY;
 	
 	
 	public void addItem(Item item) {

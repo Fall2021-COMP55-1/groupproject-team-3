@@ -50,7 +50,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		setGUI();
 		background = new GImage("res/bedrooms.png");
 		monsterTimer = new Timer(100, this);
-		monsterTimer.setInitialDelay(6000);
+		monsterTimer.setInitialDelay(3000);
 	}
 	
 	public void setDoors() {
@@ -176,9 +176,15 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 	
 		//monster
-		program.add(monster.getImage(), playerX + 30, playerY + 50);
-		monster.setX(playerX + 32);
-		monster.setY(playerY + 32);
+		if(program.fromPausetoBed) {
+			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
+			monster.setX(program.lastMonsterX);
+			monster.setY(program.lastMonsterY);
+		}else {
+			program.add(monster.getImage(), playerX + 16, playerY + 50);
+			monster.setX(playerX + 16);
+			monster.setY(playerY + 50);
+		}
 		
 		program.player.getInv();
 		//inventory hot bar image
@@ -255,6 +261,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.fromPausetoLiving = false;
 			program.lastPlayerX=program.player.getX();
 			program.lastPlayerY=program.player.getY();
+			program.lastMonsterX=monster.getX();
+			program.lastMonsterY=monster.getY();
 			//redBox still shows
 			program.player.getInventory().setHighlightVisible(false);
 			program.switchToPause();
