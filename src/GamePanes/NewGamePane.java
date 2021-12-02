@@ -30,9 +30,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	private Door inBedMap, inBath, outBath, winning;
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
-	private GLabel keyUsed = null, lockedDoor = null, wrongItem = null;
+	private GLabel keyUsed = null, lockedDoor = null, wrongItem = null, goal = null;
 	
-	private GImage MainMenu; 
+	private GImage MainMenu, NPC; 
 	private GButton MainMenu2;
 	//health
 	private GParagraph healthPoints; 
@@ -127,6 +127,13 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 620);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
+		
+		NPC = new GImage("res/NPC/NPC2.png", 540, 450); 
+		NPC.setSize(30, 30); 
+		goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
+		goal.setColor(Color.white);
+		program.add(goal);
+		label5sec(goal);
 	}
 	
 	public boolean checkCollision() {
@@ -209,6 +216,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		}
 		addgui();		
 		monsterTimer.start();
+		
+		program.add(NPC);
+		program.add(goal);
 	}
 
 	private void grab(Item item)   {
@@ -247,6 +257,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monsterTimer.stop();
 		//redBox still shows
 		program.player.getInventory().setHighlightVisible(false);
+		
+		program.remove(NPC);
+		program.remove(goal);
 	}
 	
 

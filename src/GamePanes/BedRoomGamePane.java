@@ -32,7 +32,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private GLabel keyUsed = null, lockedDoor = null, wrongItem = null;
 	private Door inLivingMap, inLeftBed, inRightBed, outLeftBed, outRightBed;
 	
-	private GImage choice1, choice2, MainMenu; 
+	private GImage choice1, choice2, MainMenu, NPC; 
 	private GButton killHim, spareHim, MainMenu2;
 	
 	ChoiceHandler choiceHandler = new ChoiceHandler();  
@@ -106,6 +106,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40); 
+		
+		NPC = new GImage("res/NPC/NPC1.png", 400, 400);
+		NPC.setSize(30, 30); 
 	}
 	
 	public void setItems() {
@@ -200,6 +203,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.player.getInventory().setHighlightVisible(true);
 		addgui();
 		monsterTimer.start();
+		
+		program.add(NPC);
 	}
 	
 	private void grab(Item item)   {
@@ -238,6 +243,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		monsterTimer.stop();
 		//redBox still shows
 		program.player.getInventory().setHighlightVisible(false);
+		
+		program.remove(NPC);
 	}
 
 	@Override
@@ -253,12 +260,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.switchToPause();
 		}
 		if (obj == killHim) {
-			// Something will happen here
+			program.remove(NPC);
 			program.remove(choice1);
 			program.remove(choice2);
 		}
 		if (obj == spareHim) {
-			// Something will happen here
+			// Nothing happens so the NPC lives 
 			program.remove(choice1);
 			program.remove(choice2);
 		}
@@ -400,8 +407,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 	}
 	
-	public void updatePlayerHeartsGUI(int hp) {
-		
+	public void updatePlayerHeartsGUI(int hp) {	
 		int heartLen = playerHearts.size();
 		int dif = hp - heartLen;
 		if (dif > 0) {
