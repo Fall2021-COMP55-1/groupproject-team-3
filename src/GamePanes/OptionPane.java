@@ -70,6 +70,9 @@ public class OptionPane extends GraphicsPane {
 		program.remove(background);
 		program.remove(Credits);
 		program.remove(Back);
+		program.remove(audioBar);
+		program.remove(mute);
+		program.remove(MuteButton);
 	}
 
 	@Override

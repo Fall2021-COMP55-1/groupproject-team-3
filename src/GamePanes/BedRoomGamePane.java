@@ -169,9 +169,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.add(program.player.getImage(),program.lastPlayerX, program.lastPlayerY);
 			program.player.setX(program.lastPlayerX);
 			program.player.setY(program.lastPlayerY);
-			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
-			monster.setX(program.lastMonsterX);
-			monster.setY(program.lastMonsterY);
+			//program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
+			//monster.setX(program.lastMonsterX);
+			//monster.setY(program.lastMonsterY);
 			program.fromPausetoBed=false;
 			monsterTimer.setInitialDelay(0);
 		} else {
@@ -259,8 +259,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.fromPausetoLiving = false;
 			program.lastPlayerX=program.player.getX();
 			program.lastPlayerY=program.player.getY();
-			program.lastMonsterX=monster.getX();
-			program.lastMonsterY=monster.getY();
+			//program.lastMonsterX=monster.getX();
+			//program.lastMonsterY=monster.getY();
 			//redBox still shows
 			program.player.getInventory().setHighlightVisible(false);
 			program.switchToPause();
