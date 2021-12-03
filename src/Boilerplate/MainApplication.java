@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.Timer;
+
 import Entity.*;
 import Item.*;
 import GamePanes.*;
@@ -26,32 +28,111 @@ public class MainApplication extends GraphicsProgram {
 	private GraphicsPane curScreen;
 	private MenuPane menu;
 	private NewGamePane newGame;
-	private SavePane save;
 	private OptionPane options;
 	private Credits credits; 
 	private BedRoomGamePane bedroom;
 	private GoodEndPane goodEnd;
 	private BadEndPane badEnd;
-
+	
+	
 	public Player player = new Player(0, 0, this);
 	public NPC NPC = new NPC(540, 450, this);
-	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
+	public Monster monster = new Monster(0, 0, MonsterType.TALL);
+	public Timer monsterTimer = new Timer(100, this);
+	
+	public boolean fromBedtoLiving = false;
+	
 	private ArrayList<Item> items = new ArrayList <Item>();
+	
+	public static MusicBox music = new MusicBox();
+	
+	//label
+	public GLabel keyUsed = null;
+	public GLabel lockedDoor = null;
+	public GLabel wrongItem = null;
+	
+	//pause and resume
+	private GImage pauseImg;
+	public GButton pauseButton;
 	public boolean paused = false;
 	public GButton resume = new GButton("", 296, 180, 208, 95);
 	private GImage resumeImg = new GImage("res/texture/Resume.png",296,180);
 	public GButton quit = new GButton("", 296, 420, 208, 95);
 	private GImage quitImg = new GImage("res/texture/Quit.png",296, 420);
-	public static MusicBox music = new MusicBox();
-	public GLabel keyUsed = null;
-	public GLabel lockedDoor = null;
-	public GLabel wrongItem = null;
 	
-	//in bedroom map
+	//player health gui
+	private GParagraph healthPoints; 
+	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
+	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 	
+	
+	//doors in bedroom map
 	public Door inLivingMap, inLeftBed, inRightBed, outLeftBed, outRightBed;
-	//in livingroom map
+	//doors in living room map
 	public Door inBedMap, inBath, outBath, winning;
 	
+	//---------------------------------------------------------------------------
+	
+	/* GUI
+	 * -----------------------------
+	 * setGUI()
+	 * addGUI()
+	 * removeGUI()
+	 * updatePlayerHeartsGUI(int hp)
+	 */
+	public void setGUI() {
+		pauseImg = new GImage("res/texture/pause.png", 768, 0); 
+		pauseImg.setSize(32, 32);
+		pauseImg.setVisible(true);
+		pauseButton = new GButton("", 768, 0, 32, 32); 
+		healthPoints = new GParagraph("HP:", 50, 625);
+		healthPoints.setColor(Color.white); 
+		healthPoints.setFont("Arial-12");
+	}
+	public void addGUI() {
+		this.add(pauseImg);
+		this.add(pauseButton);
+		this.add(healthPoints);
+		updatePlayerHeartsGUI(this.player.getHP());
+	}
+	public void removeGUI() {
+		this.remove(pauseImg);
+		this.remove(pauseButton);
+		this.remove(healthPoints);
+		updatePlayerHeartsGUI(0);
+	}
+	public void updatePlayerHeartsGUI(int hp) {
+		int heartLen = playerHearts.size();
+		int dif = hp - heartLen;
+		if (dif > 0) {
+			for (int i = 0; i < dif; i++) {
+				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
+				heart.setSize(25, 20);
+				heart.setVisible(true); 
+				playerHearts.add(heart);
+				this.add(heart); 
+			}
+		}
+		else if (dif < 0) {
+			dif = dif * -1; // Absolute value
+			for (int i = 0; i < dif; i++) {
+				int end = playerHearts.size() - 1;
+				GImage heart = playerHearts.get(end);
+				this.remove(heart);
+				playerHearts.remove(end);
+			}
+		}
+	}
+	
+	/* Doors
+	 * --------------------------------------------
+	 * setDoorsLiving()
+	 * removeDoorsLiving()
+	 * setDoorsBedRoom()
+	 * removeDoorsBedRoom()
+	 * unlockDoor(Door door, KeyEvent e)
+	 * openDoor(Door door, KeyEvent e)
+	 * openDoor(Door door, KeyEvent e, int x, int y)
+	 */
 	public void setDoorsLiving() {
 		//door to bedroom map
 		inBedMap = new Door(64,150,64,20, true);
@@ -62,8 +143,6 @@ public class MainApplication extends GraphicsProgram {
 		outBath = new Door(672,283,32,10, false);
 		winning = new Door(480,540,65,10, true);
 		winning.setRoomType(RoomType.OUT);
-	}
-	public void addDoorLiving() {
 		this.add(inBedMap.getRect());
 		this.add(inBath.getRect());
 		this.add(outBath.getRect());
@@ -87,9 +166,6 @@ public class MainApplication extends GraphicsProgram {
 		outLeftBed = new Door(128,252,32,5, false);
 		//door to hallway from right bedroom
 		outRightBed = new Door(672,252,32,5, false);
-	}
-	
-	public void addDoorBedRoom() {
 		this.add(inLivingMap.getRect());
 		this.add(inLeftBed.getRect());
 		this.add(inRightBed.getRect());
@@ -103,47 +179,6 @@ public class MainApplication extends GraphicsProgram {
 		this.remove(outLeftBed.getRect());
 		this.remove(outRightBed.getRect());
 	}
-	
-	public void pause() { 
-		this.add(resumeImg);
-		this.add(quitImg);
-		this.add(resume);
-		this.add(quit);
-		paused = true;
-	}
-	
-	public void resume() {
-		this.remove(resume);
-		this.remove(quit);
-		this.remove(resumeImg);
-		this.remove(quitImg);
-		paused = false;
-	}
-	
-	public void addItem(Item item) {
-		items.add(item);
-	}
-	
-	public static MusicBox getMusic() {return music;}
-	
-	public int numItems() {
-		return items.size();
-	}
-	
-	public Item itemAt(int i) {
-		return items.get(i);
-	}
-	
-	public void removeLabels() {
-		if(keyUsed!=null) {this.remove(keyUsed);}
-		if(wrongItem!=null) {this.remove(wrongItem);}
-		if(lockedDoor!=null) {this.remove(lockedDoor);}
-	}
-	
-	public Item getSelectedItem() {
-		return this.player.getInventory().getSelectedItem();
-	}
-	
 	public void unlockDoor(Door door, KeyEvent e) {
 		if(getSelectedItem()!=null) {
 			if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
@@ -167,7 +202,6 @@ public class MainApplication extends GraphicsProgram {
 			}
 		}
 	}
-	
 	public void openDoor(Door door, KeyEvent e) {
 		if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			if (!door.isLocked()) {
@@ -191,7 +225,6 @@ public class MainApplication extends GraphicsProgram {
 			}
 		}
 	}
-	
 	public void openDoor(Door door, KeyEvent e, int x, int y) {
 		if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
 			this.remove(this.player.getImage());
@@ -199,18 +232,129 @@ public class MainApplication extends GraphicsProgram {
 		}
 	}
 	
-	/* Method: setupInteractions
-	 * -------------------------
-	 * must be called before switching to another
-	 * pane to make sure that interactivity
-	 * is setup and ready to go.
+	/* Items
+	 * ---------------------------
+	 * setItemsLiving()
+	 * setItemsBedRoom()
+	 * getSelectedItem()
+	 * setSelectedItem(KeyEvent e)
+	 * addItem(Item item)
+	 * numItems()
+	 * itemAt(int i)
+	 * grab(Item item)
 	 */
-	protected void setupInteractions() {
-		requestFocus();
-		addKeyListeners();
-		addMouseListeners();
+	public void setItemsLiving() {
+		Item itemKnife1 = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
+		itemKnife1.setX(734);
+		itemKnife1.setY(259);
+		itemKnife1.setDescription("Knife to kill");
+		this.addItem(itemKnife1);
+		Item bedroomKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "livingR");
+		bedroomKey.setX(200);
+		bedroomKey.setY(100);
+		bedroomKey.setRoomType(RoomType.BEDROOMS);
+		bedroomKey.setDescription("Key to hallway of bedrooms");
+		this.addItem(bedroomKey);
+	}
+	public void setItemsBedRoom() {
+		Item winningKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
+		winningKey.setX(422);
+		winningKey.setY(217);
+		winningKey.setRoomType(RoomType.OUT);
+		winningKey.setDescription("Key of the house");
+		this.addItem(winningKey);
+		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
+		itemKey2.setX(116);
+		itemKey2.setY(184);
+		itemKey2.setRoomType(RoomType.BEDROOMR);
+		itemKey2.setDescription("Key to master bedroom");
+		this.addItem(itemKey2);
+	}
+	public Item getSelectedItem() {
+		return this.player.getInventory().getSelectedItem();
+	}
+	public void setSelectedItem(KeyEvent e) {
+		Inventory playerInv = this.player.getInventory();
+		if(e.getKeyCode()==KeyEvent.VK_1) {
+			if (playerInv.setSelectedItem(0)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_2) {
+			if (playerInv.setSelectedItem(1)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_3) {
+			if (playerInv.setSelectedItem(2)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_4) {
+			if (playerInv.setSelectedItem(3)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_5) {
+			if (playerInv.setSelectedItem(4)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+	}
+	public void addItem(Item item) {items.add(item);}
+	public int numItems() {return items.size();}
+	public Item itemAt(int i) {return items.get(i);}
+	public void grab(Item item)   {
+		this.player.grabItem(item);
+		item.setPickedUp(true);
+		this.remove(item.getImage());
+		this.add(item.getInvSprite());
 	}
 	
+	/* Pause and Resume
+	 * ----------------
+	 * pause()
+	 * resume()
+	 */
+	public void pause() { 
+		this.add(resumeImg);
+		this.add(quitImg);
+		this.add(resume);
+		this.add(quit);
+		paused = true;
+	}
+	public void resume() {
+		this.remove(resume);
+		this.remove(quit);
+		this.remove(resumeImg);
+		this.remove(quitImg);
+		paused = false;
+	}
+	
+	/* Labels
+	 * -----------------------
+	 * removeLabels()
+	 * label5sec(GLabel label)
+	 */
+	public void removeLabels() {
+		if(keyUsed!=null) {this.remove(keyUsed);}
+		if(wrongItem!=null) {this.remove(wrongItem);}
+		if(lockedDoor!=null) {this.remove(lockedDoor);}
+	}
+	public void label5sec(GLabel label) {
+		//label disappears in 5 sec
+		int delay = 5000;
+	    ActionListener taskPerformer = new ActionListener() {
+	    	public void actionPerformed(ActionEvent evt) {
+	        label.setVisible(false);;
+	    	}
+	    };
+	    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+	    tick.setRepeats(false);
+	    tick.start();
+	}
+	
+	//collision detect
 	public boolean checkCollision(ArrayList<GRect> walls) {
 		Iterator<GRect> iterate = walls.iterator();
 		while(iterate.hasNext()) {
@@ -243,53 +387,19 @@ public class MainApplication extends GraphicsProgram {
 		return false;
 	}
 	
-	public void grab(Item item)   {
-		this.player.grabItem(item);
-		item.setPickedUp(true);
-		this.remove(item.getImage());
-		this.add(item.getInvSprite());
-	}
+	//music
+		public static MusicBox getMusic() {return music;}
 	
-	public void setSelectedItem(KeyEvent e) {
-		Inventory playerInv = this.player.getInventory();
-		if(e.getKeyCode()==KeyEvent.VK_1) {
-			if (playerInv.setSelectedItem(0)) {
-				playerInv.drawSelectedItem();
-			}
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_2) {
-			if (playerInv.setSelectedItem(1)) {
-				playerInv.drawSelectedItem();
-			}
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_3) {
-			if (playerInv.setSelectedItem(2)) {
-				playerInv.drawSelectedItem();
-			}
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_4) {
-			if (playerInv.setSelectedItem(3)) {
-				playerInv.drawSelectedItem();
-			}
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_5) {
-			if (playerInv.setSelectedItem(4)) {
-				playerInv.drawSelectedItem();
-			}
-		}
-	}
-	
-	public void label5sec(GLabel label) {
-		//label disappears in 5 sec
-		int delay = 5000;
-	    ActionListener taskPerformer = new ActionListener() {
-	    	public void actionPerformed(ActionEvent evt) {
-	        label.setVisible(false);;
-	    	}
-	    };
-	    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
-	    tick.setRepeats(false);
-	    tick.start();
+	/* Method: setupInteractions
+	 * -------------------------
+	 * must be called before switching to another
+	 * pane to make sure that interactivity
+	 * is setup and ready to go.
+	 */
+	protected void setupInteractions() {
+		requestFocus();
+		addKeyListeners();
+		addMouseListeners();
 	}
 	
 	/* switchToScreen(newGraphicsPane)
@@ -363,10 +473,23 @@ public class MainApplication extends GraphicsProgram {
 		}
 	}
 	
-
+	public void actionPerformed(ActionEvent e) {
+		monster.move(this.player);
+		if(monster.touchPlayer())   {
+			if (this.player.getHP() <= 0)   {
+				monsterTimer.stop();
+			}else {
+				monsterTimer.setInitialDelay(2000);
+				monsterTimer.restart();
+			}
+			this.player.setHP(this.player.getHP() - 1);
+			if(this.player.getHP()==0) {this.switchToBadEnd();}
+			this.updatePlayerHeartsGUI(this.player.getHP());
+		}
+	}
+	
 	public void init() {
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	
 	}
 
 	public void run() {
@@ -375,7 +498,6 @@ public class MainApplication extends GraphicsProgram {
 		music.PLAY(Audio);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
-		save = new SavePane(this);
 		options = new OptionPane(this);
 		credits = new Credits(this);
 		bedroom = new BedRoomGamePane(this);
@@ -388,9 +510,7 @@ public class MainApplication extends GraphicsProgram {
 	public void switchToMenu() {switchToScreen(menu);}
 	
 	public void switchToNewGame() {switchToScreen(newGame);}
-	
-	public void switchToSave() {switchToScreen(save);}
-	
+		
 	public void switchToOptions() {switchToScreen(options);}
 	
 	public void switchToCredits() {switchToScreen(credits);}
