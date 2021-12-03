@@ -130,9 +130,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 625);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		
-		program.NPC.setX(540);
-		program.NPC.setY(450);
 		goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
 		goal.setColor(Color.white);
 		program.add(goal);
@@ -187,8 +184,14 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(monster.getImage(), 35, 102);
 			monster.setX(35);
 			monster.setY(102);
-			program.NPC.setX(540);
-			program.NPC.setY(450);
+			if(program.NPC.isDead() == false)   {
+				program.add(program.NPC.getImage(), 540, 450);
+				program.NPC.setX(540);
+				program.NPC.setY(450);
+			}
+			if(program.NPC.isDead())   {
+				walls.remove(walls.size() - 1);
+			}
 			program.fromBedtoLiving=false;
 			monsterTimer.setInitialDelay(1000);
 		} else {
@@ -196,6 +199,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.player.setX(playerX);
 			program.player.setY(playerY);
 			program.add(monster.getImage(), playerX + 20, playerY + 50);
+			program.add(program.NPC.getImage(), 540, 450);
+			program.NPC.setX(540);
+			program.NPC.setY(450);
 			monster.setX(playerX + 20);
 			monster.setY(playerY + 50);
 			monsterTimer.setInitialDelay(3000);

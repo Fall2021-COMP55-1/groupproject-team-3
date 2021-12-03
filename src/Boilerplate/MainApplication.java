@@ -1,13 +1,9 @@
 package Boilerplate;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
-
-import javax.sound.sampled.FloatControl;
-
 import Entity.*;
 import Item.*;
 import GamePanes.*;
