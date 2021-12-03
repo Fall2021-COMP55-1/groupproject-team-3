@@ -17,8 +17,8 @@ public class MusicBox {
 			Audio.open(AudioSystem.getAudioInputStream(SelectedAudio));
 			Audio.start();
 			audioControl = (FloatControl) Audio.getControl(FloatControl.Type.MASTER_GAIN);
+			audioControl.setValue(-5.0f);
 			Audio.loop(20);
-			//Thread.sleep(Audio.getMicrosecondLength()/1000);
 		}
 		catch (Exception e) {}
 	}
@@ -35,11 +35,6 @@ public class MusicBox {
 	
 	public static void Unmute()   {
 		audioControl.setValue(0.0f);
-	}
-	
-	public void main (String [] args) {
-		File TestAudio = new File("res/music/TestAudio.wav");
-		PLAY(TestAudio);
 	}
 	
 }

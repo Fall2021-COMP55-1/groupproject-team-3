@@ -50,7 +50,7 @@ public class OptionPane extends GraphicsPane {
 	private void setVolume(double d)   {
 		for(int i = 0; i <= 8; ++i)   {
 			if (d >= 50 + 82 * i && d <= 50 + 82 * (i + 1))   {
-				getMusic().audioControl.setValue(-80.0f + (10.0f * i));
+				getMusic().audioControl.setValue(-40.0f + (5.0f * i));
 			}
 		}
 	}
