@@ -22,7 +22,7 @@ import acm.graphics.GRect;
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	private GImage background;
+	private GImage background, pauseImg, NPC; 
 	
 	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
@@ -32,12 +32,13 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
 	private GLabel keyUsed = null, lockedDoor = null, wrongItem = null, goal = null;
 	
-	private GImage MainMenu, NPC; 
-	private GButton MainMenu2;
+	private GButton pauseButton;
+	
 	//health
 	private GParagraph healthPoints; 
 	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
 	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 	
+	
 	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
@@ -119,10 +120,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	public void setGUI() {
-		MainMenu = new GImage("res/texture/pause.png", 768, 0); 
-		MainMenu.setSize(32, 32);
-		MainMenu.setVisible(true);
-		MainMenu2 = new GButton("", 768, 0, 32, 32); 
+		pauseImg = new GImage("res/texture/pause.png", 768, 0); 
+		pauseImg.setSize(32, 32);
+		pauseImg.setVisible(true);
+		pauseButton = new GButton("", 768, 0, 32, 32); 
 		healthPoints = new GParagraph("HP:", 50, 620);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
@@ -185,15 +186,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			monster.setY(102);
 			program.fromBedtoLiving=false;
 			monsterTimer.setInitialDelay(1000);
-		} else if (program.fromPausetoLiving) {
-			program.add(program.player.getImage(),program.lastPlayerX, program.lastPlayerY);
-			program.player.setX(program.lastPlayerX);
-			program.player.setY(program.lastPlayerY);
-			program.add(monster.getImage(),program.lastMonsterX, program.lastMonsterY);
-			monster.setX(program.lastMonsterX);
-			monster.setY(program.lastMonsterY);
-			program.fromPausetoLiving=false;
-			monsterTimer.setInitialDelay(0);
 		} else {
 			program.add(program.player.getImage(), playerX, playerY);
 			program.player.setX(playerX);
@@ -203,8 +195,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			monster.setY(playerY + 50);
 			monsterTimer.setInitialDelay(3000);
 		}
-		
-		
 		
 		program.player.getInventory();
 		//Inventory hot bar image
@@ -276,23 +266,25 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == MainMenu2) {
-			program.fromPausetoBed = false;
-			program.fromPausetoLiving = true;
-			program.lastPlayerX=program.player.getX();
-			program.lastPlayerY=program.player.getY();
-			program.lastMonsterX=monster.getX();
-			program.lastMonsterY=monster.getY();
-			
-			//redBox still shows
-			program.player.getInventory().setHighlightVisible(false);
-			program.switchToPause();
+		if (obj == pauseButton) {
+			monsterTimer.stop();
+			program.pause();
+		}
+		if (obj == program.ResumeGame) {
+			program.resume();
+			monsterTimer.setInitialDelay(0);
+			monsterTimer.restart();
+		}	
+		if (obj == program.Quit) {
+			program.switchToMenu();
 		}
 		
 		//click item in hot bar to select
 		Inventory playerInv = program.player.getInventory();
-		playerInv.setSelectedItem(obj);
-		playerInv.drawSelectedItem(program);
+		if(playerInv.setSelectedItem(obj)) {
+			playerInv.drawSelectedItem();
+		}
+		
 	}
 	
 	@Override
@@ -400,27 +392,27 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		Inventory playerInv = program.player.getInventory();
 		if(e.getKeyCode()==KeyEvent.VK_1) {
 			if (playerInv.setSelectedItem(0)) {
-				playerInv.drawSelectedItem(program);
+				playerInv.drawSelectedItem();
 			}
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_2) {
 			if (playerInv.setSelectedItem(1)) {
-				playerInv.drawSelectedItem(program);
+				playerInv.drawSelectedItem();
 			}
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_3) {
 			if (playerInv.setSelectedItem(2)) {
-				playerInv.drawSelectedItem(program);
+				playerInv.drawSelectedItem();
 			}
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_4) {
 			if (playerInv.setSelectedItem(3)) {
-				playerInv.drawSelectedItem(program);
+				playerInv.drawSelectedItem();
 			}
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_5) {
 			if (playerInv.setSelectedItem(4)) {
-				playerInv.drawSelectedItem(program);
+				playerInv.drawSelectedItem();
 			}
 		}
 	}
@@ -449,15 +441,15 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	public void addgui() {	
-		program.add(MainMenu);
-		program.add(MainMenu2);
+		program.add(pauseImg);
+		program.add(pauseButton);
 		program.add(healthPoints);
 		updatePlayerHeartsGUI(program.player.getHP());
 	}
 
 	public void removegui() {
-		program.remove(MainMenu);
-		program.remove(MainMenu2);
+		program.remove(pauseImg);
+		program.remove(pauseButton);
 		program.remove(healthPoints);
 		updatePlayerHeartsGUI(0);
 	}
@@ -473,7 +465,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			if (program.player.getHP() <= 0)   {
 				monsterTimer.stop();
 			}else {
-				 monsterTimer.restart();
+				monsterTimer.setInitialDelay(2000);
+				monsterTimer.restart();
 			}
 			program.player.setHP(program.player.getHP() - 1);
 			if(program.player.getHP()==0) {program.switchToBadEnd();}

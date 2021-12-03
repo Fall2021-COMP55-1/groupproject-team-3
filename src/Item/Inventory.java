@@ -7,6 +7,7 @@ import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 
 public class Inventory {
 	public ArrayList<Item> invItems = new ArrayList<Item>(5);
@@ -18,12 +19,15 @@ public class Inventory {
 	private Item selectedItem = null;
 	private GRect redBox = null;
 	private GLabel description = null;
+	MainApplication program;
 	
 	
-	public Inventory() {	
+	public Inventory(MainApplication program) {	
 		redBox = new GRect(0, 0, 32, 32);
 		description = new GLabel("", 210, 600);
 		setHighlightVisible(false);
+		this.program = program;
+		System.out.println("Inventory Created \n");
 	}
 	
 	public int numInvItems() {
@@ -48,16 +52,18 @@ public class Inventory {
 		return true;
 	}
 	
-	public void setSelectedItem(GObject obj) {
+	public boolean setSelectedItem(GObject obj) {
 		for (int i=0; i<numInvItems(); i++) {
 			Item detected = invItems.get(i);
 			if (obj == detected.getInvSprite()) {
 				setSelectedItem(detected);
+				return true;
 			}
 		}
+		return false;
 	}
 	
-	public void drawSelectedItem(MainApplication program) {
+	public void drawSelectedItem() {
 		setHighlightVisible(true);
 		Item selectedItem = program.player.getInventory().getSelectedItem();
 		if(selectedItem!=null) {
@@ -65,6 +71,7 @@ public class Inventory {
 			redBox.setLocation(selectedItemSprite.getX(), selectedItemSprite.getY());
 			redBox.setColor(Color.red);
 			program.add(redBox);
+			
 			
 			description.setLabel(selectedItem.getDescription());
 			description.setColor(Color.white);

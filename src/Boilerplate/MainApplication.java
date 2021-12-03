@@ -9,6 +9,7 @@ import Entity.*;
 import Item.*;
 import GamePanes.*;
 import acm.graphics.GImage;
+import acm.graphics.GObject;
 import acm.program.GraphicsProgram;
 
 public class MainApplication extends GraphicsProgram {
@@ -16,9 +17,8 @@ public class MainApplication extends GraphicsProgram {
 	public static final int WINDOW_WIDTH = 800;
 	public static final int WINDOW_HEIGHT = 640;
 	public static final String MUSIC_FOLDER = "sounds";
-
+		
 	private GraphicsPane curScreen;
-	private PausePane pause;
 	private MenuPane menu;
 	private NewGamePane newGame;
 	private SavePane save;
@@ -30,11 +30,23 @@ public class MainApplication extends GraphicsProgram {
 	public boolean fromBedtoLiving = false;
 	public boolean fromPausetoBed = false;
 	public boolean fromPausetoLiving = false;
-	public Player player = new Player(0, 0);
+	public Player player = new Player(0, 0, this);
 	private ArrayList<Item> items = new ArrayList <Item>();
-	public int lastPlayerX, lastPlayerY;
-	public int lastMonsterX, lastMonsterY;
+	public boolean paused = false;
+	public GButton ResumeGame = new GButton("Resume", 255, 200, 250, 60);
+	public GButton Quit = new GButton("To Main Menu", 255, 400, 250, 60);
 	
+	public void pause() { 
+		this.add(ResumeGame);
+		this.add(Quit);
+		paused = true;
+	}
+	
+	public void resume() {
+		this.remove(ResumeGame);
+		this.remove(Quit);
+		paused = false;
+	}
 	
 	public void addItem(Item item) {
 		items.add(item);
@@ -58,6 +70,7 @@ public class MainApplication extends GraphicsProgram {
 		addKeyListeners();
 		addMouseListeners();
 	}
+	
 	
 	/* switchToScreen(newGraphicsPane)
 	 * -------------------------------
@@ -136,7 +149,6 @@ public class MainApplication extends GraphicsProgram {
 
 	public void run() {
 		System.out.println("Let's make something awesome!");
-		pause = new PausePane(this);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
 		save = new SavePane(this);
@@ -150,8 +162,6 @@ public class MainApplication extends GraphicsProgram {
 	}
 
 	public void switchToMenu() {switchToScreen(menu);}
-
-	public void switchToPause() {switchToScreen(pause);}
 	
 	public void switchToNewGame() {switchToScreen(newGame);}
 	

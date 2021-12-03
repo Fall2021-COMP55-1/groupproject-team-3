@@ -2,6 +2,7 @@ package Entity;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import Boilerplate.MainApplication;
 import Item.*;
 import acm.graphics.GImage;
 
@@ -14,11 +15,14 @@ public class Player extends Entity{
 	private Inventory inventory;
 	private String playerDirection;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
+	MainApplication program;
 	
-	public Player(int x, int y)   {
+	public Player(int x, int y, MainApplication program)   {
 		super(x, y);
-		inventory = new Inventory();
+		inventory = new Inventory(program);
 		addImages();
+		this.program = program;
+		System.out.println("Player Created \n");
 	}
 	
 	public int getHP()	{return HP;}

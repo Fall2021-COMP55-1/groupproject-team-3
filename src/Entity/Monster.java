@@ -2,6 +2,7 @@ package Entity;
 import java.util.ArrayList;
 
 import acm.graphics.GImage;
+import acm.graphics.GRectangle;
 
 public class Monster extends Entity{
 	private GImage sprite = getImage();
@@ -73,7 +74,13 @@ public class Monster extends Entity{
 	
 	public boolean touchPlayer() {
 		if(player == null)   {return false;}
-		if(this.sprite.getBounds().intersects(player.sprite.getBounds()))   {return true;}
+		//smaller bounds or timer
+		double smallerH = this.sprite.getHeight()-32;
+		double smallerW = this.sprite.getWidth()-16;
+		double smallerX = this.sprite.getX()+8;
+		double smallerY = this.sprite.getY()+16;
+		GRectangle smallerBounds = new GRectangle(smallerX, smallerY, smallerH, smallerW);
+		if(smallerBounds.intersects(player.sprite.getBounds()))   {return true;}
 		return false;
 	}
 			
