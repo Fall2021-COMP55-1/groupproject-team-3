@@ -2,9 +2,7 @@ package GamePanes;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.io.File;
-
 import javax.sound.sampled.FloatControl;
-
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
