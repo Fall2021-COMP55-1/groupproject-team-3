@@ -8,15 +8,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.Timer;
+
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
 
 public class NewGamePane extends GraphicsPane implements ActionListener {
-	// you will use program to get access to all of the GraphicsProgram calls
+
 	private MainApplication program; 
-	private GImage background, pauseImg; 
+	private GImage background = new GImage("res/livingroom.png"), pauseImg; 
 	private Timer monsterTimer;
 	private int playerX = 482, playerY = 510;
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
@@ -29,15 +30,12 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
 	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 	
 	
-	
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
 		program.setDoorsLiving();
-		setItems();
-		setGUI();
-		background = new GImage("res/livingroom.png");
-		monsterTimer = new Timer(100, this);
+		program.setItemsLiving();
+		program.setGUI();
 	}
 	
 	public void setWalls() {
@@ -63,120 +61,102 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		GRect npc = new GRect(540, 450, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
-	}
-	
-	public void setItems() {
-		Item itemKnife1 = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
-		itemKnife1.setX(734);
-		itemKnife1.setY(259);
-		itemKnife1.setDescription("Knife to kill");
-		program.addItem(itemKnife1);
+	}	
 		
-		Item bedroomKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "livingR");
-		bedroomKey.setX(200);
-		bedroomKey.setY(100);
-		bedroomKey.setRoomType(RoomType.BEDROOMS);
-		bedroomKey.setDescription("Key to hallway of bedrooms");
-		program.addItem(bedroomKey);
-	}
-	
-	public void setGUI() {
-		pauseImg = new GImage("res/texture/pause.png", 768, 0); 
-		pauseImg.setSize(32, 32);
-		pauseImg.setVisible(true);
-		pauseButton = new GButton("", 768, 0, 32, 32); 
-		healthPoints = new GParagraph("HP:", 50, 625);
-		healthPoints.setColor(Color.white); 
-		healthPoints.setFont("Arial-12");
-		goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
-		goal.setColor(Color.white);
-		program.add(goal);
-		program.label5sec(goal);
-	}
-	
 	@Override
-	
 	public void showContents() {
-		//walls
+		//1. walls
 		for (int i=0; i<14; i++) {program.add(walls.get(i));}
-		//background image
+		//2. background image
 		program.add(background);
-		
-		//player and monster location
+		//3. player and monster and npc and Goal Label
 		if (program.fromBedtoLiving) {
 			program.addPlayer(85, 172);
 			program.addMonster(35, 102);
 			
 			if(program.NPC.isDead() == false)   {program.addNPC(540, 450);}
 			else  {walls.remove(walls.size() - 1);}
-			
 			program.fromBedtoLiving=false;
-			monsterTimer.setInitialDelay(1000);
+			program.monsterTimer.setInitialDelay(1000);
 		} else {
 			program.addPlayer(playerX, playerY);
 			program.addMonster(playerX + 20, playerY + 50);
 			program.addNPC(540, 450);
 			monsterTimer.setInitialDelay(3000);
+			program.monsterTimer.setInitialDelay(3000);
+			goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
+			goal.setColor(Color.white);
+			program.label5sec(goal);
+			program.add(goal);
 		}
-		monsterTimer.start();
+		program.monsterTimer.start();
 		program.player.getInventory();
-		//Inventory hot bar image
+		//4. Inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
-		//doors
-		program.addDoorLiving();
-		
-		//items on the map
+		//5. items on the map
 		for (int i = 0; i < program.numItems(); i++)   {
 			if (program.itemAt(i).getMap()=="livingR" && !program.itemAt(i).isPickedUp()) {
 				program.add(program.itemAt(i).getImage(), program.itemAt(i).getX(), program.itemAt(i).getY());
 			}
 		}
-		//items on the inventory hot bar
+		//6. items on the inventory hot bar
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
-		}
-		addgui();		
-		program.add(goal);
+		}	
+		//7. GUI
+		program.addGUI();
 	}
 
 	@Override
 	public void hideContents() {
-		program.remove(background);
 		program.remove(program.player.getImage());
-		
-		for(int i=0; i<13; i++) {program.remove(walls.get(i));}
-		
+		//1. walls
+		for(int i = 0; i < 13; i++) {program.remove(walls.get(i));}
+		//2. background
+		program.remove(background);
+		//2.5 doors
 		program.removeDoorLiving();
 		
 		program.remove(program.monster.getImage());
 		
+		//3. player and monster and npc and Goal Label
+		program.remove(program.player.getImage());
+		program.remove(program.monster.getImage());
+		program.remove(program.NPC.getImage());
+		program.monsterTimer.stop();
+		program.remove(goal);
+		//4. Inventory hot bar image
 		program.remove(Inventory.INVENTORY_IMG);
 		
 		for (int i = 0; i < program.numItems(); ++i)   {program.remove(program.itemAt(i).getImage());}
 		
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {program.remove(program.player.getInventory().itemAt(i).getInvSprite());}
 		
+		//5. items on the map
+		for (int i = 0; i < program.numItems(); ++i)   {
+			program.remove(program.itemAt(i).getImage());
+		}
+		//6. items on the inventory hot bar
+		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
+			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
+		}
+		//6.5 labels of wrongItem, lockedDoor, keyUsed
 		program.removeLabels();
-		
-		removegui();
-		monsterTimer.stop();
-		//redBox still shows
-		program.player.getInventory().setHighlightVisible(false);
-		program.remove(goal);
+		//7. GUI
+		program.removeGUI();		
 	}
-	
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == pauseButton) {
-			monsterTimer.stop();
+		if (obj == program.pauseButton) {
+			program.monsterTimer.stop();
 			program.pause();
 		}
 		if (obj == program.resume) {
 			program.resume();
-			monsterTimer.setInitialDelay(0);
-			monsterTimer.restart();
+			program.monsterTimer.setInitialDelay(0);
+			program.monsterTimer.restart();
 		}	
 		
 		if (obj == program.quit) {System.exit(0);}
@@ -280,4 +260,5 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
 		}
 	}
+	
 }
