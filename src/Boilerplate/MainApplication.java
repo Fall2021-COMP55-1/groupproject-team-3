@@ -1,19 +1,19 @@
 package Boilerplate;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.sound.sampled.FloatControl;
-
 import Entity.*;
 import Item.*;
 import GamePanes.*;
 import acm.graphics.GImage;
-import acm.graphics.GObject;
+import acm.graphics.GLabel;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
@@ -42,6 +42,66 @@ public class MainApplication extends GraphicsProgram {
 	public GButton quit = new GButton("", 296, 420, 208, 95);
 	private GImage quitImg = new GImage("res/texture/Quit.png",296, 420);
 	public static MusicBox music = new MusicBox();
+	public GLabel keyUsed = null;
+	public GLabel lockedDoor = null;
+	public GLabel wrongItem = null;
+	
+	//in bedroom map
+	public Door inLivingMap, inLeftBed, inRightBed, outLeftBed, outRightBed;
+	//in livingroom map
+	public Door inBedMap, inBath, outBath, winning;
+	
+	public void setDoorsLiving() {
+		//door to bedroom map
+		inBedMap = new Door(64,150,64,20, true);
+		inBedMap.setRoomType(RoomType.BEDROOMS);
+		//door to bathroom
+		inBath = new Door(672,380,32,20, false);
+		//door to hallway from bathroom
+		outBath = new Door(672,283,32,10, false);
+		winning = new Door(480,540,65,10, true);
+		winning.setRoomType(RoomType.OUT);
+	}
+	public void addDoorLiving() {
+		this.add(inBedMap.getRect());
+		this.add(inBath.getRect());
+		this.add(outBath.getRect());
+		this.add(winning.getRect());
+	}
+	public void removeDoorLiving() {
+		this.remove(inBedMap.getRect());
+		this.remove(inBath.getRect());
+		this.remove(outBath.getRect());
+		this.remove(winning.getRect());
+	}
+	public void setDoorsBedRoom() {
+		//door to living room map
+		inLivingMap = new Door(704,510,64,4, false);
+		//door to left bedroom
+		inLeftBed = new Door(128,340,32,20, true);
+		//door to right bedroom
+		inRightBed = new Door(672,340,32,20, true);
+		inRightBed.setRoomType(RoomType.BEDROOMR);
+		//door to hallway from left bedroom
+		outLeftBed = new Door(128,252,32,5, false);
+		//door to hallway from right bedroom
+		outRightBed = new Door(672,252,32,5, false);
+	}
+	
+	public void addDoorBedRoom() {
+		this.add(inLivingMap.getRect());
+		this.add(inLeftBed.getRect());
+		this.add(inRightBed.getRect());
+		this.add(outLeftBed.getRect());
+		this.add(outRightBed.getRect());
+	}
+	public void removeDoorBedRoom() {
+		this.remove(inLivingMap.getRect());
+		this.remove(inLeftBed.getRect());
+		this.remove(inRightBed.getRect());
+		this.remove(outLeftBed.getRect());
+		this.remove(outRightBed.getRect());
+	}
 	
 	public void pause() { 
 		this.add(resumeImg);
@@ -72,6 +132,72 @@ public class MainApplication extends GraphicsProgram {
 	public Item itemAt(int i) {
 		return items.get(i);
 	}
+	
+	public void removeLabels() {
+		if(keyUsed!=null) {this.remove(keyUsed);}
+		if(wrongItem!=null) {this.remove(wrongItem);}
+		if(lockedDoor!=null) {this.remove(lockedDoor);}
+	}
+	
+	public Item getSelectedItem() {
+		return this.player.getInventory().getSelectedItem();
+	}
+	
+	public void unlockDoor(Door door, KeyEvent e) {
+		if(getSelectedItem()!=null) {
+			if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
+				if(getSelectedItem().getRoomType()==door.getRoomType()) {
+					if(wrongItem!=null) {wrongItem.setVisible(false);} 
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					keyUsed = new GLabel("Unlocked the door with key!", 210, 550);
+					keyUsed.setColor(Color.white);
+					this.add(keyUsed);
+					door.unlock();
+					this.player.getInventory().deleteItem(this,getSelectedItem());
+					this.remove(getSelectedItem().getInvSprite());
+					this.label5sec(keyUsed);
+				}else {
+					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
+					wrongItem = new GLabel("Wrong item!", 210, 575);
+					wrongItem.setColor(Color.white);
+					this.add(wrongItem);
+					this.label5sec(wrongItem);
+				}	
+			}
+		}
+	}
+	
+	public void openDoor(Door door, KeyEvent e) {
+		if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			if (!door.isLocked()) {
+				if(door == inBedMap) {
+					this.switchToBedRoom();
+				}else if (door == winning) {
+					this.switchToGoodEnd();
+				}else if (door == inLivingMap) {
+					this.fromBedtoLiving = true;
+					this.switchToNewGame();
+				}else if(door == inRightBed) {
+					this.remove(this.player.getImage());
+					this.add(this.player.getImage(), 672,219);
+				}
+			}else {
+				if(wrongItem!=null) {wrongItem.setVisible(false);}
+				lockedDoor = new GLabel("Door is locked!", 210, 550);
+				lockedDoor.setColor(Color.white);
+				this.add(lockedDoor);
+				this.label5sec(lockedDoor);
+			}
+		}
+	}
+	
+	public void openDoor(Door door, KeyEvent e, int x, int y) {
+		if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_ENTER) {
+			this.remove(this.player.getImage());
+			this.add(this.player.getImage(), x,y);
+		}
+	}
+	
 	/* Method: setupInteractions
 	 * -------------------------
 	 * must be called before switching to another
@@ -114,6 +240,55 @@ public class MainApplication extends GraphicsProgram {
 			}
 		}
 		return false;
+	}
+	
+	public void grab(Item item)   {
+		this.player.grabItem(item);
+		item.setPickedUp(true);
+		this.remove(item.getImage());
+		this.add(item.getInvSprite());
+	}
+	
+	public void setSelectedItem(KeyEvent e) {
+		Inventory playerInv = this.player.getInventory();
+		if(e.getKeyCode()==KeyEvent.VK_1) {
+			if (playerInv.setSelectedItem(0)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_2) {
+			if (playerInv.setSelectedItem(1)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_3) {
+			if (playerInv.setSelectedItem(2)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_4) {
+			if (playerInv.setSelectedItem(3)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_5) {
+			if (playerInv.setSelectedItem(4)) {
+				playerInv.drawSelectedItem();
+			}
+		}
+	}
+	
+	public void label5sec(GLabel label) {
+		//label disappears in 5 sec
+		int delay = 5000;
+	    ActionListener taskPerformer = new ActionListener() {
+	    	public void actionPerformed(ActionEvent evt) {
+	        label.setVisible(false);;
+	    	}
+	    };
+	    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
+	    tick.setRepeats(false);
+	    tick.start();
 	}
 	
 	/* switchToScreen(newGraphicsPane)
