@@ -3,7 +3,10 @@ package Boilerplate;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.FloatControl;
 
 import Entity.*;
 import Item.*;
@@ -27,18 +30,18 @@ public class MainApplication extends GraphicsProgram {
 	private BedRoomGamePane bedroom;
 	private GoodEndPane goodEnd;
 	private BadEndPane badEnd;
-	public boolean fromBedtoLiving = false;
-	public boolean fromPausetoBed = false;
-	public boolean fromPausetoLiving = false;
+	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
 	public Player player = new Player(0, 0);
 	private ArrayList<Item> items = new ArrayList <Item>();
 	public int lastPlayerX, lastPlayerY;
-	public int lastMonsterX, lastMonsterY;
+	public static MusicBox music = new MusicBox();
 	
 	
 	public void addItem(Item item) {
 		items.add(item);
 	}
+	
+	public static MusicBox getMusic() {return music;}
 	
 	public int numItems() {
 		return items.size();
@@ -136,6 +139,8 @@ public class MainApplication extends GraphicsProgram {
 
 	public void run() {
 		System.out.println("Let's make something awesome!");
+		File Audio = new File("res/music/TestAudio.wav");
+		music.PLAY(Audio);
 		pause = new PausePane(this);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
