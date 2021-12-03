@@ -35,19 +35,25 @@ public class MainApplication extends GraphicsProgram {
 	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
 	private ArrayList<Item> items = new ArrayList <Item>();
 	public boolean paused = false;
-	public GButton ResumeGame = new GButton("Resume", 255, 200, 250, 60);
-	public GButton Quit = new GButton("To Main Menu", 255, 400, 250, 60);
+	public GButton resume = new GButton("", 296, 180, 208, 95);
+	private GImage resumeImg = new GImage("res/texture/Resume.png",296,180);
+	public GButton quit = new GButton("", 296, 420, 208, 95);
+	private GImage quitImg = new GImage("res/texture/Quit.png",296, 420);
 	public static MusicBox music = new MusicBox();
 	
 	public void pause() { 
-		this.add(ResumeGame);
-		this.add(Quit);
+		this.add(resumeImg);
+		this.add(quitImg);
+		this.add(resume);
+		this.add(quit);
 		paused = true;
 	}
 	
 	public void resume() {
-		this.remove(ResumeGame);
-		this.remove(Quit);
+		this.remove(resume);
+		this.remove(quit);
+		this.remove(resumeImg);
+		this.remove(quitImg);
 		paused = false;
 	}
 	

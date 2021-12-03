@@ -14,32 +14,30 @@ public class GoodEndPane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	
-	private GLabel wonGame;
-	private GButton Quit;
-
+	private GButton quit;
+	private GImage background;
 	public GoodEndPane(MainApplication app) {
 		this.program = app;
-		wonGame = new GLabel("You escaped the house!",255,200);
-		wonGame.setColor(Color.black);
-		Quit = new GButton("Exit", 255, 400, 250, 60);
+		background = new GImage("res/texture/Good Ending.png");
+		quit = new GButton("", 296, 460, 208, 95);
 	}
 	
 	@Override
 	public void showContents() {
-		program.add(wonGame);
-		program.add(Quit);
+		program.add(background);
+		program.add(quit);
 	}
 
 	@Override
 	public void hideContents() {
-		program.remove(wonGame);
-		program.remove(Quit);
+		program.remove(background);
+		program.remove(quit);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == Quit) {System.exit(0);}
+		if (obj == quit) {System.exit(0);}
 	}
 	
 	@Override

@@ -124,7 +124,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		pauseImg.setSize(32, 32);
 		pauseImg.setVisible(true);
 		pauseButton = new GButton("", 768, 0, 32, 32); 
-		healthPoints = new GParagraph("HP:", 50, 620);
+		healthPoints = new GParagraph("HP:", 50, 625);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
 		
@@ -269,13 +269,13 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			monsterTimer.stop();
 			program.pause();
 		}
-		if (obj == program.ResumeGame) {
+		if (obj == program.resume) {
 			program.resume();
 			monsterTimer.setInitialDelay(0);
 			monsterTimer.restart();
 		}	
-		if (obj == program.Quit) {
-			program.switchToMenu();
+		if (obj == program.quit) {
+			System.exit(0);
 		}
 		
 		//click item in hot bar to select
@@ -422,7 +422,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		if (dif > 0) {
 			for (int i = 0; i < dif; i++) {
 				GImage heart = new GImage("res/texture/HP.png", heartRootX + ((heartLen + i) * heartWidth), heartRootY);
-				heart.setSize(32, 32);
+				heart.setSize(25, 20);
 				heart.setVisible(true); 
 				playerHearts.add(heart);
 				program.add(heart); 
