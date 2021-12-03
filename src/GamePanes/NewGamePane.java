@@ -102,7 +102,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		GRect wall13 = new GRect(576,288,192,96);
 		wall13.setFilled(true);
 		walls.add(wall13);
-		GRect npc = new GRect(540, 450, 30, 30);
+		GRect npc = new GRect(540, 450, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
 	}
