@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.sound.sampled.FloatControl;
 
@@ -13,6 +14,7 @@ import Item.*;
 import GamePanes.*;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
+import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
 public class MainApplication extends GraphicsProgram {
@@ -82,6 +84,37 @@ public class MainApplication extends GraphicsProgram {
 		addMouseListeners();
 	}
 	
+	public boolean checkCollision(ArrayList<GRect> walls) {
+		Iterator<GRect> iterate = walls.iterator();
+		while(iterate.hasNext()) {
+			GRect temp = iterate.next();
+			if(this.player.sprite.getBounds().intersects(temp.getBounds())) {
+				
+				if(this.player.getDX() > 0)   {
+					if(this.player.getDY() > 0)   {this.player.sprite.move(-2, -2);}
+					if(this.player.getDY() < 0)   {this.player.sprite.move(-2, 2);}
+					if(this.player.getDY() == 0)   {this.player.sprite.move(-4, 0);}
+				}
+				if(this.player.getDX() < 0)   {
+					if(this.player.getDY() > 0)   {this.player.sprite.move(2, -2);}
+					if(this.player.getDY() < 0)   {this.player.sprite.move(2, 2);}
+					if(this.player.getDY() == 0)   {this.player.sprite.move(4, 0);}
+				}
+				if(this.player.getDY() < 0)   {
+					if(this.player.getDX() > 0)   {this.player.sprite.move(-2, 2);}
+					if(this.player.getDX() < 0)   {this.player.sprite.move(2, 2);}
+					if(this.player.getDX() == 0)   {this.player.sprite.move(0, 4);}
+				}
+				if(this.player.getDY() > 0)   {
+					if(this.player.getDX() > 0)   {this.player.sprite.move(-2, -2);}
+					if(this.player.getDX() < 0)   {this.player.sprite.move(2, -2);}
+					if(this.player.getDX() == 0)   {this.player.sprite.move(0, -4);}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	/* switchToScreen(newGraphicsPane)
 	 * -------------------------------

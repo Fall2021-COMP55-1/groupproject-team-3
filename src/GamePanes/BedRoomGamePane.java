@@ -123,37 +123,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.addItem(itemKey2);
 	}
 	
-	public boolean checkCollision() {
-		Iterator<GRect> iterate = walls.iterator();
-		while(iterate.hasNext()) {
-			GRect temp = iterate.next();
-			if(program.player.sprite.getBounds().intersects(temp.getBounds())) {
-				
-				if(program.player.getDX() > 0)   {
-					if(program.player.getDY() > 0)   {program.player.sprite.move(-2, -2);}
-					if(program.player.getDY() < 0)   {program.player.sprite.move(-2, 2);}
-					if(program.player.getDY() == 0)   {program.player.sprite.move(-4, 0);}
-				}
-				if(program.player.getDX() < 0)   {
-					if(program.player.getDY() > 0)   {program.player.sprite.move(2, -2);}
-					if(program.player.getDY() < 0)   {program.player.sprite.move(2, 2);}
-					if(program.player.getDY() == 0)   {program.player.sprite.move(4, 0);}
-				}
-				if(program.player.getDY() < 0)   {
-					if(program.player.getDX() > 0)   {program.player.sprite.move(-2, 2);}
-					if(program.player.getDX() < 0)   {program.player.sprite.move(2, 2);}
-					if(program.player.getDX() == 0)   {program.player.sprite.move(0, 4);}
-				}
-				if(program.player.getDY() > 0)   {
-					if(program.player.getDX() > 0)   {program.player.sprite.move(-2, -2);}
-					if(program.player.getDX() < 0)   {program.player.sprite.move(2, -2);}
-					if(program.player.getDX() == 0)   {program.player.sprite.move(0, -4);}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
 	
 	@Override
 	public void showContents() {
@@ -277,7 +246,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		program.player.keyPressed(e);
-		checkCollision();
+		
+		program.checkCollision(walls);
 		
 		//back to livingroom map
 		openDoor(inLivingMap,e);
