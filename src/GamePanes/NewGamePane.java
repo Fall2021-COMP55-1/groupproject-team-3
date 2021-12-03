@@ -21,7 +21,7 @@ import acm.graphics.GRect;
 public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	private GImage background, pauseImg, NPC; 
+	private GImage background, pauseImg; 
 	
 	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
@@ -88,7 +88,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		GRect wall13 = new GRect(576,288,192,96);
 		wall13.setFilled(true);
 		walls.add(wall13);
-		GRect npc = new GRect(540, 450, 30, 30);
+		GRect npc = new GRect(540, 450, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
 	}
@@ -116,9 +116,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 625);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		
-		NPC = new GImage("res/NPC/NPC2.png", 540, 450); 
-		NPC.setSize(30, 30); 
 		goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
 		goal.setColor(Color.white);
 		program.add(goal);
@@ -141,6 +138,14 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(monster.getImage(), 35, 102);
 			monster.setX(35);
 			monster.setY(102);
+			if(program.NPC.isDead() == false)   {
+				program.add(program.NPC.getImage(), 540, 450);
+				program.NPC.setX(540);
+				program.NPC.setY(450);
+			}
+			if(program.NPC.isDead())   {
+				walls.remove(walls.size() - 1);
+			}
 			program.fromBedtoLiving=false;
 			monsterTimer.setInitialDelay(1000);
 		} else {
@@ -148,6 +153,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.player.setX(playerX);
 			program.player.setY(playerY);
 			program.add(monster.getImage(), playerX + 20, playerY + 50);
+			program.add(program.NPC.getImage(), 540, 450);
+			program.NPC.setX(540);
+			program.NPC.setY(450);
 			monster.setX(playerX + 20);
 			monster.setY(playerY + 50);
 			monsterTimer.setInitialDelay(3000);
@@ -170,8 +178,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		addgui();		
-		
-		program.add(NPC);
 		program.add(goal);
 	}
 
@@ -201,8 +207,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		monsterTimer.stop();
 		//redBox still shows
 		program.player.getInventory().setHighlightVisible(false);
-		
-		program.remove(NPC);
 		program.remove(goal);
 	}
 	

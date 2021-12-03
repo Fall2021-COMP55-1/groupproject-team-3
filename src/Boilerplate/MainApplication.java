@@ -34,6 +34,7 @@ public class MainApplication extends GraphicsProgram {
 	private BadEndPane badEnd;
 
 	public Player player = new Player(0, 0, this);
+	public NPC NPC = new NPC(540, 450, this);
 	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
 	private ArrayList<Item> items = new ArrayList <Item>();
 	public boolean paused = false;

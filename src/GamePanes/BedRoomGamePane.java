@@ -19,7 +19,7 @@ import acm.graphics.GRect;
 public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	private GImage background, choice1, choice2, pauseImge, NPC; 
+	private GImage background, choice1, choice2, pauseImge; 
 	
 	private Timer monsterTimer;
 	private Monster monster = new Monster(0, 0, MonsterType.TALL);
@@ -71,7 +71,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		GRect wall7 = new GRect(704,512,64,128);
 		wall7.setFilled(true);
 		walls.add(wall7);
-		GRect npc = new GRect(100, 150, 30, 30);
+		GRect npc = new GRect(100, 150, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
 	}
@@ -91,9 +91,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40); 
-		
-		NPC = new GImage("res/NPC/NPC1.png", 100, 150);
-		NPC.setSize(30, 30); 
 	}
 	
 	public void setItems() {
@@ -124,7 +121,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.player.setX(playerX);
 		program.player.setY(playerY);
 		program.player.getInventory();
-		
+		if(program.NPC.isDead() == false)   {
+			program.add(program.NPC.getImage(), 540, 450);
+			program.NPC.setX(540);
+			program.NPC.setY(450);
+		}
+		if(program.NPC.isDead())   {
+			walls.remove(walls.size() - 1);
+		}
 		program.add(monster.getImage(), playerX + 16, playerY + 50);
 		monster.setX(playerX + 16);
 		monster.setY(playerY + 50);
@@ -149,8 +153,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		program.player.getInventory().setHighlightVisible(true);
 		addgui();
-		
-		program.add(NPC);
 	}
 	
 	@Override
@@ -178,8 +180,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		monsterTimer.stop();
 		//redBox still shows
 		program.player.getInventory().setHighlightVisible(false);
-		
-		program.remove(NPC);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 		
 		if (obj == killHim) {
-			program.remove(NPC);
+			program.NPC.setDead(true);
 			program.remove(choice1);
 			program.remove(choice2);
 		}
@@ -316,7 +316,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.player.setHP(program.player.getHP() - 1);
 			if(program.player.getHP()==0) {program.switchToBadEnd();}
 			updatePlayerHeartsGUI(program.player.getHP());
-			System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
 		}
 	}
 	

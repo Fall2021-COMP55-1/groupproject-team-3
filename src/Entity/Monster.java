@@ -23,8 +23,6 @@ public class Monster extends Entity{
 	@Override
 	public int getY()   {return y;}
 	
-		
-	@Override
 	public void addImages() {
 		spriteUp = new ArrayList<GImage>(2);
 		spriteDown = new ArrayList<GImage>(2);
