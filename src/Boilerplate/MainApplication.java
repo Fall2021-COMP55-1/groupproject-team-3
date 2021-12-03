@@ -128,7 +128,9 @@ public class MainApplication extends GraphicsProgram {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(curScreen != null) {
-			curScreen.keyPressed(e);
+			if(!paused) {
+				curScreen.keyPressed(e);
+			}
 		}
 	}
 	
