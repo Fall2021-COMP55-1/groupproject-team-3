@@ -42,7 +42,6 @@ public class Player extends Entity{
 		
 	public Inventory getInventory() {return inventory;}
 	
-	@Override
 	public void addImages() {
 		spriteUp = new ArrayList<GImage>(2);
 		spriteDown = new ArrayList<GImage>(2);

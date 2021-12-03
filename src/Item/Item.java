@@ -69,9 +69,6 @@ public class Item {
 	
 	public void setPickedUp(boolean pickedUp)   {
 		this.pickedUp = pickedUp;
-		if (pickedUp == true)   {
-			System.out.println("Item of type " + type.toString() + ", called \"" + name + ",\" was picked up");
-			}
 	}
 
 	public GImage getInvSprite() {return invSprite;}

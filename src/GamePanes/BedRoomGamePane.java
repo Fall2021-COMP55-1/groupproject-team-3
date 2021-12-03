@@ -470,7 +470,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.player.setHP(program.player.getHP() - 1);
 			if(program.player.getHP()==0) {program.switchToBadEnd();}
 			updatePlayerHeartsGUI(program.player.getHP());
-			System.out.println("Player has been hit and their HP is now: " + program.player.getHP());
 		}
 	}
 	
