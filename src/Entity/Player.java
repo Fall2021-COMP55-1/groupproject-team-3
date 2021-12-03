@@ -22,7 +22,6 @@ public class Player extends Entity{
 		inventory = new Inventory(program);
 		addImages();
 		this.program = program;
-		System.out.println("Player Created \n");
 	}
 	
 	public int getHP()	{return HP;}
@@ -40,9 +39,7 @@ public class Player extends Entity{
 	public void setX(int a)   { x=x+a;}
 	
 	public String getDirection()   {return playerDirection;}
-	
-	public void setInv(Inventory inventory)   {this.inventory = inventory;}
-	
+		
 	public Inventory getInventory() {return inventory;}
 	
 	@Override

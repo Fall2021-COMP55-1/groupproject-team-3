@@ -27,7 +27,6 @@ public class Inventory {
 		description = new GLabel("", 210, 600);
 		setHighlightVisible(false);
 		this.program = program;
-		System.out.println("Inventory Created \n");
 	}
 	
 	public int numInvItems() {

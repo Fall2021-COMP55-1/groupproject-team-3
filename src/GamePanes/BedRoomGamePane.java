@@ -161,15 +161,20 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<7; i++) {program.add(walls.get(i));}
 		//background image
 		program.add(background);
-		//player		
+
+		//player and monster
 		program.add(program.player.getImage(), playerX, playerY);
 		program.player.setX(playerX);
 		program.player.setY(playerY);
+		program.player.getInventory();
+		
 		program.add(monster.getImage(), playerX + 16, playerY + 50);
 		monster.setX(playerX + 16);
 		monster.setY(playerY + 50);
+		monsterTimer.setInitialDelay(3000);
+		monsterTimer.start();
 		
-		program.player.getInventory();
+		
 		//inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
 		//items on the map
@@ -191,8 +196,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		program.player.getInventory().setHighlightVisible(true);
 		addgui();
-		monsterTimer.setInitialDelay(3000);
-		monsterTimer.start();
 		
 		program.add(NPC);
 	}

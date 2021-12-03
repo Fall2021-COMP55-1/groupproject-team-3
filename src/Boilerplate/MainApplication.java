@@ -3,7 +3,10 @@ package Boilerplate;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.sound.sampled.FloatControl;
 
 import Entity.*;
 import Item.*;
@@ -27,14 +30,14 @@ public class MainApplication extends GraphicsProgram {
 	private BedRoomGamePane bedroom;
 	private GoodEndPane goodEnd;
 	private BadEndPane badEnd;
-	public boolean fromBedtoLiving = false;
-	public boolean fromPausetoBed = false;
-	public boolean fromPausetoLiving = false;
+
 	public Player player = new Player(0, 0, this);
+	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
 	private ArrayList<Item> items = new ArrayList <Item>();
 	public boolean paused = false;
 	public GButton ResumeGame = new GButton("Resume", 255, 200, 250, 60);
 	public GButton Quit = new GButton("To Main Menu", 255, 400, 250, 60);
+	public static MusicBox music = new MusicBox();
 	
 	public void pause() { 
 		this.add(ResumeGame);
@@ -51,6 +54,8 @@ public class MainApplication extends GraphicsProgram {
 	public void addItem(Item item) {
 		items.add(item);
 	}
+	
+	public static MusicBox getMusic() {return music;}
 	
 	public int numItems() {
 		return items.size();
@@ -149,6 +154,8 @@ public class MainApplication extends GraphicsProgram {
 
 	public void run() {
 		System.out.println("Let's make something awesome!");
+		File Audio = new File("res/music/TestAudio.wav");
+		music.PLAY(Audio);
 		menu = new MenuPane(this);
 		newGame = new NewGamePane(this);
 		save = new SavePane(this);

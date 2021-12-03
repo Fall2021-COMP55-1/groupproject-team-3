@@ -195,7 +195,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			monster.setY(playerY + 50);
 			monsterTimer.setInitialDelay(3000);
 		}
-		
+		monsterTimer.start();
 		program.player.getInventory();
 		//Inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
@@ -215,7 +215,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
 		addgui();		
-		monsterTimer.start();
 		
 		program.add(NPC);
 		program.add(goal);

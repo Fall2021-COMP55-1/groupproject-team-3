@@ -1,10 +1,12 @@
 package GamePanes;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-
+import java.io.File;
+import javax.sound.sampled.FloatControl;
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
+import Boilerplate.MusicBox;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
@@ -14,15 +16,15 @@ public class OptionPane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	
-	private GImage background;
-	private GButton Credits; 
-	private GButton Back; 
+	private GImage background, mute;
+	private GButton Credits, Back, MuteButton; 
 	private GRect audioBar;
-	private final int WIDTH = 200; 
-	private final int HEIGHT = 88; 
+	private final int WIDTH = 200, HEIGHT = 88; 
 	private int lastX;
 	private GObject obj;
-
+	private boolean muted = false;
+	private File Audio = new File("res/music/TestAudio.wav");
+	
 	public OptionPane(MainApplication app) {
 		super();
 		this.program = app;
@@ -30,11 +32,25 @@ public class OptionPane extends GraphicsPane {
 		double X = app.getWidth()/2 - WIDTH/2 -7;
 		background = new GImage("res/texture/Options Menu.png", 0, 0);
 		background.setSize(800, 640);
+		mute = new GImage("res/texture/Unmuted.png", 718, 75);
 		Credits = new GButton("", X, 418, WIDTH, HEIGHT);
 		Back = new GButton("", X, 532, WIDTH, HEIGHT);
-		audioBar = new GRect(384, 170, 32, 32);
+		MuteButton = new GButton("", 718, 75, 42, 41);
+		audioBar = new GRect(710, 170, 32, 32);
 		audioBar.setFilled(true);
 		audioBar.setFillColor(Color.black);
+	}
+	
+	private MusicBox getMusic()   {
+		return MainApplication.getMusic();
+	}
+	
+	private void setVolume(double d)   {
+		for(int i = 0; i <= 8; ++i)   {
+			if (d >= 50 + 82 * i && d <= 50 + 82 * (i + 1))   {
+				getMusic().audioControl.setValue(-40.0f + (5.0f * i));
+			}
+		}
 	}
 
 	@Override
@@ -43,6 +59,8 @@ public class OptionPane extends GraphicsPane {
 		program.add(Credits);
 		program.add(Back);
 		program.add(audioBar);
+		program.add(mute);
+		program.add(MuteButton);
 	}
 
 	@Override
@@ -50,6 +68,9 @@ public class OptionPane extends GraphicsPane {
 		program.remove(background);
 		program.remove(Credits);
 		program.remove(Back);
+		program.remove(audioBar);
+		program.remove(mute);
+		program.remove(MuteButton);
 	}
 
 	@Override
@@ -62,6 +83,18 @@ public class OptionPane extends GraphicsPane {
 		if (obj == Credits) {
 			program.switchToCredits();
 		}
+		if (obj == MuteButton)   {
+			if(muted == false)   {
+				mute.setImage("res/texture/Muted.png");
+				muted = true;
+				getMusic().Mute();
+			}
+			else   {
+				mute.setImage("res/texture/Unmuted.png");
+				muted = false;
+				getMusic().Unmute();
+			}
+		}
 	}
 	
 	@Override
@@ -71,6 +104,7 @@ public class OptionPane extends GraphicsPane {
 			if (audioBar.getX() > 710)   {audioBar.setLocation(710, 170); return;}
 				audioBar.move(e.getX() - lastX, 0);
 				lastX = e.getX();
+				setVolume(audioBar.getX());
 		}
 	}
 }
