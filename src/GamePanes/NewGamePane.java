@@ -1,10 +1,6 @@
 package GamePanes;
-
 import Boilerplate.*;
-
 import Item.*;
-import Entity.*;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.Timer;
-
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
@@ -22,14 +17,11 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	private GImage background, pauseImg; 
-	
 	private Timer monsterTimer;
-	private Monster monster = new Monster(0, 0, MonsterType.TALL);
 	private int playerX = 482, playerY = 510;
-	
 	private ArrayList <GRect> walls = new ArrayList <GRect>(); 
+	private ArrayList <GObject> GUI = new ArrayList <GObject>();
 	private GLabel goal = null;
-	
 	private GButton pauseButton;
 	
 	//health
@@ -50,44 +42,24 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,64);
-		wall1.setFilled(true);
-		walls.add(wall1);
 		GRect wall2 = new GRect(0,64,160,96);
-		wall2.setFilled(true);
-		walls.add(wall2);
 		GRect wall3 = new GRect(0,160, 32,480);
-		wall3.setFilled(true);
-		walls.add(wall3);
 		GRect wall4 = new GRect(32,224,128,128);
-		wall4.setFilled(true);
-		walls.add(wall4);
 		GRect wall5 = new GRect(160,256,288,128);
-		wall5.setFilled(true);
-		walls.add(wall5);
 		GRect wall6 = new GRect(32,512,448,128);
-		wall6.setFilled(true);
-		walls.add(wall6);
 		GRect wall7 = new GRect(480,544,64,96);
-		wall7.setFilled(true);
-		walls.add(wall7);
 		GRect wall8 = new GRect(544,512,256,128);
-		wall8.setFilled(true);
-		walls.add(wall8);
 		GRect wall9 = new GRect(576,448,224,64);
-		wall9.setFilled(true);
-		walls.add(wall9);
 		GRect wall10 = new GRect(768,64,32,384);
-		wall10.setFilled(true);
-		walls.add(wall10);
 		GRect wall11 = new GRect(576,64,192,128);
-		wall11.setFilled(true);
-		walls.add(wall11);
 		GRect wall12 = new GRect(576,192,64,96);
-		wall12.setFilled(true);
-		walls.add(wall12);
 		GRect wall13 = new GRect(576,288,192,96);
-		wall13.setFilled(true);
-		walls.add(wall13);
+		
+		walls.add(wall1); walls.add(wall2); walls.add(wall3); walls.add(wall4); walls.add(wall5); walls.add(wall6); walls.add(wall7);
+		walls.add(wall8); walls.add(wall9); walls.add(wall10); walls.add(wall11); walls.add(wall12); walls.add(wall13);
+		
+		for (int i = 0; i < 13; ++i)   {walls.get(i).setFilled(true);}
+		
 		GRect npc = new GRect(540, 450, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
@@ -132,32 +104,18 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		
 		//player and monster location
 		if (program.fromBedtoLiving) {
-			program.add(program.player.getImage(),85,172);
-			program.player.setX(85);
-			program.player.setY(172);
-			program.add(monster.getImage(), 35, 102);
-			monster.setX(35);
-			monster.setY(102);
-			if(program.NPC.isDead() == false)   {
-				program.add(program.NPC.getImage(), 540, 450);
-				program.NPC.setX(540);
-				program.NPC.setY(450);
-			}
-			if(program.NPC.isDead())   {
-				walls.remove(walls.size() - 1);
-			}
+			program.addPlayer(85, 172);
+			program.addMonster(35, 102);
+			
+			if(program.NPC.isDead() == false)   {program.addNPC(540, 450);}
+			else  {walls.remove(walls.size() - 1);}
+			
 			program.fromBedtoLiving=false;
 			monsterTimer.setInitialDelay(1000);
 		} else {
-			program.add(program.player.getImage(), playerX, playerY);
-			program.player.setX(playerX);
-			program.player.setY(playerY);
-			program.add(monster.getImage(), playerX + 20, playerY + 50);
-			program.add(program.NPC.getImage(), 540, 450);
-			program.NPC.setX(540);
-			program.NPC.setY(450);
-			monster.setX(playerX + 20);
-			monster.setY(playerY + 50);
+			program.addPlayer(playerX, playerY);
+			program.addMonster(playerX + 20, playerY + 50);
+			program.addNPC(540, 450);
 			monsterTimer.setInitialDelay(3000);
 		}
 		monsterTimer.start();
@@ -185,21 +143,18 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public void hideContents() {
 		program.remove(background);
 		program.remove(program.player.getImage());
-		for(int i=0; i<13; i++) {
-			program.remove(walls.get(i));
-		}
+		
+		for(int i=0; i<13; i++) {program.remove(walls.get(i));}
 		
 		program.removeDoorLiving();
 		
-		program.remove(monster.getImage());
+		program.remove(program.monster.getImage());
 		
 		program.remove(Inventory.INVENTORY_IMG);
-		for (int i = 0; i < program.numItems(); ++i)   {
-			program.remove(program.itemAt(i).getImage());
-		}
-		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
-			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
-		}
+		
+		for (int i = 0; i < program.numItems(); ++i)   {program.remove(program.itemAt(i).getImage());}
+		
+		for (int i=0; i<program.player.getInventory().numInvItems();i++) {program.remove(program.player.getInventory().itemAt(i).getInvSprite());}
 		
 		program.removeLabels();
 		
@@ -223,15 +178,12 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			monsterTimer.setInitialDelay(0);
 			monsterTimer.restart();
 		}	
-		if (obj == program.quit) {
-			System.exit(0);
-		}
+		
+		if (obj == program.quit) {System.exit(0);}
 		
 		//click item in hot bar to select
 		Inventory playerInv = program.player.getInventory();
-		if(playerInv.setSelectedItem(obj)) {
-			playerInv.drawSelectedItem();
-		}
+		if(playerInv.setSelectedItem(obj)) {playerInv.drawSelectedItem();}
 		
 	}
 	
@@ -295,16 +247,16 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	public void addgui() {	
-		program.add(pauseImg);
-		program.add(pauseButton);
-		program.add(healthPoints);
+		GUI.add(pauseImg); GUI.add(pauseButton); GUI.add(healthPoints); 
+		
+		for(int i = 0; i < 3; ++i)   {program.add(GUI.get(i));}
+		
 		updatePlayerHeartsGUI(program.player.getHP());
 	}
 
 	public void removegui() {
-		program.remove(pauseImg);
-		program.remove(pauseButton);
-		program.remove(healthPoints);
+		for(int i = 0; i < 3; ++i)   {program.remove(GUI.get(i));}
+		
 		updatePlayerHeartsGUI(0);
 	}
 	
@@ -314,8 +266,8 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		monster.move(program.player);
-		if(monster.touchPlayer())   {
+		program.monster.move(program.player);
+		if(program.monster.touchPlayer())   {
 			if (program.player.getHP() <= 0)   {
 				monsterTimer.stop();
 			}else {

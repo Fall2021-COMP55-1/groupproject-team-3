@@ -1,5 +1,4 @@
 package Entity;
-
 import Boilerplate.MainApplication;
 import acm.graphics.GImage;
 

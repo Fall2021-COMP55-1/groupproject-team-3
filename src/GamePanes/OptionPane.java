@@ -1,8 +1,6 @@
 package GamePanes;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import javax.sound.sampled.FloatControl;
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
@@ -23,7 +21,6 @@ public class OptionPane extends GraphicsPane {
 	private int lastX;
 	private GObject obj;
 	private boolean muted = false;
-	private File Audio = new File("res/music/TestAudio.wav");
 	
 	public OptionPane(MainApplication app) {
 		super();
@@ -48,7 +45,8 @@ public class OptionPane extends GraphicsPane {
 	private void setVolume(double d)   {
 		for(int i = 0; i <= 8; ++i)   {
 			if (d >= 50 + 82 * i && d <= 50 + 82 * (i + 1))   {
-				getMusic().audioControl.setValue(-40.0f + (5.0f * i));
+				getMusic();
+				MusicBox.audioControl.setValue(-40.0f + (5.0f * i));
 			}
 		}
 	}
@@ -87,12 +85,14 @@ public class OptionPane extends GraphicsPane {
 			if(muted == false)   {
 				mute.setImage("res/texture/Muted.png");
 				muted = true;
-				getMusic().Mute();
+				getMusic();
+				MusicBox.Mute();
 			}
 			else   {
 				mute.setImage("res/texture/Unmuted.png");
 				muted = false;
-				getMusic().Unmute();
+				getMusic();
+				MusicBox.Unmute();
 			}
 		}
 	}

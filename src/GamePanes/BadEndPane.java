@@ -1,19 +1,15 @@
 package GamePanes;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
 import acm.graphics.GImage;
-import acm.graphics.GLabel;
 import acm.graphics.GObject;
 
 public class BadEndPane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	
 	private GButton quit;
 	private GImage background;
 
@@ -42,8 +38,7 @@ public class BadEndPane extends GraphicsPane {
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent e) {
-	}
+	public void keyPressed(KeyEvent e) {}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {}

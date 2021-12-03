@@ -1,13 +1,11 @@
 package Item;
 import java.awt.Color;
 import java.util.ArrayList;
-
 import Boilerplate.MainApplication;
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
-import acm.graphics.GRectangle;
 
 public class Inventory {
 	public ArrayList<Item> invItems = new ArrayList<Item>(5);
@@ -29,18 +27,15 @@ public class Inventory {
 		this.program = program;
 	}
 	
-	public int numInvItems() {
-		return invItems.size();
-	}
+	public int numInvItems() {return invItems.size();}
+	
 	public int getListSpacing() {return listSpacing;}
 	
 	public Item getSelectedItem() {return selectedItem;}
 
 	public void setListSpacing(int listSpacing) {this.listSpacing = listSpacing;}
 
-	public void setSelectedItem(Item item) {
-		this.selectedItem = item;
-	}
+	public void setSelectedItem(Item item) {this.selectedItem = item;}
 	
 	public boolean setSelectedItem(int idx) {
 		int maxItems = numInvItems();
@@ -106,7 +101,6 @@ public class Inventory {
 		}
 	}
 	
-	public Item itemAt(int i) {
-		return invItems.get(i);
-	}
+	public Item itemAt(int i) {return invItems.get(i);}
+	
 }

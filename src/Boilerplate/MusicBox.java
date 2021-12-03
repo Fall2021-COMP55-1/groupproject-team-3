@@ -29,12 +29,8 @@ public class MusicBox {
 		Audio.drain();
 	}
 	
-	public static void Mute()   {
-		audioControl.setValue(-80.0f);
-	}
+	public static void Mute()   {audioControl.setValue(-80.0f);}
 	
-	public static void Unmute()   {
-		audioControl.setValue(0.0f);
-	}
+	public static void Unmute()   {audioControl.setValue(0.0f);}
 	
 }

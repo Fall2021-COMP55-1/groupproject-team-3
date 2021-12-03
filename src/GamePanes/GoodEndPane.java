@@ -1,13 +1,10 @@
 package GamePanes;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
 import acm.graphics.GImage;
-import acm.graphics.GLabel;
 import acm.graphics.GObject;
 
 public class GoodEndPane extends GraphicsPane {
@@ -41,8 +38,7 @@ public class GoodEndPane extends GraphicsPane {
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent e) {
-	}
+	public void keyPressed(KeyEvent e) {}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {}

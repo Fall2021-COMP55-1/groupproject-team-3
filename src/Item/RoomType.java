@@ -1,5 +1,4 @@
 package Item;
-import java.util.ArrayList;
 
 public enum RoomType {
 	BEDROOMS, BEDROOML, BEDROOMR, OUT;

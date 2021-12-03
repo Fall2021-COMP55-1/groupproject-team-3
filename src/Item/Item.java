@@ -21,20 +21,14 @@ public class Item {
 		map = mapName;
 	}
 	
-	public void setRoomType(RoomType roomType) {
-		this.roomType=roomType;
-	}
+	public void setRoomType(RoomType roomType) {this.roomType=roomType;}
 	
-	public RoomType getRoomType() {
-		return roomType;
-	}
+	public RoomType getRoomType() {return roomType;}
 	
-	public void setMap(String mapName) {
-		map = mapName;
-	}
-	public String getMap() {
-		return map;
-	}
+	public void setMap(String mapName) {map = mapName;}
+	
+	public String getMap() {return map;}
+	
 	public int getX()   {return x;}
 	
 	public int getY()   {return y;}
@@ -67,9 +61,7 @@ public class Item {
 	
 	public void setUsed(boolean used)   {this.used = used;}
 	
-	public void setPickedUp(boolean pickedUp)   {
-		this.pickedUp = pickedUp;
-	}
+	public void setPickedUp(boolean pickedUp)   {this.pickedUp = pickedUp;}
 
 	public GImage getInvSprite() {return invSprite;}
 

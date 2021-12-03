@@ -1,5 +1,4 @@
 package Boilerplate;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,12 +7,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import Entity.*;
 import Item.*;
 import GamePanes.*;
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
+import acm.graphics.GObject;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
@@ -34,18 +33,19 @@ public class MainApplication extends GraphicsProgram {
 	private BadEndPane badEnd;
 
 	public Player player = new Player(0, 0, this);
+	public Monster monster = new Monster(0, 0, MonsterType.TALL, this);
 	public NPC NPC = new NPC(540, 450, this);
 	public boolean fromBedtoLiving = false, fromPausetoBed = false,fromPausetoLiving = false;
 	private ArrayList<Item> items = new ArrayList <Item>();
+	private ArrayList <Door> livingDoors = new ArrayList <Door>(), bedDoors = new ArrayList <Door>();
+	private ArrayList <GObject> GUI = new ArrayList <GObject>();
 	public boolean paused = false;
 	public GButton resume = new GButton("", 296, 180, 208, 95);
-	private GImage resumeImg = new GImage("res/texture/Resume.png",296,180);
 	public GButton quit = new GButton("", 296, 420, 208, 95);
 	private GImage quitImg = new GImage("res/texture/Quit.png",296, 420);
+	private GImage resumeImg = new GImage("res/texture/Resume.png",296,180);
+	public GLabel lockedDoor = null, wrongItem = null, keyUsed = null;
 	public static MusicBox music = new MusicBox();
-	public GLabel keyUsed = null;
-	public GLabel lockedDoor = null;
-	public GLabel wrongItem = null;
 	
 	//in bedroom map
 	public Door inLivingMap, inLeftBed, inRightBed, outLeftBed, outRightBed;
@@ -62,19 +62,17 @@ public class MainApplication extends GraphicsProgram {
 		outBath = new Door(672,283,32,10, false);
 		winning = new Door(480,540,65,10, true);
 		winning.setRoomType(RoomType.OUT);
+		livingDoors.add(inBedMap); livingDoors.add(inBath); livingDoors.add(outBath); livingDoors.add(winning);
 	}
+	
 	public void addDoorLiving() {
-		this.add(inBedMap.getRect());
-		this.add(inBath.getRect());
-		this.add(outBath.getRect());
-		this.add(winning.getRect());
+		for (int i = 0; i < 4; ++i)   {this.add(livingDoors.get(i).getRect());}
 	}
+	
 	public void removeDoorLiving() {
-		this.remove(inBedMap.getRect());
-		this.remove(inBath.getRect());
-		this.remove(outBath.getRect());
-		this.remove(winning.getRect());
+		for (int i = 0; i < 4; ++i)   {this.remove(livingDoors.get(i).getRect());}
 	}
+	
 	public void setDoorsBedRoom() {
 		//door to living room map
 		inLivingMap = new Door(704,510,64,4, false);
@@ -87,52 +85,53 @@ public class MainApplication extends GraphicsProgram {
 		outLeftBed = new Door(128,252,32,5, false);
 		//door to hallway from right bedroom
 		outRightBed = new Door(672,252,32,5, false);
+		bedDoors.add(inLivingMap); bedDoors.add(inLeftBed); bedDoors.add(inRightBed); bedDoors.add(outLeftBed); bedDoors.add(outRightBed);
+		
 	}
 	
 	public void addDoorBedRoom() {
-		this.add(inLivingMap.getRect());
-		this.add(inLeftBed.getRect());
-		this.add(inRightBed.getRect());
-		this.add(outLeftBed.getRect());
-		this.add(outRightBed.getRect());
-	}
-	public void removeDoorBedRoom() {
-		this.remove(inLivingMap.getRect());
-		this.remove(inLeftBed.getRect());
-		this.remove(inRightBed.getRect());
-		this.remove(outLeftBed.getRect());
-		this.remove(outRightBed.getRect());
+		for (int i = 0; i < 5; ++i)   {this.add(bedDoors.get(i).getRect());}
 	}
 	
-	public void pause() { 
-		this.add(resumeImg);
-		this.add(quitImg);
-		this.add(resume);
-		this.add(quit);
+	public void removeDoorBedRoom() {
+		for (int i = 0; i < 5; ++i)   {this.remove(bedDoors.get(i).getRect());}
+	}
+	
+	public void addPlayer(int x, int y)   {
+		this.add(player.getImage(), x, y);
+		player.setX(x);
+		player.setY(y);
+	}
+	
+	public void addMonster(int x, int y)   {
+		this.add(monster.getImage(), x, y);
+		monster.setX(x);
+		monster.setY(y);
+	}
+	
+	public void addNPC(int x, int y)   {
+		this.add(NPC.getImage(), x, y);
+		NPC.setX(x);
+		NPC.setY(y);
+	}
+	
+	public void pause() {
+		for(int i = 0; i < 4; ++i)   {this.remove(GUI.get(i));}
 		paused = true;
 	}
 	
 	public void resume() {
-		this.remove(resume);
-		this.remove(quit);
-		this.remove(resumeImg);
-		this.remove(quitImg);
+		for(int i = 0; i < 4; ++i)   {this.add(GUI.get(i));}
 		paused = false;
 	}
 	
-	public void addItem(Item item) {
-		items.add(item);
-	}
+	public void addItem(Item item) {items.add(item);}
 	
 	public static MusicBox getMusic() {return music;}
 	
-	public int numItems() {
-		return items.size();
-	}
+	public int numItems() {return items.size();}
 	
-	public Item itemAt(int i) {
-		return items.get(i);
-	}
+	public Item itemAt(int i) {return items.get(i);}
 	
 	public void removeLabels() {
 		if(keyUsed!=null) {this.remove(keyUsed);}
@@ -140,9 +139,7 @@ public class MainApplication extends GraphicsProgram {
 		if(lockedDoor!=null) {this.remove(lockedDoor);}
 	}
 	
-	public Item getSelectedItem() {
-		return this.player.getInventory().getSelectedItem();
-	}
+	public Item getSelectedItem() {return this.player.getInventory().getSelectedItem();}
 	
 	public void unlockDoor(Door door, KeyEvent e) {
 		if(getSelectedItem()!=null) {
@@ -307,67 +304,40 @@ public class MainApplication extends GraphicsProgram {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(curScreen != null) {
-			curScreen.mousePressed(e);
-		}
+		if(curScreen != null) {curScreen.mousePressed(e);}
 	}
 	
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		if(curScreen != null) {
-			curScreen.mouseReleased(e);
-		}
-	}
+	public void mouseReleased(MouseEvent e) {if(curScreen != null) {curScreen.mouseReleased(e);}}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		if(curScreen != null) {
-			curScreen.mouseClicked(e);
-		}
-	}
+	public void mouseClicked(MouseEvent e) {if(curScreen != null) {curScreen.mouseClicked(e);}}
 	
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		if(curScreen != null) {
-			curScreen.mouseDragged(e);
-		}
-	}
+	public void mouseDragged(MouseEvent e) {if(curScreen != null) {curScreen.mouseDragged(e);}}
 	
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		if(curScreen != null) {
-			curScreen.mouseMoved(e);
-		}
-	}
+	public void mouseMoved(MouseEvent e) {if(curScreen != null) {curScreen.mouseMoved(e);}}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(curScreen != null) {
-			if(!paused) {
-				curScreen.keyPressed(e);
-			}
+			if(!paused) {curScreen.keyPressed(e);}
 		}
 	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(curScreen != null) {
-			curScreen.keyReleased(e);
-		}
+		if(curScreen != null) {curScreen.keyReleased(e);}
 	}
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(curScreen != null) {
-			curScreen.keyTyped(e);
-		}
+		if(curScreen != null) {curScreen.keyTyped(e);}
 	}
 	
-
 	public void init() {
-		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	
-	}
+		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);}
 
 	public void run() {
 		System.out.println("Let's make something awesome!");
@@ -383,6 +353,7 @@ public class MainApplication extends GraphicsProgram {
 		badEnd = new BadEndPane(this);
 		setupInteractions();
 		switchToMenu();
+		GUI.add(resume); GUI.add(resumeImg); GUI.add(quit); GUI.add(quitImg); 
 	}
 
 	public void switchToMenu() {switchToScreen(menu);}

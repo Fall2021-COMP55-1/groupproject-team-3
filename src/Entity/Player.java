@@ -1,7 +1,6 @@
 package Entity;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-
 import Boilerplate.MainApplication;
 import Item.*;
 import acm.graphics.GImage;
@@ -129,7 +128,6 @@ public class Player extends Entity{
 	}
 	
 	public void grabItem(Item item)   {
-		//Item newItem = item;
 		getInventory().addItem(item);
 	}
 		

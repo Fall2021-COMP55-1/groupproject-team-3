@@ -1,5 +1,4 @@
 package GamePanes;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,11 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javax.swing.Timer;
-
-import Entity.*;
 import Item.*;
 import Boilerplate.*;
-
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
@@ -20,16 +16,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	private GImage background, choice1, choice2, pauseImge; 
-	
 	private Timer monsterTimer;
-	private Monster monster = new Monster(0, 0, MonsterType.TALL);
-	
 	private int playerX = 722, playerY = 474;
-	
 	ArrayList <GRect> walls = new ArrayList <GRect>();
-	
+	ArrayList <GObject> GUI = new ArrayList <GObject>();
 	private GButton killHim, spareHim, pauseButton;
-	
 	ChoiceHandler choiceHandler = new ChoiceHandler();  
 	
 	//health
@@ -47,30 +38,19 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		monsterTimer = new Timer(100, this);
 	}
 	
-	
-	
 	public void setWalls() {
 		GRect wall1 = new GRect(0,0,800,96);
-		wall1.setFilled(true);
-		walls.add(wall1);
 		GRect wall2 = new GRect(0,256,800,96);
-		wall2.setFilled(true);
-		walls.add(wall2);
 		GRect wall3 = new GRect(0,448, 704 ,192);
-		wall3.setFilled(true);
-		walls.add(wall3);
 		GRect wall4 = new GRect(0,0,32,640);
-		wall4.setFilled(true);
-		walls.add(wall4);
 		GRect wall5 = new GRect(768,0,32,640);
-		wall5.setFilled(true);
-		walls.add(wall5);
 		GRect wall6 = new GRect(352,32,64,224);
-		wall6.setFilled(true);
-		walls.add(wall6);
 		GRect wall7 = new GRect(704,512,64,128);
-		wall7.setFilled(true);
-		walls.add(wall7);
+		
+		walls.add(wall1); walls.add(wall2); walls.add(wall3); walls.add(wall4); walls.add(wall5); walls.add(wall6); walls.add(wall7);
+		
+		for (int i = 0; i < 7; ++i)   {walls.get(i).setFilled(true);}
+		
 		GRect npc = new GRect(100, 150, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
@@ -84,13 +64,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		healthPoints = new GParagraph("HP:", 50, 625);
 		healthPoints.setColor(Color.white); 
 		healthPoints.setFont("Arial-12");
-		
 		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
 		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
 		choice1.setSize(150, 40);
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
-		spareHim = new GButton("", 500, 600, 150, 40); 
+		spareHim = new GButton("", 500, 600, 150, 40);
 	}
 	
 	public void setItems() {
@@ -115,23 +94,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<8; i++) {program.add(walls.get(i));}
 		//background image
 		program.add(background);
-
 		//player and monster
-		program.add(program.player.getImage(), playerX, playerY);
-		program.player.setX(playerX);
-		program.player.setY(playerY);
+		program.addPlayer(playerX, playerY);
 		program.player.getInventory();
-		if(program.NPC.isDead() == false)   {
-			program.add(program.NPC.getImage(), 540, 450);
-			program.NPC.setX(540);
-			program.NPC.setY(450);
-		}
-		if(program.NPC.isDead())   {
-			walls.remove(walls.size() - 1);
-		}
-		program.add(monster.getImage(), playerX + 16, playerY + 50);
-		monster.setX(playerX + 16);
-		monster.setY(playerY + 50);
+		if(program.NPC.isDead() == false)   {program.addNPC(540, 450);}
+		if(program.NPC.isDead())   {walls.remove(walls.size() - 1);}
+		program.addMonster(playerX + 16,  playerY + 50);
 		monsterTimer.setInitialDelay(3000);
 		monsterTimer.start();
 		
@@ -150,7 +118,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 		//doors
 		program.addDoorBedRoom();
-		
 		program.player.getInventory().setHighlightVisible(true);
 		addgui();
 	}
@@ -158,22 +125,17 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void hideContents() {
 		program.remove(background);
-		
 		program.removeDoorBedRoom();
-
 		program.remove(program.player.getImage());
-		program.remove(monster.getImage());
-		for(int i=0; i<7; i++) {
-			program.remove(walls.get(i));
-		}
-		for (int i = 0; i < program.numItems(); ++i)   {
-			program.remove(program.itemAt(i).getImage());
-		}
-		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
-			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
-		}
-		program.remove(Inventory.INVENTORY_IMG);
+		program.remove(program.monster.getImage());
 		
+		for(int i = 0; i < 7; i++) {program.remove(walls.get(i));}
+		
+		for(int i = 0; i < program.numItems(); ++i)   {program.remove(program.itemAt(i).getImage());}
+		
+		for(int i = 0; i < program.player.getInventory().numInvItems(); i++) {program.remove(program.player.getInventory().itemAt(i).getInvSprite());}
+		
+		program.remove(Inventory.INVENTORY_IMG);
 		program.removeLabels();
 		
 		removegui();
@@ -194,17 +156,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			monsterTimer.setInitialDelay(0);
 			monsterTimer.restart();
 		}	
-		if (obj == program.quit) {
-			System.exit(0);
-		}
 		
-		if (obj == killHim) {
-			program.NPC.setDead(true);
-			program.remove(choice1);
-			program.remove(choice2);
-		}
-		if (obj == spareHim) {
-			// Nothing happens so the NPC lives 
+		if (obj == program.quit) {System.exit(0);}
+		
+		if (obj == killHim || obj == spareHim)   {
+			if (obj == killHim)   {program.NPC.setDead(true);}
 			program.remove(choice1);
 			program.remove(choice2);
 		}
@@ -274,27 +230,16 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 	}
 	
-	public void addgui() {	
-		program.add(pauseImge);
-		program.add(pauseButton);
-		program.add(healthPoints);
+	public void addgui() {
+		GUI.add(pauseImge); GUI.add(pauseButton); GUI.add(healthPoints); GUI.add(choice1); GUI.add(choice2); GUI.add(killHim); GUI.add(spareHim);
 		
-		program.add(choice1);
-		program.add(choice2);
-		program.add(killHim);
-		program.add(spareHim);
+		for (int i = 0; i < 7; ++ i)   {program.add(GUI.get(i));}
 		updatePlayerHeartsGUI(program.player.getHP());
+		
 	}
 
 	public void removegui() {
-		program.remove(pauseImge);
-		program.remove(pauseButton);
-		program.remove(healthPoints);
-		
-		program.remove(choice1);
-		program.remove(choice2);
-		program.remove(killHim);
-		program.remove(spareHim);
+		for (int i = 0; i < 7; ++ i)   {program.remove(GUI.get(i));}
 		updatePlayerHeartsGUI(0);
 	}
 	
@@ -305,8 +250,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		monster.move(program.player);
-		if(monster.touchPlayer())   {
+		program.monster.move(program.player);
+		if(program.monster.touchPlayer())   {
 			if (program.player.getHP() <= 0)   {
 				monsterTimer.stop();
 			}else {

@@ -1,6 +1,5 @@
 package GamePanes;
 import java.awt.event.MouseEvent;
-
 import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
@@ -11,7 +10,6 @@ import acm.graphics.GObject;
 public class SavePane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
-	
 	private GImage img; 
 	private GButton Back; 
 	private GButton save1; 
@@ -56,19 +54,10 @@ public class SavePane extends GraphicsPane {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
-		if (obj == Back) {
-			program.switchToMenu();
-		}
-		if (obj == save1) {
-			program.switchToNewGame();
-		}
-		if (obj ==  save2) {
-			program.switchToNewGame();
-		}
-		if (obj == save3) {
-			program.switchToNewGame();
-		}
+		if (obj == Back) {program.switchToMenu();}
+		if (obj == save1) {program.switchToNewGame();}
+		if (obj ==  save2) {program.switchToNewGame();}
+		if (obj == save3) {program.switchToNewGame();}
 	}
-
 }
 

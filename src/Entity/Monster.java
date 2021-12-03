@@ -1,18 +1,20 @@
 package Entity;
 import java.util.ArrayList;
-
+import Boilerplate.MainApplication;
 import acm.graphics.GImage;
 import acm.graphics.GRectangle;
 
 public class Monster extends Entity{
 	private GImage sprite = getImage();
 	private ArrayList<GImage> spriteUp, spriteDown, spriteLeft, spriteRight;
-	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0, width, height;
+	private int x = 0, y = 0, dx = 0, dy = 0, stepsTaken = 0;
 	public enum dir   {UP,DOWN,LEFT,RIGHT}
 	private Player player;
+	public MainApplication program;
 			
-	public Monster(int x, int y, MonsterType type)   {
+	public Monster(int x, int y, MonsterType type, MainApplication program)   {
 		super(x, y);
+		this.program = program;
 		addImages();
 		loadImage(this.spriteDown.get(0).getImage());
 	}
