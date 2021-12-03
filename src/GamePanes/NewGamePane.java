@@ -102,6 +102,9 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		GRect wall13 = new GRect(576,288,192,96);
 		wall13.setFilled(true);
 		walls.add(wall13);
+		GRect npc = new GRect(540, 450, 30, 30);
+		npc.setVisible(false);
+		walls.add(npc);
 	}
 	
 	public void setItems() {
@@ -172,7 +175,7 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	
 	public void showContents() {
 		//walls
-		for (int i=0; i<13; i++) {program.add(walls.get(i));}
+		for (int i=0; i<14; i++) {program.add(walls.get(i));}
 		//background image
 		program.add(background);
 		

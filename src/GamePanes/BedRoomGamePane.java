@@ -86,6 +86,9 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		GRect wall7 = new GRect(704,512,64,128);
 		wall7.setFilled(true);
 		walls.add(wall7);
+		GRect npc = new GRect(100, 150, 30, 30);
+		npc.setVisible(false);
+		walls.add(npc);
 	}
 	
 	public void setGUI() {
@@ -104,7 +107,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40); 
 		
-		NPC = new GImage("res/NPC/NPC1.png", 400, 400);
+		NPC = new GImage("res/NPC/NPC1.png", 100, 150);
 		NPC.setSize(30, 30); 
 	}
 	
@@ -158,7 +161,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	@Override
 	public void showContents() {
 		//walls
-		for (int i=0; i<7; i++) {program.add(walls.get(i));}
+		for (int i=0; i<8; i++) {program.add(walls.get(i));}
 		//background image
 		program.add(background);
 
