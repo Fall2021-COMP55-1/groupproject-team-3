@@ -79,7 +79,6 @@ public class Inventory {
 		
 	}
 	
-	
 	public void setHighlightVisible(boolean state) {
 		if (redBox != null) {	
 			redBox.setVisible(state);

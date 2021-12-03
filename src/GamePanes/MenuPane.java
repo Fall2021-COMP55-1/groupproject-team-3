@@ -14,7 +14,6 @@ public class MenuPane extends GraphicsPane {
 	private MainApplication program; 
 								
 	private GButton newGame;
-	private GButton loadGame;
 	private GButton options;
 	private GButton exitGame;
 	private GImage background;
@@ -28,8 +27,7 @@ public class MenuPane extends GraphicsPane {
 		double X = app.getWidth()/2 - WIDTH/2 -7;
 		background = new GImage("res/texture/Main Menu.png", 0, 0);
 		background.setSize(800,640);
-		newGame = new GButton("", X, 190, WIDTH, HEIGHT);
-		loadGame = new GButton("", X, 305, WIDTH, HEIGHT);
+		newGame = new GButton("", X, 305, WIDTH, HEIGHT);
 		options = new GButton("", X, 418, WIDTH, HEIGHT);
 		exitGame = new GButton("", X, 532, WIDTH, HEIGHT);
 	}
@@ -39,7 +37,6 @@ public class MenuPane extends GraphicsPane {
 	public void showContents() {
 		program.add(background);
 		program.add(newGame);
-		program.add(loadGame);
 		program.add(options);
 		program.add(exitGame);
 	}
@@ -48,7 +45,6 @@ public class MenuPane extends GraphicsPane {
 	public void hideContents() {
 		program.remove(background);
 		program.remove(newGame);
-		program.remove(loadGame);
 		program.remove(options);
 		program.remove(exitGame);
 	}
@@ -57,7 +53,6 @@ public class MenuPane extends GraphicsPane {
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
 		if (obj == newGame)   {program.switchToNewGame();}
-		if (obj == loadGame)   {program.switchToSave();}	
 		if (obj == options)   {program.switchToOptions();}
 		if (obj == exitGame)   {System.exit(0);}
 	}
