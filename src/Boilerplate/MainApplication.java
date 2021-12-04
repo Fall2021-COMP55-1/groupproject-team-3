@@ -38,8 +38,6 @@ public class MainApplication extends GraphicsProgram {
 	public Timer monsterTimer = new Timer(100, this);
 	public boolean fromBedtoLiving = false;
 	private ArrayList<Item> items = new ArrayList <Item>();
-	private ArrayList <Door> livingDoors = new ArrayList <Door>(), bedDoors = new ArrayList <Door>();
-	private ArrayList <GObject> GUI = new ArrayList <GObject>();
 	public static MusicBox music = new MusicBox();
 	
 	//pause and resume
@@ -57,6 +55,8 @@ public class MainApplication extends GraphicsProgram {
 	private static final int heartRootX = 75, heartRootY = 610, heartWidth = 30;
 	ArrayList <GImage> playerHearts = new ArrayList <GImage>(); 	
 	
+	//doors
+	public ArrayList <Door> doors = new ArrayList <Door>();
 	//doors in bedroom map
 	public Door inLivingMap, inLeftBed, inRightBed, outLeftBed, outRightBed;
 	//doors in living room map
@@ -120,104 +120,40 @@ public class MainApplication extends GraphicsProgram {
 	
 	/* Doors
 	 * --------------------------------------------
-	 * setDoorsLiving()
-	 * removeDoorsLiving()
-	 * setDoorsBedRoom()
-	 * removeDoorsBedRoom()
+	 * setDoors()
+	 * Doors(Boolean addOrRemove, MapType map)
 	 * unlockDoor(Door door, KeyEvent e)
 	 * openDoor(Door door, KeyEvent e)
 	 * openDoor(Door door, KeyEvent e, int x, int y)
 	 */
-	public void setDoorsLiving() {
-		//door to bedroom map
-		inBedMap = new Door(64,150,64,20, true);
+	public void setDoors() {
+		inBedMap = new Door(64,150,64,20, true, MapType.LIVINGR);
 		inBedMap.setRoomType(RoomType.BEDROOMS);
-		//door to bathroom
-		inBath = new Door(672,380,32,20, false);
-		//door to hallway from bathroom
-		outBath = new Door(672,283,32,10, false);
-		winning = new Door(480,540,65,10, true);
+		inBath = new Door(672,380,32,20, false, MapType.LIVINGR);
+		outBath = new Door(672,283,32,10, false, MapType.LIVINGR);
+		winning = new Door(480,540,65,10, true, MapType.LIVINGR);
 		winning.setRoomType(RoomType.OUT);
-		livingDoors.add(inBedMap); livingDoors.add(inBath); livingDoors.add(outBath); livingDoors.add(winning);
-	}
-	
-	public void addDoorLiving() {
-		for (int i = 0; i < 4; ++i)   {this.add(livingDoors.get(i).getRect());}
-	}
-	
-	public void removeDoorLiving() {
-		for (int i = 0; i < 4; ++i)   {this.remove(livingDoors.get(i).getRect());}
-	}
-	
-	public void setDoorsBedRoom() {
-		//door to living room map
-		inLivingMap = new Door(704,510,64,4, false);
-		//door to left bedroom
-		inLeftBed = new Door(128,340,32,20, true);
-		//door to right bedroom
-		inRightBed = new Door(672,340,32,20, true);
+		doors.add(inBedMap); doors.add(inBath); doors.add(outBath); doors.add(winning);
+		inLivingMap = new Door(704,510,64,4, false, MapType.BEDR);
+		inLeftBed = new Door(128,340,32,20, true, MapType.BEDR);
+		inRightBed = new Door(672,340,32,20, true, MapType.BEDR);
 		inRightBed.setRoomType(RoomType.BEDROOMR);
-		//door to hallway from left bedroom
-		outLeftBed = new Door(128,252,32,5, false);
-		//door to hallway from right bedroom
-		outRightBed = new Door(672,252,32,5, false);
-		bedDoors.add(inLivingMap); bedDoors.add(inLeftBed); bedDoors.add(inRightBed); bedDoors.add(outLeftBed); bedDoors.add(outRightBed);
-		
+		outLeftBed = new Door(128,252,32,5, false, MapType.BEDR);
+		outRightBed = new Door(672,252,32,5, false, MapType.BEDR);
+		doors.add(inLivingMap); doors.add(inLeftBed); doors.add(inRightBed); doors.add(outLeftBed); doors.add(outRightBed);	
 	}
-	
-	public void addDoorBedRoom() {
-		for (int i = 0; i < 5; ++i)   {this.add(bedDoors.get(i).getRect());}
+	public void Doors(Boolean addOrRemove, MapType map) {
+		for (int i = 0; i < this.doors.size(); ++i)   {
+			Door door = this.doors.get(i);
+			if(door.getMapType()==map) {
+				if(addOrRemove) {
+					this.add(door.getRect());
+				}else {
+					this.remove(door.getRect());
+				}
+			}
+		}
 	}
-	
-	public void removeDoorBedRoom() {
-		for (int i = 0; i < 5; ++i)   {this.remove(bedDoors.get(i).getRect());}
-	}
-	
-	public void addPlayer(int x, int y)   {
-		this.add(player.getImage(), x, y);
-		player.setX(x);
-		player.setY(y);
-	}
-	
-	public void addMonster(int x, int y)   {
-		this.add(monster.getImage(), x, y);
-		monster.setX(x);
-		monster.setY(y);
-	}
-	
-	public void addNPC(int x, int y)   {
-		this.add(NPC.getImage(), x, y);
-		NPC.setX(x);
-		NPC.setY(y);
-	}
-	
-	public void pause() {
-		for(int i = 0; i < 4; ++i)   {this.remove(GUI.get(i));}
-		paused = true;
-	}
-	
-	public void resume() {
-		for(int i = 0; i < 4; ++i)   {this.add(GUI.get(i));}
-		paused = false;
-	}
-	
-	public void addItem(Item item) {items.add(item);}
-	
-	public static MusicBox getMusic() {return music;}
-	
-	public int numItems() {return items.size();}
-	
-	public Item itemAt(int i) {return items.get(i);}
-	
-	public void removeLabels() {
-		if(keyUsed!=null) {this.remove(keyUsed);}
-		if(wrongItem!=null) {this.remove(wrongItem);}
-		if(lockedDoor!=null) {this.remove(lockedDoor);}
-	}
-	
-	public Item getSelectedItem() {return this.player.getInventory().getSelectedItem();}
-	
-
 	public void unlockDoor(Door door, KeyEvent e) {
 		if(getSelectedItem()!=null) {
 			if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){
@@ -273,43 +209,51 @@ public class MainApplication extends GraphicsProgram {
 	
 	/* Items
 	 * ---------------------------
-	 * setItemsLiving()
-	 * setItemsBedRoom()
+	 * setItems()
 	 * getSelectedItem()
 	 * setSelectedItem(KeyEvent e)
-	 * addItem(Item item)
 	 * numItems()
 	 * itemAt(int i)
+	 * pickUpItem(KeyEvent e)
 	 * grab(Item item)
 	 */
-	public void setItemsLiving() {
-		itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
+	public void setItems() {
+		itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, MapType.LIVINGR);
 		itemKnife.setX(734);
 		itemKnife.setY(259);
 		itemKnife.setDescription("Knife to kill");
-		this.addItem(itemKnife);
-		Item bedroomKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "livingR");
+		items.add(itemKnife);
+		Item bedroomKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, MapType.LIVINGR);
 		bedroomKey.setX(200);
 		bedroomKey.setY(100);
 		bedroomKey.setRoomType(RoomType.BEDROOMS);
 		bedroomKey.setDescription("Key to hallway of bedrooms");
-		this.addItem(bedroomKey);
-	}
-	public void setItemsBedRoom() {
-		Item winningKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
+		items.add(bedroomKey);
+		Item winningKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, MapType.BEDR);
 		winningKey.setX(422);
 		winningKey.setY(217);
 		winningKey.setRoomType(RoomType.OUT);
 		winningKey.setDescription("Key of the house");
-		this.addItem(winningKey);
-		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, "bedR");
+		items.add(winningKey);
+		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, MapType.BEDR);
 		itemKey2.setX(116);
 		itemKey2.setY(184);
 		itemKey2.setRoomType(RoomType.BEDROOMR);
 		itemKey2.setDescription("Key to master bedroom");
-		this.addItem(itemKey2);
+		items.add(itemKey2);
 	}
-	
+	public void Items(Boolean addOrRemove, MapType map) {
+		for (int i = 0; i < this.numItems(); i++)   {
+			if (this.itemAt(i).getMapType()==map && !this.itemAt(i).isPickedUp()) {
+				if(addOrRemove) {
+					this.add(this.itemAt(i).getImage(), this.itemAt(i).getX(), this.itemAt(i).getY());
+				}else {
+					this.remove(this.itemAt(i).getImage());
+				}
+			}
+		}
+	}
+	public Item getSelectedItem() {return this.player.getInventory().getSelectedItem();}
 	public void setSelectedItem(KeyEvent e) {
 		Inventory playerInv = this.player.getInventory();
 		if(e.getKeyCode()==KeyEvent.VK_1) {
@@ -338,7 +282,15 @@ public class MainApplication extends GraphicsProgram {
 			}
 		}
 	}
-
+	public int numItems() {return items.size();}
+	public Item itemAt(int i) {return items.get(i);}
+	public void pickUpItem(KeyEvent e) {
+		for (int i=0; i<this.numItems(); i++) {
+			if(e.getKeyCode()==KeyEvent.VK_E && this.player.sprite.getBounds().intersects(this.itemAt(i).getImage().getBounds())) {
+				this.grab(this.itemAt(i));
+			}
+		}
+	}
 	public void grab(Item item)   {
 		this.player.grabItem(item);
 		item.setPickedUp(true);
@@ -348,15 +300,47 @@ public class MainApplication extends GraphicsProgram {
 	
 	/* Pause and Resume
 	 * ----------------
+	 * pauseMenu(GObject obj)
 	 * pause()
 	 * resume()
+	 */
+	public void pauseMenu(GObject obj) {
+		if (obj == this.pauseButton) {
+			this.monsterTimer.stop();
+			this.pause();
+		}
+		if (obj == this.resume) {
+			this.resume();
+			this.monsterTimer.setInitialDelay(0);
+			this.monsterTimer.restart();
+		}	
+		if (obj == this.quit) {System.exit(0);}
+	}
+	public void pause() {
+		this.add(resumeImg);
+		this.add(resume);
+		this.add(quit);
+		this.add(quitImg);
+		paused = true;
+	}
+	public void resume() {
+		this.remove(resumeImg);
+		this.remove(resume);
+		this.remove(quit);
+		this.remove(quitImg);
+		paused = false;
+	}
 	
 	/* Labels
 	 * -----------------------
 	 * removeLabels()
 	 * label5sec(GLabel label)
 	 */
-
+	public void removeLabels() {
+		if(keyUsed!=null) {this.remove(keyUsed);}
+		if(wrongItem!=null) {this.remove(wrongItem);}
+		if(lockedDoor!=null) {this.remove(lockedDoor);}
+	}
 	public void label5sec(GLabel label) {
 		//label disappears in 5 sec
 		int delay = 5000;
@@ -368,6 +352,28 @@ public class MainApplication extends GraphicsProgram {
 	    javax.swing.Timer tick=new javax.swing.Timer(delay,taskPerformer);
 	    tick.setRepeats(false);
 	    tick.start();
+	}
+	
+	
+	/* Player, monster, NPC
+	 * addPlayer(int x, int y)
+	 * addMonster(int x, int y)
+	 * addNPC(int x, int y)
+	 */
+	public void addPlayer(int x, int y)   {
+		this.add(player.getImage(), x, y);
+		player.setX(x);
+		player.setY(y);
+	}
+	public void addMonster(int x, int y)   {
+		this.add(monster.getImage(), x, y);
+		monster.setX(x);
+		monster.setY(y);
+	}
+	public void addNPC(int x, int y)   {
+		this.add(NPC.getImage(), x, y);
+		NPC.setX(x);
+		NPC.setY(y);
 	}
 	
 	//collision detect
@@ -404,6 +410,7 @@ public class MainApplication extends GraphicsProgram {
 	}
 	
 	//music
+	public static MusicBox getMusic() {return music;}
 	
 	/* Method: setupInteractions
 	 * -------------------------
@@ -496,9 +503,10 @@ public class MainApplication extends GraphicsProgram {
 		bedroom = new BedRoomGamePane(this);
 		goodEnd = new GoodEndPane(this);
 		badEnd = new BadEndPane(this);
+		setDoors();
+		setItems();
 		setupInteractions();
 		switchToMenu();
-		GUI.add(resume); GUI.add(resumeImg); GUI.add(quit); GUI.add(quitImg); 
 	}
 
 	public void switchToMenu() {switchToScreen(menu);}

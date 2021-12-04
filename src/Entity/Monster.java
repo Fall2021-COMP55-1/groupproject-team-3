@@ -80,6 +80,7 @@ public class Monster extends Entity{
 		double smallerX = this.sprite.getX()+8;
 		double smallerY = this.sprite.getY()+16;
 		GRectangle smallerBounds = new GRectangle(smallerX, smallerY, smallerH, smallerW);
+		//program.add(smallerBounds);
 		if(smallerBounds.intersects(player.sprite.getBounds()))   {return true;}
 		return false;
 	}
