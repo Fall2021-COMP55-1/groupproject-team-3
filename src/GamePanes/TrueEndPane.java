@@ -14,26 +14,22 @@ public class TrueEndPane extends GraphicsPane {
 	
 	private GButton quit;
 	private GImage background;
-	private GLabel trueEnd;
 	
 	public TrueEndPane(MainApplication app) {
 		this.program = app;
-		trueEnd = new GLabel("You killed the person. True End", 200,200);
-		//background = new GImage("res/texture/True Ending.png");
-		quit = new GButton("quit", 296, 460, 208, 95);
+		background = new GImage("res/texture/True Ending.png");
+		quit = new GButton("", 296, 460, 208, 95);
 	}
 	
 	@Override
 	public void showContents() {
-		//program.add(background);
-		program.add(trueEnd);
+		program.add(background);
 		program.add(quit);
 	}
 
 	@Override
 	public void hideContents() {
-		//program.remove(background);
-		program.remove(trueEnd);
+		program.remove(background);
 		program.remove(quit);
 	}
 

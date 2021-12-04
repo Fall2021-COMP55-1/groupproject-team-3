@@ -76,14 +76,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		//8. interactive choices
-		program.remove(choice1);
-		program.remove(choice2);
-		program.remove(killHim);
-		program.remove(spareHim);
-		program.remove(killHimLabel);
-		program.remove(spareHimLabel);
-		//8.5 labels of wrongItem, lockedDoor, keyUsed
+		//7.5 labels of wrongItem, lockedDoor, keyUsed
 		program.removeLabels();
 		//9. GUI
 		program.removeGUI();
@@ -102,6 +95,10 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			if (obj == killHim)   {program.NPC.setDead(true);}
 			program.remove(choice1);
 			program.remove(choice2);
+			program.remove(killHim);
+			program.remove(spareHim);
+			program.remove(killHimLabel);
+			program.remove(spareHimLabel);
 			program.paused = false;
 			program.monsterTimer.start();
 		}

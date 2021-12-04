@@ -166,7 +166,7 @@ public class MainApplication extends GraphicsProgram {
 				if(getSelectedItem().getRoomType()==door.getRoomType()) {
 					if(wrongItem!=null) {wrongItem.setVisible(false);} 
 					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
-					keyUsed = new GLabel("Unlocked the door!", 200, 550);
+					keyUsed = new GLabel("Unlocked the door!", 200, 560);
 					keyUsed.setColor(Color.white);
 					keyUsed.setFont(this.customFont);
 					this.add(keyUsed);
@@ -176,7 +176,7 @@ public class MainApplication extends GraphicsProgram {
 					this.label5sec(keyUsed);
 				}else {
 					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
-					wrongItem = new GLabel("Wrong item!", 200, 575);
+					wrongItem = new GLabel("Wrong item!", 200, 580);
 					wrongItem.setColor(Color.white);
 					wrongItem.setFont(this.customFont);
 					this.add(wrongItem);
@@ -205,7 +205,7 @@ public class MainApplication extends GraphicsProgram {
 				}
 			}else {
 				if(wrongItem!=null) {wrongItem.setVisible(false);}
-				lockedDoor = new GLabel("Door is locked!", 200, 550);
+				lockedDoor = new GLabel("Door is locked!", 200, 540);
 				lockedDoor.setColor(Color.white);
 				lockedDoor.setFont(this.customFont);
 				this.add(lockedDoor);
