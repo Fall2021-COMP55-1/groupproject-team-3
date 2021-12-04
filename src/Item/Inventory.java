@@ -22,7 +22,7 @@ public class Inventory {
 	
 	public Inventory(MainApplication program) {	
 		redBox = new GRect(0, 0, 32, 32);
-		description = new GLabel("", 210, 600);
+		description = new GLabel("", 200, 600);
 		setHighlightVisible(false);
 		this.program = program;
 	}
@@ -69,6 +69,7 @@ public class Inventory {
 			
 			description.setLabel(selectedItem.getDescription());
 			description.setColor(Color.white);
+			description.setFont(program.customFont);
 			program.add(description);
 		}
 		

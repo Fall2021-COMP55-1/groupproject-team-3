@@ -10,6 +10,7 @@ import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
 import acm.graphics.GRectangle;
+import acm.graphics.GLabel;
 
 public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 
@@ -19,16 +20,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	private ArrayList <GRect> walls = new ArrayList <GRect>();
 	private GImage choice1, choice2;
 	private GButton killHim , spareHim;
+	private GLabel killHimLabel, spareHimLabel;
 
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
-		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
-		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
-		choice1.setSize(150, 40);
-		choice2.setSize(150, 40); 
-		killHim = new GButton("", 500, 555, 150, 40);
-		spareHim = new GButton("", 500, 600, 150, 40);
 	}
 
 	@Override
@@ -85,6 +81,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(choice2);
 		program.remove(killHim);
 		program.remove(spareHim);
+		program.remove(killHimLabel);
+		program.remove(spareHimLabel);
 		//8.5 labels of wrongItem, lockedDoor, keyUsed
 		program.removeLabels();
 		//9. GUI
@@ -158,8 +156,20 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	}
 	
 	private void interactiveChoices() {
+		choice1 = new GImage("res/texture/choice.png", 500, 540);
+		choice2 = new GImage("res/texture/choice.png", 500, 590); 
+		choice1.setSize(150, 40);
+		choice2.setSize(150, 40); 
+		killHim = new GButton("", 500, 555, 150, 40);
+		spareHim = new GButton("", 500, 600, 150, 40);
+		killHimLabel = new GLabel("Kill Him", 520, 565);
+		killHimLabel.setFont(program.customFont.deriveFont(13f));
+		spareHimLabel = new GLabel("Spare Him", 516, 615);
+		spareHimLabel.setFont(program.customFont.deriveFont(13f));
 		program.add(choice1);
 		program.add(choice2);
+		program.add(killHimLabel);
+		program.add(spareHimLabel);
 		program.add(killHim);
 		program.add(spareHim);
 	}

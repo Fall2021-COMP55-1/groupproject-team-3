@@ -1,10 +1,14 @@
 package Boilerplate;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.Timer;
@@ -66,6 +70,7 @@ public class MainApplication extends GraphicsProgram {
 	//item in livingroom
 	public Item itemKnife;
 	
+	public Font customFont;
 	//---------------------------------------------------------------------------
 	
 	/* GUI
@@ -80,9 +85,9 @@ public class MainApplication extends GraphicsProgram {
 		pauseImg.setSize(32, 32);
 		pauseImg.setVisible(true);
 		pauseButton = new GButton("", 768, 0, 32, 32); 
-		healthPoints = new GParagraph("HP:", 50, 625);
+		healthPoints = new GParagraph("HP:", 45, 625);
 		healthPoints.setColor(Color.white); 
-		healthPoints.setFont("Arial-12");
+		healthPoints.setFont(this.customFont);
 	}
 	public void addGUI() {
 		this.add(pauseImg);
@@ -161,8 +166,9 @@ public class MainApplication extends GraphicsProgram {
 				if(getSelectedItem().getRoomType()==door.getRoomType()) {
 					if(wrongItem!=null) {wrongItem.setVisible(false);} 
 					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
-					keyUsed = new GLabel("Unlocked the door with key!", 210, 550);
+					keyUsed = new GLabel("Unlocked the door!", 200, 550);
 					keyUsed.setColor(Color.white);
+					keyUsed.setFont(this.customFont);
 					this.add(keyUsed);
 					door.unlock();
 					this.player.getInventory().deleteItem(this,getSelectedItem());
@@ -170,8 +176,9 @@ public class MainApplication extends GraphicsProgram {
 					this.label5sec(keyUsed);
 				}else {
 					if(lockedDoor!=null) {lockedDoor.setVisible(false);}
-					wrongItem = new GLabel("Wrong item!", 210, 575);
+					wrongItem = new GLabel("Wrong item!", 200, 575);
 					wrongItem.setColor(Color.white);
+					wrongItem.setFont(this.customFont);
 					this.add(wrongItem);
 					this.label5sec(wrongItem);
 				}	
@@ -198,8 +205,9 @@ public class MainApplication extends GraphicsProgram {
 				}
 			}else {
 				if(wrongItem!=null) {wrongItem.setVisible(false);}
-				lockedDoor = new GLabel("Door is locked!", 210, 550);
+				lockedDoor = new GLabel("Door is locked!", 200, 550);
 				lockedDoor.setColor(Color.white);
+				lockedDoor.setFont(this.customFont);
 				this.add(lockedDoor);
 				this.label5sec(lockedDoor);
 			}
@@ -233,19 +241,19 @@ public class MainApplication extends GraphicsProgram {
 		bedroomKey.setX(200);
 		bedroomKey.setY(100);
 		bedroomKey.setRoomType(RoomType.BEDROOMS);
-		bedroomKey.setDescription("Key to hallway of bedrooms");
+		bedroomKey.setDescription("Key to bedrooms");
 		items.add(bedroomKey);
 		Item winningKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, MapType.BEDR);
 		winningKey.setX(422);
 		winningKey.setY(217);
 		winningKey.setRoomType(RoomType.OUT);
-		winningKey.setDescription("Key of the house");
+		winningKey.setDescription("Key to outside");
 		items.add(winningKey);
 		Item itemKey2 = new Item("Key", new GImage("res/inventory/Small Key.png"), ItemType.KEY, MapType.BEDR);
 		itemKey2.setX(116);
 		itemKey2.setY(184);
 		itemKey2.setRoomType(RoomType.BEDROOMR);
-		itemKey2.setDescription("Key to master bedroom");
+		itemKey2.setDescription("Key to bedroom");
 		items.add(itemKey2);
 	}
 	public void Items(Boolean addOrRemove, MapType map) {
@@ -509,6 +517,13 @@ public class MainApplication extends GraphicsProgram {
 		goodEnd = new GoodEndPane(this);
 		badEnd = new BadEndPane(this);
 		trueEnd = new TrueEndPane(this);
+		try {
+		     customFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/prstartk.ttf")).deriveFont(10f);
+		     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		     ge.registerFont(customFont);
+		} catch (IOException|FontFormatException e) {
+		     e.printStackTrace();
+		}
 		setGUI();
 		setDoors();
 		setItems();
