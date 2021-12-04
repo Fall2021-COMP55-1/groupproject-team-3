@@ -31,6 +31,7 @@ public class MainApplication extends GraphicsProgram {
 	private BedRoomGamePane bedroom;
 	private GoodEndPane goodEnd;
 	private BadEndPane badEnd;
+	private TrueEndPane trueEnd;
 	
 	public Player player = new Player(0, 0, this);
 	public Monster monster = new Monster(0, 0, MonsterType.TALL, this);
@@ -183,7 +184,11 @@ public class MainApplication extends GraphicsProgram {
 				if(door == inBedMap) {
 					this.switchToBedRoom();
 				}else if (door == winning) {
-					this.switchToGoodEnd();
+					if(this.NPC.isDead()) {
+						this.switchToTrueEnd();
+					}else {
+						this.switchToGoodEnd();
+					}
 				}else if (door == inLivingMap) {
 					this.fromBedtoLiving = true;
 					this.switchToNewGame();
@@ -503,6 +508,7 @@ public class MainApplication extends GraphicsProgram {
 		bedroom = new BedRoomGamePane(this);
 		goodEnd = new GoodEndPane(this);
 		badEnd = new BadEndPane(this);
+		trueEnd = new TrueEndPane(this);
 		setGUI();
 		setDoors();
 		setItems();
@@ -523,6 +529,8 @@ public class MainApplication extends GraphicsProgram {
 	public void switchToGoodEnd() {switchToScreen(goodEnd);}
 	
 	public void switchToBadEnd() {switchToScreen(badEnd);}
+	
+	public void switchToTrueEnd() {switchToScreen(trueEnd);}
 
 	public static void main(String[] args) {new MainApplication().start();}
 

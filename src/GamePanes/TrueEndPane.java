@@ -5,30 +5,35 @@ import Boilerplate.GButton;
 import Boilerplate.GraphicsPane;
 import Boilerplate.MainApplication;
 import acm.graphics.GImage;
+import acm.graphics.GLabel;
 import acm.graphics.GObject;
 
-public class GoodEndPane extends GraphicsPane {
+public class TrueEndPane extends GraphicsPane {
 	// you will use program to get access to all of the GraphicsProgram calls
 	private MainApplication program; 
 	
 	private GButton quit;
 	private GImage background;
+	private GLabel trueEnd;
 	
-	public GoodEndPane(MainApplication app) {
+	public TrueEndPane(MainApplication app) {
 		this.program = app;
-		background = new GImage("res/texture/Good Ending.png");
-		quit = new GButton("", 296, 460, 208, 95);
+		trueEnd = new GLabel("You killed the person. True End", 200,200);
+		//background = new GImage("res/texture/True Ending.png");
+		quit = new GButton("quit", 296, 460, 208, 95);
 	}
 	
 	@Override
 	public void showContents() {
-		program.add(background);
+		//program.add(background);
+		program.add(trueEnd);
 		program.add(quit);
 	}
 
 	@Override
 	public void hideContents() {
-		program.remove(background);
+		//program.remove(background);
+		program.remove(trueEnd);
 		program.remove(quit);
 	}
 
