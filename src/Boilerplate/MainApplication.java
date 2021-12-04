@@ -154,6 +154,59 @@ public class MainApplication extends GraphicsProgram {
 			}
 		}
 	}
+<<<<<<< HEAD
+	
+	public void removeDoorBedRoom() {
+		for (int i = 0; i < 5; ++i)   {this.remove(bedDoors.get(i).getRect());}
+	}
+	
+	public void addPlayer(int x, int y)   {
+		this.add(player.getImage(), x, y);
+		player.setX(x);
+		player.setY(y);
+	}
+	
+	public void addMonster(int x, int y)   {
+		this.add(monster.getImage(), x, y);
+		monster.setX(x);
+		monster.setY(y);
+	}
+	
+	public void addNPC(int x, int y)   {
+		this.add(NPC.getImage(), x, y);
+		NPC.setX(x);
+		NPC.setY(y);
+	}
+	
+	public void pause() {
+		for(int i = 0; i < 4; ++i)   {this.add(GUI.get(i));}
+		paused = true;
+	}
+	
+	public void resume() {
+		for(int i = 0; i < 4; ++i)   {this.remove(GUI.get(i));}
+		paused = false;
+	}
+	
+	public void addItem(Item item) {items.add(item);}
+	
+	public static MusicBox getMusic() {return music;}
+	
+	public int numItems() {return items.size();}
+	
+	public Item itemAt(int i) {return items.get(i);}
+	
+	public void removeLabels() {
+		if(keyUsed!=null) {this.remove(keyUsed);}
+		if(wrongItem!=null) {this.remove(wrongItem);}
+		if(lockedDoor!=null) {this.remove(lockedDoor);}
+	}
+	
+	public Item getSelectedItem() {return this.player.getInventory().getSelectedItem();}
+	
+
+=======
+>>>>>>> branch 'main' of https://github.com/Fall2021-COMP55-1/groupproject-team-3.git
 	public void unlockDoor(Door door, KeyEvent e) {
 		if(getSelectedItem()!=null) {
 			if(this.player.sprite.getBounds().intersects(door.getRect().getBounds()) && e.getKeyCode()==KeyEvent.VK_E){

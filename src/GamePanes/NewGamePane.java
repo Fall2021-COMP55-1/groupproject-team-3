@@ -45,6 +45,10 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 			program.addPlayer(playerX, playerY);
 			program.addMonster(playerX + 20, playerY + 50);
 			program.addNPC(540, 450);
+<<<<<<< HEAD
+			// monsterTimer.setInitialDelay(3000);
+=======
+>>>>>>> branch 'main' of https://github.com/Fall2021-COMP55-1/groupproject-team-3.git
 			program.monsterTimer.setInitialDelay(3000);
 			goal = new GLabel("Your goal is to escape from this house! Good luck!", 450, 440);
 			goal.setColor(Color.white);
