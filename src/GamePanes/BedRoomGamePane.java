@@ -43,7 +43,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		for (int i = 0; i < 7; ++i)   {walls.get(i).setFilled(true);}
 		
-		GRect npc = new GRect(100, 150, 32, 32);
+		GRect npc = new GRect(102, 152, 10, 10);
 		npc.setVisible(false);
 		walls.add(npc);
 	}
@@ -90,11 +90,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 
 		//3. player and monster and npc
 		program.player.getInventory();
-		if(program.NPC.isDead() == false)   {program.addNPC(540, 450);}
+		if(program.NPC.isDead() == false)   {program.addNPC(100, 150);}
 		if(program.NPC.isDead())   {walls.remove(walls.size() - 1);}
 		program.addMonster(playerX + 16,  playerY + 50);
-		monsterTimer.setInitialDelay(3000);
-		monsterTimer.start();
+		program.monsterTimer.setInitialDelay(3000);
+		program.monsterTimer.start();
 		//inventory hot bar image
 		//4. inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
@@ -112,16 +112,14 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.addDoorBedRoom();
 		program.player.getInventory().setHighlightVisible(true);
 		//7. interactive choices
+		
 		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
 		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
 		choice1.setSize(150, 40);
 		choice2.setSize(150, 40); 
 		killHim = new GButton("", 500, 555, 150, 40);
 		spareHim = new GButton("", 500, 600, 150, 40);
-		program.add(choice1);
-		program.add(choice2);
-		program.add(killHim);
-		program.add(spareHim);
+		
 		//8. GUI
 		program.addGUI();
 	}
@@ -192,6 +190,8 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			if (obj == killHim)   {program.NPC.setDead(true);}
 			program.remove(choice1);
 			program.remove(choice2);
+			program.paused = false;
+			program.monsterTimer.start();
 		}
 	
 		//to select item on the inventory hot bar
@@ -201,9 +201,25 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		}
 	}
 	
+	private void interactiveChoices() {
+		program.add(choice1);
+		program.add(choice2);
+		program.add(killHim);
+		program.add(spareHim);
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		program.player.keyPressed(e);
+		// Interactive choices showing up when intersecting with NPC		
+		if(program.player.sprite.getBounds().intersects(program.NPC.sprite.getBounds()) && e.getKeyCode()==KeyEvent.VK_E) {
+			if(program.getSelectedItem().type == ItemType.WEAPON) {
+				interactiveChoices(); 
+				program.paused = true;
+				program.monsterTimer.stop();
+				
+			}
+		}
 		
 		program.checkCollision(walls);
 		

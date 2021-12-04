@@ -192,12 +192,12 @@ public class MainApplication extends GraphicsProgram {
 	}
 	
 	public void pause() {
-		for(int i = 0; i < 4; ++i)   {this.remove(GUI.get(i));}
+		for(int i = 0; i < 4; ++i)   {this.add(GUI.get(i));}
 		paused = true;
 	}
 	
 	public void resume() {
-		for(int i = 0; i < 4; ++i)   {this.add(GUI.get(i));}
+		for(int i = 0; i < 4; ++i)   {this.remove(GUI.get(i));}
 		paused = false;
 	}
 	
