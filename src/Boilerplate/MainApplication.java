@@ -287,7 +287,8 @@ public class MainApplication extends GraphicsProgram {
 	public Item itemAt(int i) {return items.get(i);}
 	public void pickUpItem(KeyEvent e) {
 		for (int i=0; i<this.numItems(); i++) {
-			if(e.getKeyCode()==KeyEvent.VK_E && this.player.sprite.getBounds().intersects(this.itemAt(i).getImage().getBounds())) {
+			Item item = this.itemAt(i);
+			if(!item.isPickedUp() && this.player.sprite.getBounds().intersects(item.getImage().getBounds())&& e.getKeyCode()==KeyEvent.VK_E) {
 				this.grab(this.itemAt(i));
 			}
 		}
@@ -488,7 +489,6 @@ public class MainApplication extends GraphicsProgram {
 	}
 
 	public void init() {
-
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	}
 

@@ -8,7 +8,7 @@ public class Item {
 	private String name, desc;
 	private boolean used, pickedUp;
 	private GImage sprite, invSprite;
-	public ItemType type;
+	private ItemType type;
 	private RoomType roomType;
 	private MapType mapType;
 
@@ -26,6 +26,8 @@ public class Item {
 	public RoomType getRoomType() {return roomType;}
 		
 	public MapType getMapType() {return mapType;}
+	
+	public ItemType getItemType() {return type;}
 	
 	public int getX()   {return x;}
 	

@@ -73,23 +73,23 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		program.remove(background);
 		//3. doors
 		program.Doors(false,MapType.LIVINGR);	
-		//3. player and monster and npc
+		//4. player and monster and npc
 		program.remove(program.player.getImage());
 		program.remove(program.monster.getImage());
 		program.remove(program.NPC.getImage());
 		program.monsterTimer.stop();
-		//4. Inventory hot bar image
+		//5. Inventory hot bar image
 		program.remove(Inventory.INVENTORY_IMG);
-		//5. items on the map
+		//6. items on the map
 		program.Items(false, MapType.LIVINGR);
-		//6. items on the inventory hot bar
+		//7. items on the inventory hot bar
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		//6.5 labels of wrongItem, lockedDoor, keyUsed
+		//7.5 labels of wrongItem, lockedDoor, keyUsed
 		program.removeLabels();
 		program.remove(goal);
-		//7. GUI
+		//8. GUI
 		program.removeGUI();		
 	}
 

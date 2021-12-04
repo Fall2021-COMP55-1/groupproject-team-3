@@ -23,6 +23,12 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
+		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
+		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
+		choice1.setSize(150, 40);
+		choice2.setSize(150, 40); 
+		killHim = new GButton("", 500, 555, 150, 40);
+		spareHim = new GButton("", 500, 600, 150, 40);
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.addMonster(playerX + 20,  playerY + 50);
 		program.monsterTimer.setInitialDelay(3000);
 		program.monsterTimer.start();
-		if(!program.NPC.isDead()) {program.addNPC(100, 150);
+		if(!program.NPC.isDead()) {program.addNPC(200, 150);
 		}else {walls.remove(walls.size() - 1);}
 		//5. inventory hot bar image
 		program.add(Inventory.INVENTORY_IMG, Inventory.INVENTORY_X, Inventory.INVENTORY_Y);
@@ -49,18 +55,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		for (int i=0; i<program.player.getInventory().numInvItems(); i++) {
 			program.add(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		//8. interactive choices
-		choice1 = new GImage("res/interactive choices/Choice 1.png", 500, 555);
-		choice2 = new GImage("res/interactive choices/Choice 2.png", 500, 600); 
-		choice1.setSize(150, 40);
-		choice2.setSize(150, 40); 
-		killHim = new GButton("", 500, 555, 150, 40);
-		spareHim = new GButton("", 500, 600, 150, 40);
-		program.add(choice1);
-		program.add(choice2);
-		program.add(killHim);
-		program.add(spareHim);
-		//9. GUI
+		//8. GUI
 		program.addGUI();
 	}
 	
@@ -72,33 +67,38 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		program.remove(background);
 		//3. doors
 		program.Doors(false,MapType.BEDR);
-		//3 player and monster and npc
+		//4. player and monster and npc
 		program.remove(program.player.getImage());
 		program.remove(program.monster.getImage());
 		program.remove(program.NPC.getImage());		
 		program.monsterTimer.stop();
-		//4. inventory hot bar image 
+		//5. inventory hot bar image 
 		program.remove(Inventory.INVENTORY_IMG);
-		//5. items on the map
+		//6. items on the map
 		program.Items(false, MapType.BEDR);
-		//6. items on the inventory hot bar
+		//7. items on the inventory hot bar
 		for (int i=0; i<program.player.getInventory().numInvItems();i++) {
 			program.remove(program.player.getInventory().itemAt(i).getInvSprite());
 		}
-		//7. interactive choices
+		//8. interactive choices
 		program.remove(choice1);
 		program.remove(choice2);
 		program.remove(killHim);
 		program.remove(spareHim);
-		//7.5 labels of wrongItem, lockedDoor, keyUsed
+		//8.5 labels of wrongItem, lockedDoor, keyUsed
 		program.removeLabels();
-		//8. GUI
+		//9. GUI
 		program.removeGUI();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		GObject obj = program.getElementAt(e.getX(), e.getY());
+		program.pauseMenu(obj);
+	
+		//to select item on the inventory hot bar
+		Inventory playerInv = program.player.getInventory();
+		if(playerInv.setSelectedItem(obj)) {playerInv.drawSelectedItem();}
 		
 		if (obj == killHim || obj == spareHim)   {
 			if (obj == killHim)   {program.NPC.setDead(true);}
@@ -107,33 +107,11 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 			program.paused = false;
 			program.monsterTimer.start();
 		}
-
-		program.pauseMenu(obj);
-	
-		//to select item on the inventory hot bar
-		Inventory playerInv = program.player.getInventory();
-		if(playerInv.setSelectedItem(obj)) {playerInv.drawSelectedItem();}
-	}
-	
-	private void interactiveChoices() {
-		program.add(choice1);
-		program.add(choice2);
-		program.add(killHim);
-		program.add(spareHim);
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		program.player.keyPressed(e);
-		// Interactive choices showing up when intersecting with NPC		
-		if(program.player.sprite.getBounds().intersects(program.NPC.sprite.getBounds()) && e.getKeyCode()==KeyEvent.VK_E) {
-			if(program.getSelectedItem().type == ItemType.WEAPON) {
-				interactiveChoices(); 
-				program.paused = true;
-				program.monsterTimer.stop();
-				
-			}
-		}
 		
 		program.checkCollision(walls);
 		
@@ -171,21 +149,24 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		double biggerX = program.NPC.sprite.getX()-5;
 		double biggerY = program.NPC.sprite.getY()-5;
 		GRectangle biggerBounds = new GRectangle(biggerX, biggerY, biggerH, biggerW);
-		if(e.getKeyCode()==KeyEvent.VK_E && program.player.sprite.getBounds().intersects(biggerBounds)) {
-			if(program.itemKnife.isPickedUp()) {
-				System.out.println("You have knife to kill npc");
-				if(program.getSelectedItem()==program.itemKnife) {
-					//make buttons for killing the npc or spare the npc
-				}
-			}else {
-				//make the buttons for interactive choices (no killing involved)
-			}
+		if(program.getSelectedItem().getItemType()==ItemType.WEAPON && program.player.sprite.getBounds().intersects(biggerBounds) && e.getKeyCode()==KeyEvent.VK_E) {
+			interactiveChoices(); 
+			program.paused = true;
+			program.monsterTimer.stop();
+			program.monsterTimer.setInitialDelay(0);
 		}
+	}
+	
+	private void interactiveChoices() {
+		program.add(choice1);
+		program.add(choice2);
+		program.add(killHim);
+		program.add(spareHim);
 	}
 	
 	@Override
 	public void keyReleased(KeyEvent e) {program.player.keyReleased(e);}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {program.actionPerformed(e);}
 	
@@ -202,7 +183,7 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		for (int i = 0; i < 7; ++i)   {walls.get(i).setFilled(true);}
 		
-		GRect npc = new GRect(100, 150, 32, 32);
+		GRect npc = new GRect(200, 150, 32, 32);
 		npc.setVisible(false);
 		walls.add(npc);
 	}
