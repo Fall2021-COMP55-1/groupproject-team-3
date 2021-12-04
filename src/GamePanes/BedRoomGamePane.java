@@ -10,6 +10,7 @@ import Boilerplate.*;
 import acm.graphics.GImage;
 import acm.graphics.GObject;
 import acm.graphics.GRect;
+import acm.graphics.GRectangle;
 
 public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 
@@ -233,6 +234,19 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 		
 		//to select item with 12345 key
 		program.setSelectedItem(e);
+		
+		//to interact with npc
+		double biggerH = program.NPC.sprite.getHeight()+10;
+		double biggerW = program.NPC.sprite.getWidth()+10;
+		double biggerX = program.NPC.sprite.getX()-5;
+		double biggerY = program.NPC.sprite.getY()-5;
+		GRectangle biggerBounds = new GRectangle(biggerX, biggerY, biggerH, biggerW);
+		if(e.getKeyCode()==KeyEvent.VK_E && program.player.sprite.getBounds().intersects(biggerBounds)) {
+			//make the buttons for interactive choices appear
+			if(program.getSelectedItem()==program.itemKnife) {
+				//make buttons for killing the npc or spare the npc
+			}
+		}
 	}	
 	
 	public void addgui() {

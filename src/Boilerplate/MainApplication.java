@@ -62,6 +62,9 @@ public class MainApplication extends GraphicsProgram {
 	//doors in living room map
 	public Door inBedMap, inBath, outBath, winning;
 	
+	//item in livingroom
+	public Item itemKnife;
+	
 	//---------------------------------------------------------------------------
 	
 	/* GUI
@@ -280,11 +283,11 @@ public class MainApplication extends GraphicsProgram {
 	 * grab(Item item)
 	 */
 	public void setItemsLiving() {
-		Item itemKnife1 = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
-		itemKnife1.setX(734);
-		itemKnife1.setY(259);
-		itemKnife1.setDescription("Knife to kill");
-		this.addItem(itemKnife1);
+		itemKnife = new Item("Knife",new GImage ("res/inventory/Small Knife.png"), ItemType.WEAPON, "livingR");
+		itemKnife.setX(734);
+		itemKnife.setY(259);
+		itemKnife.setDescription("Knife to kill");
+		this.addItem(itemKnife);
 		Item bedroomKey = new Item("Key",new GImage("res/inventory/Small Key.png"), ItemType.KEY, "livingR");
 		bedroomKey.setX(200);
 		bedroomKey.setY(100);
