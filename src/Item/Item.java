@@ -10,24 +10,22 @@ public class Item {
 	private GImage sprite, invSprite;
 	public ItemType type;
 	private RoomType roomType;
-	private String map;
+	private MapType mapType;
 
-	public Item (String name, GImage sprite, ItemType type, String mapName) {
+	public Item (String name, GImage sprite, ItemType type, MapType map) {
 		this.name = name;
 		this.sprite = sprite;
 		setInvSprite(new GImage("res/inventory/" + name + ".png", x, y));
 		this.type = type;
 		count = 1;  
-		map = mapName;
+		this.mapType = map;
 	}
 	
 	public void setRoomType(RoomType roomType) {this.roomType=roomType;}
 	
 	public RoomType getRoomType() {return roomType;}
-	
-	public void setMap(String mapName) {map = mapName;}
-	
-	public String getMap() {return map;}
+		
+	public MapType getMapType() {return mapType;}
 	
 	public int getX()   {return x;}
 	
