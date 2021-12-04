@@ -23,7 +23,6 @@ public class BedRoomGamePane extends GraphicsPane implements ActionListener {
 	public BedRoomGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
-		program.setGUI(); 
 	}
 
 	@Override

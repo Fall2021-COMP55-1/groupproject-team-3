@@ -318,9 +318,9 @@ public class MainApplication extends GraphicsProgram {
 	}
 	public void pause() {
 		this.add(resumeImg);
+		this.add(quitImg);
 		this.add(resume);
 		this.add(quit);
-		this.add(quitImg);
 		paused = true;
 	}
 	public void resume() {
@@ -503,6 +503,7 @@ public class MainApplication extends GraphicsProgram {
 		bedroom = new BedRoomGamePane(this);
 		goodEnd = new GoodEndPane(this);
 		badEnd = new BadEndPane(this);
+		setGUI();
 		setDoors();
 		setItems();
 		setupInteractions();

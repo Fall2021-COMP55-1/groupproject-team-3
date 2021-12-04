@@ -23,7 +23,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 	public NewGamePane(MainApplication app) {
 		this.program = app;
 		setWalls();
-		program.setGUI();
 	}	
 		
 	@Override
@@ -102,7 +101,6 @@ public class NewGamePane extends GraphicsPane implements ActionListener {
 		//click item in hot bar to select
 		Inventory playerInv = program.player.getInventory();
 		if(playerInv.setSelectedItem(obj)) {playerInv.drawSelectedItem();}
-		
 	}
 	
 	@Override
